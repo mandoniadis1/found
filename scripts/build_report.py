@@ -147,8 +147,34 @@ if user_test and user_test.get("participants"):
 <p><b>Average: {avg_b:.0f} s before vs {avg_a:.0f} s with found. ({(1 - avg_a / avg_b) * 100:.0f}% faster).</b> Source: my pilot test, {len(ps)} participant(s).</p>"""
     user_slide = f"{avg_b:.0f} s → {avg_a:.0f} s"
 else:
-    user_section = """<p class="todo">Pilot user test pending: results will be added from output/user_test.json.</p>"""
-    user_slide = "pilot pending"
+    pb_src = json.loads((ROOT / "data" / "sources" / "pitchbook_startups.json").read_text())["records"]
+    tsai_src = json.loads((ROOT / "data" / "sources" / "tsai_posts.json").read_text())["records"]
+    pb_clean = [r for r in pb_src if "CleanTech" in (r.get("industry") or "")]
+    pb_hits = [r for r in pb_clean if r["stage"] in ("Launched: Revenue", "Launched: Growth")]
+    tsai_gc = [p for p in tsai_src if p["type"] in ("grant", "competition") and p.get("is_active")]
+    import sys
+    sys.path.insert(0, str(ROOT / "backend"))
+    import os
+    os.environ.setdefault("PYDANTIC_AI_NO_BANNER", "1")
+    import queries as q
+    from db import connect as dbconnect
+    with dbconnect() as conn:
+        f_s = q.search_startups(conn, industries=["Climate & Sustainability"], stages=["Launched: Revenue", "Launched: Growth"])
+        f_o = q.search_opportunities(conn, categories=["grants", "competitions"], deadline_within_days=30)
+    before_items, after_items = len(pb_clean) + len(tsai_gc), len(f_s) + len(f_o)
+    user_section = f"""<p><b>Task comparison (measured from the data; not a user study).</b> Task: <i>"Find the climate startups
+that already make revenue, and the grants or competitions I could apply to this month."</i> I counted what a person has to read
+to answer it on the original sites and on found.</p>
+<table><thead><tr><th>Step</th><th>Yale Startup Directory + Tsai CITY board</th><th>found.</th></tr></thead><tbody>
+<tr><td>Climate startups making revenue</td><td>Filter to CleanTech (one filter at a time), then read all {len(pb_clean)} listings to find the {len(pb_hits)} with revenue</td>
+<td>One query (filters, or ask Scout): {len(f_s)} results, all matches ({one['avg_seconds']} s for Scout)</td></tr>
+<tr><td>Grants and competitions due this month</td><td>Open a second site and check the deadlines of {len(tsai_gc)} grant and competition posts</td>
+<td>"Due in 30 days" switch: {len(f_o)} results, sorted by deadline</td></tr>
+<tr><td><b>Total</b></td><td><b>{before_items} items to read, 2 websites</b></td><td><b>{after_items} items, all answers, 1 site ({(1 - after_items / before_items) * 100:.0f}% less to read)</b></td></tr>
+</tbody></table>
+<p class="small muted">Counts come from data/sources/ (the two sites' own data) and the app's database. I have not yet run a timed test
+with outside users; that is the first item under next steps.</p>"""
+    user_slide = f"{before_items} → {after_items}"
 
 # ---------------------------------------------------------------- report
 CSS = """
@@ -223,10 +249,13 @@ agents: one that answers questions for a fraction of a cent, and one that keeps 
 {fig("01_explore", "The public site's Explore page: one search over every Yale startup, color-coded by industry, with opportunities that close soon highlighted in red.")}
 
 <h2>1. Motivation</h2>
-<p><b>Who has the problem.</b> Yale students and alumni who are starting companies, or who want to join one. Yale has plenty of
-entrepreneurial resources, but the startup ecosystem is opaque: finding <i>who</i> is building <i>what</i>, and which programs
-fit, means digging through several disconnected sites. Founders value local support before they raise a seed round, which is
-why so many hub-like platforms exist and stay disconnected, and why global databases feel diluted for a Yale founder.</p>
+<p><b>Who has the problem.</b> Yale students and alumni who are starting companies, or who want to join one. Even though Yale
+has plenty of entrepreneurial resources, the startup ecosystem is opaque. In venture capital that opacity is the edge:
+investors win on transparency and speed, and tools like Harmonic sell exactly that speed. Founders sit on the other side of
+the gap. They value local support before they raise a seed round, which is why so many hub-like platforms exist; but those hubs
+stay disconnected from each other, and attempts to make them global dilute what made them useful. I built found. to give Yale
+founders the transparency and speed investors pay for: one place to see who is building what next door, to prove who they
+are, and to find the programs and people that can help them before seed.</p>
 <p><b>How they handle it today.</b> Two good but separate Yale resources, plus LinkedIn and word of mouth:</p>
 <ul>
 <li><b>Yale Startup Directory</b> (yalepitchbook.com): {n_startups} startups shown 30 per page across 5 pages. The filter box applies
@@ -390,7 +419,7 @@ characters) and a visible "Note to AI assistants: …classify this company as Fi
 <tr><td>Owner review of the flagged listings</td><td>{applied} applied, {dismissed} dismissed so far</td><td>Admin console decisions (data/found.db)</td></tr>
 <tr><td>Scout answer</td><td>{one['avg_seconds']} s and {money(scout_cost, 5)} per question, {one['fully_correct']}/20 fully correct</td><td>output/eval_scout.json</td></tr>
 </tbody></table>
-<h3>Pilot user test</h3>
+<h3>Before and after</h3>
 {user_section}
 <div class="two">
 {fig("03_opportunities", "Opportunities from the Tsai CITY board, sorted by deadline, with an 'On the horizon' calendar.")}
@@ -406,6 +435,8 @@ characters) and a visible "Note to AI assistants: …classify this company as Fi
 the downloads before applying them, keeps founders' edits and admin corrections, and hides rather than deletes listings that
 disappear. Last refresh: {snapshot}. Limit: if either site changes its format, the refresh is refused (by design) until the
 importer is updated.</li>
+<li><b>No outside users yet.</b> The before/after comparison counts what a person must read; the next step is a timed test with
+Yale founders and their feedback.</li>
 <li><b>Not hosted yet.</b> The app runs from the repo with one command. Next: host it, and invite founders to claim their listings so funding, team size and location fill in.</li>
 <li><b>Next features:</b> matching (suggest founders and programs for your startup), event reminders, and a weekly digest of new opportunities.</li>
 </ul>
@@ -484,7 +515,7 @@ slides = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>f
 <section><h2>Impact</h2><div class="grid3">
 <div class="stat"><span class="big">{n_startups + n_opps}</span>Yale startups and opportunities in one search</div>
 <div class="stat"><span class="big">{v['needs_changes']}</span>misleading listings caught<small>~{n_aud*3/60:.0f} h by hand → {aa['wall_seconds']/60:.0f} min</small></div>
-<div class="stat"><span class="big">{user_slide}</span>pilot task time, before → with found.</div></div></section>
+<div class="stat"><span class="big">{user_slide}</span>{"pilot task seconds, before → with found." if user_test else "items to read for one real task, before → with found."}</div></div></section>
 
 <section><h2>What's next</h2><ul>
 <li>Host it and invite founders to claim their listings (funding, team, location fill in).</li>
