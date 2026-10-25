@@ -111,6 +111,66 @@
    ],
    "reason": "The pitch does not match the website’s stated offering, which centers on protection products. Technology remains a fitting industry classification. (Found by the Listing Auditor; approved by an admin.)",
    "corrected_at": "2026-10-25"
+  },
+  "90": {
+   "name": "General Neuro",
+   "tagline": "General Neuro makes a wearable headband that applies gentle electrical stimulation during reading practice for children with dyslexia.",
+   "industries": [
+    "Health & Biotech",
+    "Education",
+    "Technology"
+   ],
+   "reason": "The pitch is misleading: the website describes NeuroLingo as a headband used during reading practice for struggling readers, not a device to reopen a critical period for language acquisition. The listed industries are broadly consistent with the product’s health, education, and technology aspects. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
+  },
+  "5": {
+   "name": "Kenji Health",
+   "tagline": "Kenji uses AI to engage participants in community care programs and measure their outcomes.",
+   "industries": [
+    "Health & Biotech",
+    "Technology",
+    "Social Impact"
+   ],
+   "reason": "The industries broadly fit the site’s focus on health programs, AI technology, and community impact. The pitch is vague and does not capture the specific offering: AI-powered participant engagement and outcomes measurement for community care programs. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
+  },
+  "48": {
+   "name": "Cybrexa Therapeutics",
+   "tagline": "Cybrexa develops targeted intracellular delivery of anti-cancer agents.",
+   "industries": [
+    "Health & Biotech"
+   ],
+   "reason": "The Health & Biotech industry fits, but the pitch describes a different approach than the website’s stated focus on targeted intracellular delivery of anti-cancer agents. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
+  },
+  "102": {
+   "name": "EnerBot",
+   "tagline": "EnerBot provides engineering, procurement, and deployment support for tailored renewable energy projects and technologies.",
+   "industries": [
+    "Climate & Sustainability",
+    "Technology"
+   ],
+   "reason": "The website supports the clean-energy focus, but describes EnerBot primarily as an energy project engineering, procurement, and construction company, rather than specifically as a provider of the listed product categories. Education and Robotics are not supported as industries; Climate & Sustainability and Technology fit the site. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
+  },
+  "77": {
+   "name": "Crew Dog",
+   "tagline": "Crew Dog creates original hand-drawn, embroidered collegiate apparel and custom designs for universities, groups, and teams.",
+   "industries": [
+    "Consumer"
+   ],
+   "reason": "Consumer is an appropriate industry, but the pitch is too vague: Crew Dog primarily sells hand-drawn, embroidered collegiate apparel and offers custom designs. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
+  },
+  "122": {
+   "name": "Caela Enterprises",
+   "tagline": "Caela Enterprises offers storytelling, creative consulting, brand strategy, and art, including its own book.",
+   "industries": [
+    "Media & Entertainment",
+    "Marketing"
+   ],
+   "reason": "Media & Entertainment fits the creative work, but the site presents Caela as an author, storytelling and brand strategist, creative consultant, and artist. It does not substantiate the listing's claim of a multigenerational publishing, education, and entertainment franchise. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
   }
  }
 }
