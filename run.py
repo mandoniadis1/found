@@ -18,6 +18,7 @@ os.chdir(ROOT / "backend")
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", "8030"))
+    os.environ["FRONTEND_URL"] = f"http://localhost:{port}"  # links in emails point at this server
     if "--no-browser" not in sys.argv:
         Timer(2.0, lambda: webbrowser.open(f"http://localhost:{port}")).start()
     print(f"\n  found. is starting on http://localhost:{port}   (admin console: http://localhost:{port}/admin)\n")
