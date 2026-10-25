@@ -116,3 +116,7 @@ a.stat:hover { border-color: #c9c5bd; }
 .mini { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
 .mini td { padding: 5px 8px; border-top: 1px solid var(--line); }
 .mini .tag { margin-left: 0; }
+.demo-login { background: var(--side); border: 1px dashed #4a4652; border-radius: 8px; padding: 9px 10px; color: var(--side-text); font-size: 12px; cursor: pointer; text-align: left; }
+.demo-login b { color: #fff; font-weight: 600; }
+.demo-login span { color: #8d8996; }
+.demo-login:hover { border-color: var(--accent); }

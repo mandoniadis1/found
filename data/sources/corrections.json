@@ -4,9 +4,112 @@
   "111": {
    "name": "Home Catalyst Partners",
    "tagline": "Real estate investment firm delivering risk-adjusted returns through triple-bottom-line housing opportunities.",
-   "industries": ["Real Estate"],
+   "industries": [
+    "Real Estate"
+   ],
    "reason": "Pitchbook listed it as healthcare housing for adults with autism/IDD. It is a real estate investment firm; housing for adults with autism/IDD (64 units) is one of its deals, not its focus.",
    "source": "https://homecatalystpartners.com/",
+   "corrected_at": "2026-10-25"
+  },
+  "19": {
+   "name": "Win Number",
+   "tagline": "Win Number provides campaign planning, voter-contact tracking, analytics, and reporting tools for small to medium-sized campaigns.",
+   "industries": [
+    "Technology",
+    "Social Impact"
+   ],
+   "reason": "The Technology industry fits the campaign software and analytics offering. However, the homepage describes planning, tracking, and reporting tools, not an all-in-one AI platform or a Democratic-only focus, so the pitch should be revised. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
+  },
+  "29": {
+   "name": "VeruStruct",
+   "tagline": "Verustruct develops robotic construction systems that automate building affordable, sustainable housing.",
+   "industries": [
+    "Real Estate",
+    "Technology",
+    "Climate & Sustainability"
+   ],
+   "reason": "The listing broadly reflects Verustruct's focus on robotic construction for affordable, sustainable housing, but its specific claims about upcycled materials and chamber-based printing are not supported by the homepage. The site's stated approach is automated formwork, robotics, conventional structural materials, and translational slipform. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
+  },
+  "36": {
+   "name": "Vault Kinetics Inc.",
+   "tagline": "Vault Kinetics makes portable force plates and analysis software for measuring human performance.",
+   "industries": [
+    "Health & Biotech",
+    "Technology"
+   ],
+   "reason": "The listing's 'intelligent flooring' pitch is misleading: the site describes portable force-plate hardware and performance analysis tools. Technology fits, but Health & Biotech better reflects its human-performance focus. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
+  },
+  "99": {
+   "name": "Urologic Design",
+   "tagline": "Urologic Design is developing a non-surgical urethral occlusion device to help men manage stress urinary incontinence.",
+   "industries": [
+    "Health & Biotech"
+   ],
+   "reason": "The pitch is broadly aligned with the site, though it describes Uroplug as a current device rather than one under development. Health & Biotech fits; Climate & Sustainability is not a primary industry—the waste-reduction benefit is secondary to the continence-care product. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
+  },
+  "17": {
+   "name": "Suppal",
+   "tagline": "Suppal is a marketplace where creators remake proven viral video formats for brands and earn based on the views they generate.",
+   "industries": [
+    "Marketing",
+    "Media & Entertainment",
+    "Technology"
+   ],
+   "reason": "The listing describes an admissions-support product for high school students, but the website presents Suppal as a marketplace for creators to remake viral videos for brands. Education does not fit the website's stated main business. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
+  },
+  "78": {
+   "name": "Sláinte Health",
+   "tagline": "Sláinte is a wellness app that recommends one small health habit and connects people with nearby in-person activities and programs.",
+   "industries": [
+    "Health & Biotech",
+    "Technology",
+    "Social Impact"
+   ],
+   "reason": "The listing broadly identifies a consumer wellness product, but its claim that it uses everyday data for personalized next steps is not supported by the site, which emphasizes gentle suggestions and nearby activities. The site describes general wellness, not medical care. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
+  },
+  "101": {
+   "name": "Pro-Patient Tech",
+   "tagline": "Pro-Patient Tech provides personalized, goal-oriented health guidance and connects patients with clinicians and health resources.",
+   "industries": [
+    "Health & Biotech",
+    "Technology"
+   ],
+   "reason": "The listing describes a condition-specific lifestyle recommendation database, but the website presents Caspia as a team of specialized health agents offering personalized health guidance. Health & Biotech fits; Technology is also relevant to the platform. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
+  },
+  "60": {
+   "name": "Playbl",
+   "tagline": "Playbl provides evidence-based digital health games that help adolescents make healthier choices.",
+   "industries": [
+    "Health & Biotech",
+    "Education",
+    "Social Impact"
+   ],
+   "reason": "The pitch captures Playbl’s focus on youth health and substance-use prevention, but narrows its work to vaping and opioids and frames it mainly as a consumer offering. The site describes a broader portfolio of evidence-based digital health games for schools and youth-facing organizations. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
+  },
+  "4": {
+   "name": "Mundaly",
+   "tagline": "Mundaly helps companies monetize anonymized data and helps AI labs source globally representative real-world data.",
+   "industries": [
+    "Technology"
+   ],
+   "reason": "The website describes Mundaly as a marketplace/licensing service for company data used by AI labs, not an AI platform for community engagement or impact measurement. Technology fits; the listed Health & Biotech industry is not supported by the homepage. (Found by the Listing Auditor; approved by an admin.)",
+   "corrected_at": "2026-10-25"
+  },
+  "92": {
+   "name": "Orphic",
+   "tagline": "Orphic provides a platform for managing the lifecycle of protection products across vehicles, equipment, and appliances.",
+   "industries": [
+    "Technology"
+   ],
+   "reason": "The pitch does not match the website’s stated offering, which centers on protection products. Technology remains a fitting industry classification. (Found by the Listing Auditor; approved by an admin.)",
    "corrected_at": "2026-10-25"
   }
  }

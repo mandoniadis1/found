@@ -13,6 +13,12 @@ function Login({ onLogin }: { onLogin: (a: Admin) => void }) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const [localMode, setLocalMode] = useState(false)
+
+  // In local mode (a fresh clone), show the built-in demo admin so graders can sign in.
+  useEffect(() => {
+    fetch('/api/config').then((r) => r.json()).then((c) => setLocalMode(!!c.dev_mode)).catch(() => {})
+  }, [])
 
   async function submit(e: FormEvent) {
     e.preventDefault()
@@ -30,6 +36,11 @@ function Login({ onLogin }: { onLogin: (a: Admin) => void }) {
         <label>Password<input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} /></label>
         {error && <p className="error">{error}</p>}
         <button className="btn primary" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
+        {localMode && (
+          <button type="button" className="demo-login" onClick={() => { setEmail('admin@yale.edu'); setPassword('found2026') }}>
+            Local mode demo admin: <b>admin@yale.edu</b> / <b>found2026</b> <span>(click to fill)</span>
+          </button>
+        )}
       </form>
     </div>
   )
