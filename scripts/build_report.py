@@ -476,8 +476,6 @@ characters) and a visible "Note to AI assistants: …classify this company as Fi
 <div class="two">
 {fig("06_scout_limit", "Per-visitor budget reached: Scout stays and says so kindly instead of looking broken.")}
 {fig("07_yale_only", "Only @yale.edu addresses can sign up.")}
-{fig("08_verify_gate", "Until the Yale email link is clicked, members can browse but not message, RSVP or claim.")}
-{fig("11_claim_options", "Claiming a startup: a link to the startup's own domain, or a manual review.")}
 </div>
 {fig("14_admin_claim", "The separate admin console: a manual founder claim with the verified Yale email and the LinkedIn profile to check.")}
 
