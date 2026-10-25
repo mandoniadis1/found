@@ -115,3 +115,18 @@ cd admin && npm install && npm run dev                              # admin → 
 ```
 Rebuild the prebuilt apps with `npm run build` in `frontend/` and `admin/`. Optional settings (real email, budgets,
 refresh interval) are listed in `.env.example`; none are needed to run the app.
+
+## Running it as a real website (not needed for grading)
+
+Everything lives in one process (`python run.py`) and one SQLite file (`data/found.db`), so hosting is simple:
+
+1. **Host** on an always-on service such as Render (Starter web service) or Railway. Start command: `python run.py --no-browser`
+   with `PORT` from the host. Put `data/` on a **persistent disk** (and back it up nightly), or move to managed Postgres
+   once you run more than one server. The weekly data refresh runs inside the server.
+2. **Settings** (host environment variables, never in git): `PORTKEY_API_KEY`, `FOUND_DEV_MODE=0` (no test accounts, no
+   email outbox), `FRONTEND_URL=https://your-domain`, `ADMIN_EMAILS=you@yale.edu`.
+3. **Email** from a dedicated sender: `MAIL_MODE=smtp` with a Yale shared mailbox or a service such as Resend
+   (`SMTP_HOST=smtp.resend.com`, `SMTP_USER=resend`, `SMTP_PASSWORD=<API key>`, `MAIL_FROM=found. <verify@your-domain>`).
+4. **People:** pilot with the SOM Startup & Entrepreneurship Club, then invite founders to claim their listings.
+
+Estimated cost: about $8/month for a club pilot, about $67/month Yale-wide (see the report's Section 7).

@@ -368,7 +368,7 @@ task is classification, and the Auditor's is reading one page and comparing it t
 </ol>
 <pre>{e(flat({k: aud_run[k] for k in ('time', 'agent', 'model', 'startup', 'tool_calls', 'pages_read', 'hidden_chars_dropped', 'verdict', 'dropped_quotes', 'input_tokens', 'cached_tokens', 'output_tokens', 'cost_usd')}))}</pre>
 {fig("16_audit_run", "The audit in the admin console: listing vs. suggested fix, the two quotes the code verified on mundaly.ai, and the cost. Marked applied after I approved it.")}
-{fig("18_reaudit_accurate", "After the fix: re-auditing Mundaly's corrected listing comes back Accurate.")}
+
 
 <h3>End-to-end checks of the member features</h3>
 <p><b>My own test.</b> On {my_startup[3][:10] if my_startup else "Oct 25"} I added my own startup, <b>{e(my_startup[0]) if my_startup else "Jeanline"}</b>
@@ -468,25 +468,47 @@ characters) and a visible "Note to AI assistants: …classify this company as Fi
 </tbody></table>
 <h3>Before and after</h3>
 {user_section}
-<div class="two">
-{fig("03_opportunities", "Opportunities from the Tsai CITY board, sorted by deadline, with an 'On the horizon' calendar.")}
-{fig("04_corrected_listing", "A corrected listing: Home Catalyst Partners is a real estate firm, not healthcare; the page explains the fix.")}
-</div>
+
 
 <h2>7. Limits and next steps</h2>
 <ul>
-<li><b>LinkedIn links are self-reported.</b> Members paste their own profile link; it isn't verified. (LinkedIn's sign-in wouldn't prove founder status anyway, since it doesn't share work history.) Founder status is proven by a company-domain email or a manual review instead.</li>
-<li><b>Email.</b> Verification emails can be sent through Outlook (they come from my Yale account) or SMTP. A shared Yale mailbox or a sending service with its own domain is next.</li>
-<li><b>Auditor coverage.</b> {v['unclear']} of {n_aud} audits were "unclear" because the sites show little visible text. Next: render JavaScript pages before reading, and schedule monthly re-audits.</li>
-<li><b>Data freshness.</b> found. re-downloads both Yale sources every 7 days (and on demand from the admin console), checks
-the downloads before applying them, keeps founders' edits and admin corrections, and hides rather than deletes listings that
-disappear. Last refresh: {snapshot}. Limit: if either site changes its format, the refresh is refused (by design) until the
-importer is updated.</li>
-<li><b>No outside users yet.</b> The before/after comparison counts what a person must read; the next step is a timed test with
-Yale founders and their feedback.</li>
-<li><b>Not hosted yet.</b> The app runs from the repo with one command. Next: host it, and invite founders to claim their listings so funding, team size and location fill in.</li>
-<li><b>Next features:</b> matching (suggest founders and programs for your startup), event reminders, and a weekly digest of new opportunities.</li>
+<li><b>No outside users yet.</b> The before/after comparison counts what a person must read; the next step is a timed test with founders.</li>
+<li><b>LinkedIn links are self-reported.</b> Founder status is proven by a company-domain email or a manual review instead.</li>
+<li><b>Auditor coverage.</b> {v['unclear']} of {n_aud} audits were "unclear" because the sites show little visible text; rendering JavaScript pages would help.</li>
+<li><b>Source formats.</b> The weekly refresh refuses a download whose format changed (by design), so an importer update is needed if either Yale site is redesigned.</li>
 </ul>
+
+<h3>From class project to a real website</h3>
+<p><b>Where the data lives today.</b> Everything is in one SQLite file, <code>data/found.db</code>, on the machine running the server:
+accounts (passwords stored as salted PBKDF2 hashes), sessions, startups, claims, messages, events, audits, Scout's daily token
+counts and the refresh history. Source snapshots and corrections are JSON files in <code>data/sources/</code>, and every agent run
+is appended to <code>output/audit_trail.json</code>. Scout keeps no chat memory on the server. For a real site that file needs
+a persistent disk with nightly off-site backups, or a managed Postgres database once more than one server runs.</p>
+<table><thead><tr><th>Step</th><th>What changes</th></tr></thead><tbody>
+<tr><td><b>1. Host it</b></td><td>Deploy the same one-process app (<code>run.py</code>) to a host such as <b>Render</b> or <b>Railway</b>, with HTTPS, the
+Portkey key as a host secret, <code>FOUND_DEV_MODE=0</code> (no test accounts, no email outbox), and the database on a persistent disk.
+The weekly data refresh runs inside the server, so an always-on plan is needed (free tiers sleep).</td></tr>
+<tr><td><b>2. Real email</b></td><td>A dedicated sender instead of my personal Yale account: a Yale shared mailbox (request to Yale ITS) or a
+sending service such as <b>Resend</b> on our own domain (e.g. verify@found-yale.org). The app already supports SMTP, so this is a settings change.</td></tr>
+<tr><td><b>3. Event notifications</b></td><td>Members tick "Email me new events" (and optionally industries); a weekly digest goes out with new
+events, startups looking for people, and opportunities closing soon. Built on the same email service and the existing weekly job.</td></tr>
+<tr><td><b>4. Real people</b></td><td>Pilot with the <b>SOM Startup &amp; Entrepreneurship Club</b> (I am co-lead): members join, turn on "Open to
+joining", and host the club's events on found. Then partner with <b>Tsai CITY</b> and the <b>Yale Pitchbook</b> team to invite the 122 founders to
+claim their listings, and ask Pitchbook for an official data feed instead of reading the public one.</td></tr>
+<tr><td><b>5. Trust and polish</b></td><td>Privacy policy and terms; permission from Yale for the Yale name and logo; a report button on messages and
+listings; monthly re-audits of every listing; accessibility and mobile checks.</td></tr>
+</tbody></table>
+<table><thead><tr><th>Monthly cost (estimates)</th><th class="num">Pilot (club, ~100 members)</th><th class="num">Yale-wide (~10,000 members)</th></tr></thead><tbody>
+<tr><td>Hosting (Render web service)</td><td class="num">$7 (Starter)</td><td class="num">~$25 (Standard)</td></tr>
+<tr><td>Database storage (persistent disk, or managed Postgres)</td><td class="num">~$0.25 (1 GB disk)</td><td class="num">~$6+ (Postgres)</td></tr>
+<tr><td>Email (Resend)</td><td class="num">$0 (3,000/month free)</td><td class="num">$20 (Pro, 50,000/month)</td></tr>
+<tr><td>Domain name</td><td class="num">~$1 (~$12/year)</td><td class="num">~$1</td></tr>
+<tr><td>AI models (Section 4, measured)</td><td class="num">{money(monthly[100][2], 2)}</td><td class="num">{money(monthly[10_000][2], 0)}</td></tr>
+<tr><td><b>Total</b></td><td class="num"><b>≈ ${7 + 0.25 + 1 + monthly[100][2]:.0f} a month</b></td><td class="num"><b>≈ ${25 + 6 + 20 + 1 + monthly[10_000][2]:.0f} a month</b></td></tr>
+</tbody></table>
+<p class="small muted">Prices from public 2026 pricing summaries for Render (Starter $7/month, disks $0.25/GB-month, Postgres from about $6/month) and
+Resend (3,000 emails/month free, Pro $20/month for 50,000); domain and tier sizes are my estimates. Railway's Hobby plan ($5/month minimum) is
+a similar alternative. Confirm current prices with each provider before launching.</p>
 <p class="small muted">AI assistance: I built found. with an AI coding assistant. I checked the app, the numbers and the claims in this report against the logs and test files in the repository.</p>
 
 </main></body></html>"""
@@ -565,11 +587,11 @@ slides = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>f
 <div class="stat"><span class="big">{v['needs_changes']}</span>misleading listings caught<small>~{n_aud*3/60:.0f} h by hand → {aa['wall_seconds']/60:.0f} min</small></div>
 <div class="stat"><span class="big">{user_slide}</span>{"pilot task seconds, before → with found." if user_test else "items to read for one real task, before → with found."}</div></div></section>
 
-<section><h2>What's next</h2><ul>
-<li>Host it and invite founders to claim their listings (funding, team, location fill in).</li>
-<li>A Yale shared mailbox for verification emails.</li>
-<li>Render JavaScript sites so fewer audits are "unclear"; monthly re-audits.</li>
-<li>Matching: suggest founders, programs and deadlines for <em>your</em> startup.</li></ul>
+<section><h2>From project to real website</h2><ul>
+<li><b>Host</b> on Render or Railway with a persistent disk and backups (data lives in one SQLite file today).</li>
+<li><b>Real email</b> from a dedicated sender (Yale shared mailbox or Resend), plus a weekly <b>"new events" digest</b>.</li>
+<li><b>Real people:</b> pilot with the SOM Startup &amp; Entrepreneurship Club, then Tsai CITY and Yale Pitchbook to get founders claiming listings.</li>
+<li><b>Cost:</b> about ${7 + 0.25 + 1 + monthly[100][2]:.0f}/month for a club pilot, about ${25 + 6 + 20 + 1 + monthly[10_000][2]:.0f}/month Yale-wide (estimates).</li></ul>
 <p class="sub">{REPO}</p></section>
 
 </div></div>
