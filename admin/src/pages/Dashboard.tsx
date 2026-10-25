@@ -1,0 +1,83 @@
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { api, type Overview, type UsageDay } from '../api'
+
+function Stat({ label, value, sub, to, alert }: { label: string; value: number | string; sub?: string; to?: string; alert?: boolean }) {
+  const body = (
+    <>
+      <span className="stat-label">{label}</span>
+      <strong>{value}</strong>
+      {sub && <span className="stat-sub">{sub}</span>}
+    </>
+  )
+  return to ? <Link to={to} className={`stat${alert ? ' alert' : ''}`}>{body}</Link> : <div className="stat">{body}</div>
+}
+
+export function Dashboard() {
+  const [o, setO] = useState<Overview | null>(null)
+  const [usage, setUsage] = useState<UsageDay[]>([])
+
+  useEffect(() => {
+    api.overview().then(setO)
+    api.usage().then(setUsage)
+  }, [])
+
+  if (!o) return <p className="muted">Loading…</p>
+  const pct = Math.min(100, Math.round((o.scout_tokens_today / o.scout_daily_budget) * 100))
+  const maxDay = Math.max(1, ...usage.map((u) => u.tokens))
+
+  return (
+    <>
+      <header className="page-head">
+        <h1>Dashboard</h1>
+        <p className="muted">What needs you, and how the site is doing.</p>
+      </header>
+
+      <h2 className="section">Needs review</h2>
+      <div className="stats">
+        <Stat label="Founder claims" value={o.pending_claims} sub="waiting for a decision" to="/claims" alert={o.pending_claims > 0} />
+        <Stat label="New startups" value={o.pending_startups} sub="hidden until approved" to="/submissions" alert={o.pending_startups > 0} />
+      </div>
+
+      <h2 className="section">Community</h2>
+      <div className="stats">
+        <Stat label="Members" value={o.members} sub={`${o.verified_members} verified Yale email`} to="/members" />
+        <Stat label="LinkedIn connected" value={o.linkedin_members} />
+        <Stat label="Moderators" value={o.moderators} />
+        <Stat label="Upcoming events" value={o.upcoming_events} />
+      </div>
+
+      <h2 className="section">Directory</h2>
+      <div className="stats">
+        <Stat label="Listed startups" value={o.listed_startups} to="/listings" />
+        <Stat label="Claimed by founders" value={o.claimed_startups} />
+        <Stat label="Corrected listings" value={o.corrected_startups} />
+      </div>
+
+      <h2 className="section">Scout helper (gpt-6-luna)</h2>
+      <div className="panel">
+        <div className="budget-row">
+          <span>Today: <b>{o.scout_tokens_today.toLocaleString()}</b> of {o.scout_daily_budget.toLocaleString()} tokens · {o.scout_questions_today} questions</span>
+          <span className="muted">≈ ${(o.scout_tokens_today * 0.1 / 1e6).toFixed(4)}</span>
+        </div>
+        <div className="meter"><span style={{ width: `${pct}%` }} className={pct > 80 ? 'hot' : ''} /></div>
+        {usage.length > 0 && (
+          <div className="bars" aria-label="Tokens per day, last 14 days">
+            {[...usage].reverse().map((u) => (
+              <div key={u.day} className="bar" title={`${u.day}: ${u.tokens.toLocaleString()} tokens, ${u.messages} questions`}>
+                <span style={{ height: `${Math.max(4, (u.tokens / maxDay) * 100)}%` }} />
+                <em>{u.day.slice(5)}</em>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <h2 className="section">Setup</h2>
+      <div className="panel setup">
+        <div><span className="stat-label">Email</span>{o.mail_mode === 'outbox' ? 'Saved to output/outbox (not sent)' : `Sending via ${o.mail_mode}`}</div>
+        <div><span className="stat-label">LinkedIn sign-in</span>{o.linkedin_configured ? 'Connected to LinkedIn' : 'Not configured (dev stand-in)'}</div>
+      </div>
+    </>
+  )
+}

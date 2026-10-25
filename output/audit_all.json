@@ -1,0 +1,1868 @@
+{
+ "ran_at": "2026-10-25T19:20:30+00:00",
+ "audited": 97,
+ "wall_seconds": 302.8,
+ "verdicts": {
+  "accurate": 49,
+  "needs_changes": 16,
+  "unclear": 32
+ },
+ "total_cost_usd": 0.02883,
+ "tokens": {
+  "input": 218420,
+  "cached": 1115,
+  "output": 14168
+ },
+ "dropped_quotes": 4,
+ "flagged_lines": 14,
+ "results": [
+  {
+   "startup": "1.5degrees LLC (OnePointFive)",
+   "verdict": "accurate",
+   "seconds": 6.0,
+   "pages": 1,
+   "input": 2953,
+   "cached": 0,
+   "output": 182,
+   "cost_usd": 0.0003863,
+   "dropped_quotes": 0,
+   "flagged": 3,
+   "stop": "final_output",
+   "summary": "The listing\u2019s climate advisory and practitioner-led learning description is consistent with the company\u2019s stated climate solutions and hands-on training. Climate & Sustainability and Education are fitting industries. The page also contained flagged testimonial text that appeared to address AI; it was treated as website data, not as instructions.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Climate & Sustainability",
+    "Education"
+   ]
+  },
+  {
+   "startup": "11 Bibby Research",
+   "verdict": "accurate",
+   "seconds": 32.1,
+   "pages": 1,
+   "input": 3208,
+   "cached": 0,
+   "output": 152,
+   "cost_usd": 0.0003968,
+   "dropped_quotes": 0,
+   "flagged": 2,
+   "stop": "final_output",
+   "summary": "The listing's pitch accurately captures Bibby's research-writing tool, and Technology fits the software product described on the site.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Agent Ally",
+   "verdict": "unclear",
+   "seconds": 11.8,
+   "pages": 1,
+   "input": 1787,
+   "cached": 0,
+   "output": 76,
+   "cost_usd": 0.0002167,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website homepage could not be read (it returned an HTTP 404), so I can\u2019t verify the listing\u2019s pitch or industries against the company\u2019s own site.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Real Estate",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Allyx Therapeutics",
+   "verdict": "accurate",
+   "seconds": 13.5,
+   "pages": 2,
+   "input": 2805,
+   "cached": 0,
+   "output": 138,
+   "cost_usd": 0.0003495,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The homepage's description of a synapse-protecting oral therapy aligns with the listing's stated focus on protecting synapses for people with neurodegenerative diseases. Health & Biotech is an appropriate industry.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Alva Health",
+   "verdict": "accurate",
+   "seconds": 4.7,
+   "pages": 1,
+   "input": 2237,
+   "cached": 0,
+   "output": 140,
+   "cost_usd": 0.0002937,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing accurately describes Alva Health's focus on remote stroke monitoring, and Health & Biotech is an appropriate industry.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Alva Health Inc.",
+   "verdict": "accurate",
+   "seconds": 4.1,
+   "pages": 1,
+   "input": 2249,
+   "cached": 0,
+   "output": 149,
+   "cost_usd": 0.0002994,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website describes wearable technology designed to detect stroke indicators and connect users with emergency responders, matching the listing pitch. Health & Biotech and Technology are appropriate industries.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Arvinas",
+   "verdict": "accurate",
+   "seconds": 4.1,
+   "pages": 1,
+   "input": 2765,
+   "cached": 0,
+   "output": 177,
+   "cost_usd": 0.000365,
+   "dropped_quotes": 0,
+   "flagged": 1,
+   "stop": "final_output",
+   "summary": "The listing accurately describes Arvinas as a clinical-stage biotechnology company developing targeted protein degradation therapeutics. Health & Biotech is an appropriate industry.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "August",
+   "verdict": "unclear",
+   "seconds": 3.0,
+   "pages": 1,
+   "input": 1683,
+   "cached": 0,
+   "output": 67,
+   "cost_usd": 0.0002018,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The company website could not be read, so I couldn't verify whether the listing's pitch or industries match what August does.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Education",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Bexorg",
+   "verdict": "accurate",
+   "seconds": 4.1,
+   "pages": 1,
+   "input": 1965,
+   "cached": 0,
+   "output": 166,
+   "cost_usd": 0.0002795,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website describes a human-brain-based drug discovery platform aimed at neurological disease. The listing\u2019s Health & Biotech industry fits, and its pitch is consistent with the stated mission.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Biohaven",
+   "verdict": "accurate",
+   "seconds": 4.0,
+   "pages": 1,
+   "input": 2757,
+   "cached": 0,
+   "output": 179,
+   "cost_usd": 0.0003652,
+   "dropped_quotes": 0,
+   "flagged": 1,
+   "stop": "final_output",
+   "summary": "The listing accurately describes Biohaven as a biopharmaceutical company developing treatments, and Health & Biotech fits its stated business. The homepage also lists obesity among its therapeutic areas.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Bruker Cellular Analysis",
+   "verdict": "accurate",
+   "seconds": 28.8,
+   "pages": 1,
+   "input": 1781,
+   "cached": 0,
+   "output": 135,
+   "cost_usd": 0.0002456,
+   "dropped_quotes": 1,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The homepage describes enabling single-cell exploration and analysis for labs and scientists, which aligns with the listing's focus on functional single-cell analysis and Health & Biotech.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Caela Enterprises",
+   "verdict": "needs_changes",
+   "seconds": 6.5,
+   "pages": 2,
+   "input": 3382,
+   "cached": 1115,
+   "output": 258,
+   "cost_usd": 0.00036685,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "Media & Entertainment fits the creative work, but the site presents Caela as an author, storytelling and brand strategist, creative consultant, and artist. It does not substantiate the listing's claim of a multigenerational publishing, education, and entertainment franchise.",
+   "suggested_industries": [
+    "Media & Entertainment",
+    "Marketing"
+   ],
+   "current_industries": [
+    "Media & Entertainment"
+   ]
+  },
+  {
+   "startup": "CertiK",
+   "verdict": "accurate",
+   "seconds": 28.6,
+   "pages": 1,
+   "input": 3113,
+   "cached": 0,
+   "output": 153,
+   "cost_usd": 0.0003878,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website describes CertiK as a Web3 and blockchain security platform using formal verification, audits, and other security solutions. The pitch fits, and Technology is an appropriate industry.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Chorus",
+   "verdict": "accurate",
+   "seconds": 7.9,
+   "pages": 1,
+   "input": 2306,
+   "cached": 0,
+   "output": 177,
+   "cost_usd": 0.0003191,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing's pitch accurately reflects Chorus's nonprofit marketing-intelligence and fundraising focus. Social Impact and Technology are consistent with the website.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Social Impact",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Cirrus",
+   "verdict": "unclear",
+   "seconds": 2.4,
+   "pages": 1,
+   "input": 1710,
+   "cached": 0,
+   "output": 66,
+   "cost_usd": 0.000204,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "I couldn't access the company's website, so I can't verify whether the listing's pitch and industries match its main business.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Consumer",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Coco Chat",
+   "verdict": "unclear",
+   "seconds": 3.3,
+   "pages": 1,
+   "input": 1667,
+   "cached": 0,
+   "output": 69,
+   "cost_usd": 0.0002012,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "I couldn\u2019t access the website, so I can\u2019t verify whether the listing\u2019s pitch or industry matches what the company mainly does.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Coegil AI",
+   "verdict": "accurate",
+   "seconds": 4.9,
+   "pages": 1,
+   "input": 3058,
+   "cached": 0,
+   "output": 211,
+   "cost_usd": 0.0004113,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website presents Coegil as a full-stack AI platform for building apps, connecting AI to company data, and automating work. Technology fits the company's main business, and the listing pitch is consistent with the site.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Technology"
+   ]
+  },
+  {
+   "startup": "CollegeIGo",
+   "verdict": "unclear",
+   "seconds": 53.8,
+   "pages": 1,
+   "input": 1804,
+   "cached": 0,
+   "output": 96,
+   "cost_usd": 0.0002284,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website is shut down, so there is not enough evidence to verify whether the pitch or industries accurately describe CollegeIGo.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Education",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Cosnetix",
+   "verdict": "accurate",
+   "seconds": 29.3,
+   "pages": 1,
+   "input": 2394,
+   "cached": 0,
+   "output": 165,
+   "cost_usd": 0.0003219,
+   "dropped_quotes": 0,
+   "flagged": 1,
+   "stop": "final_output",
+   "summary": "The listing's pitch accurately reflects Cosnetix's biology-based skincare compatibility platform. Consumer is a fitting industry for its consumer skincare app.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Consumer"
+   ]
+  },
+  {
+   "startup": "Couragene",
+   "verdict": "accurate",
+   "seconds": 5.2,
+   "pages": 1,
+   "input": 1842,
+   "cached": 0,
+   "output": 144,
+   "cost_usd": 0.0002562,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing\u2019s pitch closely matches the company\u2019s homepage, and Health & Biotech is an appropriate industry for its stated gene and biologic therapy work.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Crew Dog",
+   "verdict": "needs_changes",
+   "seconds": 7.2,
+   "pages": 1,
+   "input": 2815,
+   "cached": 0,
+   "output": 205,
+   "cost_usd": 0.000384,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "Consumer is an appropriate industry, but the pitch is too vague: Crew Dog primarily sells hand-drawn, embroidered collegiate apparel and offers custom designs.",
+   "suggested_industries": [
+    "Consumer"
+   ],
+   "current_industries": [
+    "Consumer"
+   ]
+  },
+  {
+   "startup": "Cxpture",
+   "verdict": "unclear",
+   "seconds": 3.2,
+   "pages": 1,
+   "input": 1717,
+   "cached": 0,
+   "output": 66,
+   "cost_usd": 0.0002047,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "I couldn't access the website, so I couldn't verify whether the listing's pitch or industries match the company's main business.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Consumer",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Cybrexa Therapeutics",
+   "verdict": "needs_changes",
+   "seconds": 32.0,
+   "pages": 1,
+   "input": 1768,
+   "cached": 0,
+   "output": 151,
+   "cost_usd": 0.0002523,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The Health & Biotech industry fits, but the pitch describes a different approach than the website\u2019s stated focus on targeted intracellular delivery of anti-cancer agents.",
+   "suggested_industries": [
+    "Health & Biotech"
+   ],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Daemo AI",
+   "verdict": "unclear",
+   "seconds": 6.3,
+   "pages": 1,
+   "input": 1757,
+   "cached": 0,
+   "output": 133,
+   "cost_usd": 0.0002422,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The homepage only says that something new is coming and does not describe the company\u2019s business. There is not enough website information to assess the pitch or Technology industry.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Technology"
+   ]
+  },
+  {
+   "startup": "deej",
+   "verdict": "unclear",
+   "seconds": 3.3,
+   "pages": 1,
+   "input": 1679,
+   "cached": 0,
+   "output": 66,
+   "cost_usd": 0.0002009,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "I couldn't read the company's website, so I can't verify whether the pitch or industry matches what deej mainly does.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Destress",
+   "verdict": "unclear",
+   "seconds": 5.1,
+   "pages": 1,
+   "input": 1747,
+   "cached": 0,
+   "output": 66,
+   "cost_usd": 0.0002077,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The homepage contains no visible text, so I couldn't verify whether the listing's pitch or industries accurately describe Destress.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "DotLab",
+   "verdict": "unclear",
+   "seconds": 18.7,
+   "pages": 1,
+   "input": 1753,
+   "cached": 0,
+   "output": 76,
+   "cost_usd": 0.0002133,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "I couldn't access DotLab's website because the page read failed with an SSL handshake error, so I can't verify whether the listing matches what the company says it does.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "EnerBot",
+   "verdict": "needs_changes",
+   "seconds": 7.6,
+   "pages": 1,
+   "input": 2852,
+   "cached": 0,
+   "output": 239,
+   "cost_usd": 0.0004047,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website supports the clean-energy focus, but describes EnerBot primarily as an energy project engineering, procurement, and construction company, rather than specifically as a provider of the listed product categories. Education and Robotics are not supported as industries; Climate & Sustainability and Technology fit the site.",
+   "suggested_industries": [
+    "Climate & Sustainability",
+    "Technology"
+   ],
+   "current_industries": [
+    "Climate & Sustainability",
+    "Education",
+    "Robotics"
+   ]
+  },
+  {
+   "startup": "EV.com",
+   "verdict": "accurate",
+   "seconds": 9.0,
+   "pages": 1,
+   "input": 2420,
+   "cached": 0,
+   "output": 136,
+   "cost_usd": 0.00031,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The homepage describes a marketplace for shopping new and pre-owned electric vehicles, matching the pitch. The listed industries are consistent with its EV-focused consumer marketplace.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Climate & Sustainability",
+    "Consumer",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "EvolveImmune Therapeutics",
+   "verdict": "accurate",
+   "seconds": 5.5,
+   "pages": 1,
+   "input": 2194,
+   "cached": 0,
+   "output": 156,
+   "cost_usd": 0.0002974,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing's cancer-medicine pitch and Health & Biotech industry match the company's stated focus on developing T cell engager immunotherapies.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Fluent Futures",
+   "verdict": "accurate",
+   "seconds": 4.8,
+   "pages": 1,
+   "input": 1843,
+   "cached": 0,
+   "output": 142,
+   "cost_usd": 0.0002553,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing's pitch accurately reflects the service described on the homepage, and Social Impact is an appropriate industry tag.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Social Impact"
+   ]
+  },
+  {
+   "startup": "FrameShare",
+   "verdict": "accurate",
+   "seconds": 6.8,
+   "pages": 1,
+   "input": 2944,
+   "cached": 0,
+   "output": 254,
+   "cost_usd": 0.0004214,
+   "dropped_quotes": 0,
+   "flagged": 2,
+   "stop": "final_output",
+   "summary": "The listing broadly matches the website: FrameShare is a secure digital platform for art therapy and creative care, with tools for therapists and art educators. The listed industries fit these stated uses.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Education",
+    "Health & Biotech",
+    "Social Impact",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Freedom Biosciences",
+   "verdict": "accurate",
+   "seconds": 4.2,
+   "pages": 1,
+   "input": 2930,
+   "cached": 0,
+   "output": 163,
+   "cost_usd": 0.0003745,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing accurately describes the company\u2019s focus on developing neuropsychiatric therapeutics, and Health & Biotech is an appropriate industry.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "FulcrumCare",
+   "verdict": "accurate",
+   "seconds": 5.0,
+   "pages": 1,
+   "input": 2557,
+   "cached": 0,
+   "output": 194,
+   "cost_usd": 0.0003527,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing accurately describes FulcrumCare\u2019s dental care model for Medicaid and Medicare beneficiaries. Health & Biotech is an appropriate industry.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Genepi",
+   "verdict": "unclear",
+   "seconds": 55.5,
+   "pages": 1,
+   "input": 1700,
+   "cached": 0,
+   "output": 73,
+   "cost_usd": 0.0002065,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "I couldn\u2019t read the company website (the homepage returned an HTTP 404), so I can\u2019t verify whether the listing\u2019s pitch or industries match.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "General Neuro",
+   "verdict": "needs_changes",
+   "seconds": 18.9,
+   "pages": 1,
+   "input": 3210,
+   "cached": 0,
+   "output": 262,
+   "cost_usd": 0.000452,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The pitch is misleading: the website describes NeuroLingo as a headband used during reading practice for struggling readers, not a device to reopen a critical period for language acquisition. The listed industries are broadly consistent with the product\u2019s health, education, and technology aspects.",
+   "suggested_industries": [
+    "Health & Biotech",
+    "Education",
+    "Technology"
+   ],
+   "current_industries": [
+    "Education",
+    "Health & Biotech",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Home Catalyst Partners",
+   "verdict": "accurate",
+   "seconds": 5.1,
+   "pages": 1,
+   "input": 1818,
+   "cached": 0,
+   "output": 171,
+   "cost_usd": 0.0002673,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The homepage describes investing in multifamily and single-family housing for financial performance and expanded access to quality housing. This supports the listing\u2019s real estate industry and its risk-adjusted, triple-bottom-line housing focus.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Real Estate"
+   ]
+  },
+  {
+   "startup": "IndiaRTI",
+   "verdict": "unclear",
+   "seconds": 7.8,
+   "pages": 2,
+   "input": 2936,
+   "cached": 0,
+   "output": 147,
+   "cost_usd": 0.0003671,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The homepage provides only a broad description and navigation labels, so it does not provide enough detail to verify the listing's specific pitch or industries. The available About page could not be read.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Social Impact",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Inozyme",
+   "verdict": "unclear",
+   "seconds": 3.6,
+   "pages": 1,
+   "input": 1718,
+   "cached": 0,
+   "output": 66,
+   "cost_usd": 0.0002048,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "I couldn't read the company's website because the homepage request failed, so I can't verify whether the pitch and industry match.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "KampusMart",
+   "verdict": "unclear",
+   "seconds": 5.1,
+   "pages": 1,
+   "input": 1754,
+   "cached": 0,
+   "output": 64,
+   "cost_usd": 0.0002074,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "I couldn't verify the listing because the company's homepage could not be read; it returned a certificate hostname mismatch.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Consumer"
+   ]
+  },
+  {
+   "startup": "Kenji Health",
+   "verdict": "needs_changes",
+   "seconds": 4.6,
+   "pages": 1,
+   "input": 1930,
+   "cached": 0,
+   "output": 220,
+   "cost_usd": 0.000303,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The industries broadly fit the site\u2019s focus on health programs, AI technology, and community impact. The pitch is vague and does not capture the specific offering: AI-powered participant engagement and outcomes measurement for community care programs.",
+   "suggested_industries": [
+    "Health & Biotech",
+    "Technology",
+    "Social Impact"
+   ],
+   "current_industries": [
+    "Health & Biotech",
+    "Social Impact",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "komodo.ai",
+   "verdict": "unclear",
+   "seconds": 5.3,
+   "pages": 1,
+   "input": 1755,
+   "cached": 0,
+   "output": 67,
+   "cost_usd": 0.000209,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The homepage returned no visible text, so I couldn't verify whether the listing's pitch or industries match the company's main business.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "LeanCon",
+   "verdict": "accurate",
+   "seconds": 32.2,
+   "pages": 1,
+   "input": 2979,
+   "cached": 0,
+   "output": 164,
+   "cost_usd": 0.0003799,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing accurately describes LeanCon\u2019s AI-powered construction planning and its focus on general contractors and real estate developers. The Real Estate and Technology industries fit the construction-planning software business described on the site.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Real Estate",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Lending Automator",
+   "verdict": "accurate",
+   "seconds": 5.3,
+   "pages": 1,
+   "input": 2939,
+   "cached": 0,
+   "output": 166,
+   "cost_usd": 0.0003769,
+   "dropped_quotes": 0,
+   "flagged": 1,
+   "stop": "final_output",
+   "summary": "The listing accurately describes a platform that helps mortgage and commercial brokers match borrowers with lenders and manage loan applications. Fintech, Real Estate, and Technology are reasonable industry tags for this business.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Fintech",
+    "Real Estate",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Manifest Technologies",
+   "verdict": "accurate",
+   "seconds": 5.3,
+   "pages": 1,
+   "input": 2178,
+   "cached": 0,
+   "output": 186,
+   "cost_usd": 0.0003108,
+   "dropped_quotes": 0,
+   "flagged": 1,
+   "stop": "final_output",
+   "summary": "The listing's pitch and Health & Biotech industry fit the website's focus on AI-powered computational neuroimaging and individualized therapies for CNS disorders.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "maxPartners",
+   "verdict": "accurate",
+   "seconds": 7.9,
+   "pages": 1,
+   "input": 1870,
+   "cached": 0,
+   "output": 158,
+   "cost_usd": 0.000266,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website describes a design studio helping founders, teams, and creatives communicate their ideas. This aligns with the listing's pitch and Marketing industry.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Marketing"
+   ]
+  },
+  {
+   "startup": "MindStudy AI",
+   "verdict": "unclear",
+   "seconds": 6.2,
+   "pages": 1,
+   "input": 1689,
+   "cached": 0,
+   "output": 71,
+   "cost_usd": 0.0002044,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website could not be read because the address was not available as a public website, so I couldn't verify the listing's pitch or industries.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Education",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Mirage Labs",
+   "verdict": "unclear",
+   "seconds": 3.2,
+   "pages": 1,
+   "input": 1687,
+   "cached": 0,
+   "output": 73,
+   "cost_usd": 0.0002052,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "I couldn\u2019t access the company website because it returned an HTTP 429 error, so I can\u2019t verify whether the listing\u2019s pitch or industries match.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Robotics",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Modifi Bio",
+   "verdict": "unclear",
+   "seconds": 6.9,
+   "pages": 1,
+   "input": 1697,
+   "cached": 0,
+   "output": 77,
+   "cost_usd": 0.0002082,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website could not be read because it redirects to Merck.com, which is blocked. I can\u2019t verify the listing\u2019s pitch or industry from the startup\u2019s website.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Morphic",
+   "verdict": "unclear",
+   "seconds": 4.7,
+   "pages": 1,
+   "input": 1743,
+   "cached": 0,
+   "output": 69,
+   "cost_usd": 0.0002088,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website homepage contains no visible text, so I can\u2019t verify whether the listing\u2019s pitch or Technology industry accurately describes Morphic.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Mundaly",
+   "verdict": "needs_changes",
+   "seconds": 31.6,
+   "pages": 1,
+   "input": 1818,
+   "cached": 0,
+   "output": 189,
+   "cost_usd": 0.0002763,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website describes Mundaly as a marketplace/licensing service for company data used by AI labs, not an AI platform for community engagement or impact measurement. Technology fits; the listed Health & Biotech industry is not supported by the homepage.",
+   "suggested_industries": [
+    "Technology"
+   ],
+   "current_industries": [
+    "Health & Biotech",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "New Vanguard Art",
+   "verdict": "unclear",
+   "seconds": 8.3,
+   "pages": 1,
+   "input": 1722,
+   "cached": 0,
+   "output": 76,
+   "cost_usd": 0.0002102,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The company website homepage could not be read (it returned an HTTP 404), so I couldn't verify whether the listing's pitch or industry matches the company's main business.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Media & Entertainment"
+   ]
+  },
+  {
+   "startup": "Onsero",
+   "verdict": "unclear",
+   "seconds": 43.1,
+   "pages": 1,
+   "input": 1753,
+   "cached": 0,
+   "output": 72,
+   "cost_usd": 0.0002113,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website could not be read because it redirected to a blocked third-party site, so I can't verify the listing against Onsero's own website.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Oria AI",
+   "verdict": "accurate",
+   "seconds": 11.3,
+   "pages": 1,
+   "input": 2603,
+   "cached": 0,
+   "output": 202,
+   "cost_usd": 0.0003613,
+   "dropped_quotes": 0,
+   "flagged": 1,
+   "stop": "final_output",
+   "summary": "The listing's pitch and industries are consistent with the website's description of a personal AI life coach that synthesizes personal data into actionable guidance and wellness insights.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Consumer",
+    "Health & Biotech",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Orphic",
+   "verdict": "needs_changes",
+   "seconds": 4.6,
+   "pages": 1,
+   "input": 1760,
+   "cached": 0,
+   "output": 148,
+   "cost_usd": 0.00025,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The pitch does not match the website\u2019s stated offering, which centers on protection products. Technology remains a fitting industry classification.",
+   "suggested_industries": [
+    "Technology"
+   ],
+   "current_industries": [
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Osmol Therapeutics",
+   "verdict": "unclear",
+   "seconds": 3.5,
+   "pages": 1,
+   "input": 1738,
+   "cached": 0,
+   "output": 69,
+   "cost_usd": 0.0002083,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The company website could not be read, so I could not verify whether the listing's pitch or industry matches the company's main business.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Pananosis Laboratories",
+   "verdict": "accurate",
+   "seconds": 4.2,
+   "pages": 1,
+   "input": 1862,
+   "cached": 0,
+   "output": 118,
+   "cost_usd": 0.0002452,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website describes a blood test that analyzes immune footprints using machine learning, which aligns with the listing's pitch and selected industries.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Pangomer Platform",
+   "verdict": "accurate",
+   "seconds": 8.6,
+   "pages": 1,
+   "input": 2489,
+   "cached": 0,
+   "output": 203,
+   "cost_usd": 0.0003504,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing pitch closely matches the website\u2019s description of Pangomer therapeutic agents targeting disease-associated IDPs. Health & Biotech is an appropriate industry for this drug-discovery business.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Pearl Bio",
+   "verdict": "accurate",
+   "seconds": 8.7,
+   "pages": 1,
+   "input": 1976,
+   "cached": 0,
+   "output": 151,
+   "cost_usd": 0.0002731,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing's pitch closely matches Pearl Bio's stated focus on synthetic biology and biomaterials, and Health & Biotech fits the described biologics platform.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Picksy.Quest",
+   "verdict": "unclear",
+   "seconds": 14.7,
+   "pages": 1,
+   "input": 1802,
+   "cached": 0,
+   "output": 72,
+   "cost_usd": 0.0002162,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The homepage returned no visible content describing Picksy.Quest, so I can\u2019t verify whether the listing\u2019s pitch or industries accurately reflect the company.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Playbl",
+   "verdict": "needs_changes",
+   "seconds": 13.1,
+   "pages": 1,
+   "input": 2284,
+   "cached": 0,
+   "output": 235,
+   "cost_usd": 0.0003459,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The pitch captures Playbl\u2019s focus on youth health and substance-use prevention, but narrows its work to vaping and opioids and frames it mainly as a consumer offering. The site describes a broader portfolio of evidence-based digital health games for schools and youth-facing organizations.",
+   "suggested_industries": [
+    "Health & Biotech",
+    "Education",
+    "Social Impact"
+   ],
+   "current_industries": [
+    "Consumer",
+    "Social Impact"
+   ]
+  },
+  {
+   "startup": "Portrage Biotech",
+   "verdict": "accurate",
+   "seconds": 22.9,
+   "pages": 1,
+   "input": 2282,
+   "cached": 0,
+   "output": 209,
+   "cost_usd": 0.0003327,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The pitch and Health & Biotech industry match the website's description of Portage's oncology drug-development business. The homepage also says Portage Biotech Inc. is now AlphaTON Capital Corp, so the listing name may need updating.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Pro-Patient Tech",
+   "verdict": "needs_changes",
+   "seconds": 22.6,
+   "pages": 2,
+   "input": 3408,
+   "cached": 0,
+   "output": 223,
+   "cost_usd": 0.0004523,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing describes a condition-specific lifestyle recommendation database, but the website presents Caspia as a team of specialized health agents offering personalized health guidance. Health & Biotech fits; Technology is also relevant to the platform.",
+   "suggested_industries": [
+    "Health & Biotech",
+    "Technology"
+   ],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Project Hope: Transplant",
+   "verdict": "accurate",
+   "seconds": 18.2,
+   "pages": 1,
+   "input": 2945,
+   "cached": 0,
+   "output": 185,
+   "cost_usd": 0.000387,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The pitch accurately reflects the organization\u2019s peer-support mission, and Health & Biotech and Social Impact fit its focus on young transplant patients and community support.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech",
+    "Social Impact"
+   ]
+  },
+  {
+   "startup": "Propria",
+   "verdict": "accurate",
+   "seconds": 38.3,
+   "pages": 1,
+   "input": 2358,
+   "cached": 0,
+   "output": 159,
+   "cost_usd": 0.0003153,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing's pitch closely matches Propria's stated focus on in vitro cardiac contractility testing, and Health & Biotech is an appropriate industry.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Quantum Circuits",
+   "verdict": "accurate",
+   "seconds": 10.7,
+   "pages": 1,
+   "input": 2907,
+   "cached": 0,
+   "output": 162,
+   "cost_usd": 0.0003717,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The pitch closely matches the website\u2019s description of its dual-rail qubit technology. Technology is an appropriate industry tag.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Technology"
+   ]
+  },
+  {
+   "startup": "QuarterMill",
+   "verdict": "accurate",
+   "seconds": 5.8,
+   "pages": 1,
+   "input": 1995,
+   "cached": 0,
+   "output": 152,
+   "cost_usd": 0.0002755,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The pitch accurately describes QuarterMill\u2019s work turning archival, library, and museum collections into source-linked knowledge and discovery tools. Technology is an appropriate industry tag.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Technology"
+   ]
+  },
+  {
+   "startup": "rentnbuy.com",
+   "verdict": "accurate",
+   "seconds": 41.6,
+   "pages": 1,
+   "input": 3476,
+   "cached": 0,
+   "output": 198,
+   "cost_usd": 0.0004466,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing accurately describes rentnbuy as a digital platform for direct, cost-effective real-estate transactions. Real Estate is an appropriate industry.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Real Estate"
+   ]
+  },
+  {
+   "startup": "RootOn",
+   "verdict": "unclear",
+   "seconds": 4.2,
+   "pages": 1,
+   "input": 1758,
+   "cached": 0,
+   "output": 77,
+   "cost_usd": 0.0002143,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "I couldn\u2019t read the website: the supplied address was not recognized as a public website, so I can\u2019t verify the pitch or industry against the company\u2019s own site.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Media & Entertainment"
+   ]
+  },
+  {
+   "startup": "Scrapi",
+   "verdict": "accurate",
+   "seconds": 6.7,
+   "pages": 1,
+   "input": 1756,
+   "cached": 0,
+   "output": 127,
+   "cost_usd": 0.0002391,
+   "dropped_quotes": 1,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website describes helping customers find savings, locate recycling vendors, and optimize waste and recycling programs. This aligns with the listing\u2019s waste-management focus and Climate & Sustainability and Technology industries.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Climate & Sustainability",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Seranova Bio",
+   "verdict": "accurate",
+   "seconds": 18.5,
+   "pages": 1,
+   "input": 2016,
+   "cached": 0,
+   "output": 168,
+   "cost_usd": 0.0002856,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The site describes therapeutic target discovery based on patients\u2019 naturally occurring, protective autoantibodies. The pitch is consistent with that focus, and Health & Biotech is an appropriate industry.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Series",
+   "verdict": "accurate",
+   "seconds": 9.7,
+   "pages": 1,
+   "input": 1766,
+   "cached": 0,
+   "output": 127,
+   "cost_usd": 0.0002401,
+   "dropped_quotes": 1,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website describes Series as an AI social network that helps people get warm introductions. This is consistent with the listing's pitch and industries.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Consumer",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "ShinnKuu",
+   "verdict": "unclear",
+   "seconds": 5.1,
+   "pages": 1,
+   "input": 1689,
+   "cached": 0,
+   "output": 75,
+   "cost_usd": 0.0002064,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website could not be read because it redirects to preservio.co, which is blocked. I couldn't verify the listing's pitch or industries from the company's website.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Climate & Sustainability",
+    "Consumer",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Singleron Bio",
+   "verdict": "accurate",
+   "seconds": 28.9,
+   "pages": 1,
+   "input": 2937,
+   "cached": 0,
+   "output": 140,
+   "cost_usd": 0.0003637,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website presents Singleron as a provider of single-cell sequencing and multi-omics solutions for research and clinical applications. The pitch and Health & Biotech industry fit.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Sl\u00e1inte Health",
+   "verdict": "needs_changes",
+   "seconds": 5.1,
+   "pages": 1,
+   "input": 2999,
+   "cached": 0,
+   "output": 259,
+   "cost_usd": 0.0004294,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing broadly identifies a consumer wellness product, but its claim that it uses everyday data for personalized next steps is not supported by the site, which emphasizes gentle suggestions and nearby activities. The site describes general wellness, not medical care.",
+   "suggested_industries": [
+    "Health & Biotech",
+    "Technology",
+    "Social Impact"
+   ],
+   "current_industries": [
+    "Health & Biotech",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Spikefore",
+   "verdict": "unclear",
+   "seconds": 3.6,
+   "pages": 1,
+   "input": 1754,
+   "cached": 0,
+   "output": 73,
+   "cost_usd": 0.0002119,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "I couldn't access Spikefore's website because it returned an HTTP 429 error, so I can't verify whether the listing matches what the company mainly does.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Technology"
+   ]
+  },
+  {
+   "startup": "SummerStore",
+   "verdict": "accurate",
+   "seconds": 5.1,
+   "pages": 1,
+   "input": 1726,
+   "cached": 0,
+   "output": 115,
+   "cost_usd": 0.0002301,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website describes full-service college storage with campus pickup, storage, and delivery, which matches the listing\u2019s pitch and Logistics industry.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Logistics"
+   ]
+  },
+  {
+   "startup": "Suppal",
+   "verdict": "needs_changes",
+   "seconds": 28.1,
+   "pages": 1,
+   "input": 2144,
+   "cached": 0,
+   "output": 225,
+   "cost_usd": 0.0003269,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing describes an admissions-support product for high school students, but the website presents Suppal as a marketplace for creators to remake viral videos for brands. Education does not fit the website's stated main business.",
+   "suggested_industries": [
+    "Marketing",
+    "Media & Entertainment",
+    "Technology"
+   ],
+   "current_industries": [
+    "Education",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Tennie",
+   "verdict": "unclear",
+   "seconds": 6.3,
+   "pages": 2,
+   "input": 2856,
+   "cached": 0,
+   "output": 136,
+   "cost_usd": 0.0003536,
+   "dropped_quotes": 1,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The homepage text does not provide enough information to verify the pitch or Consumer industry, and the linked About page could not be read.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Consumer"
+   ]
+  },
+  {
+   "startup": "Tetricus Labs",
+   "verdict": "unclear",
+   "seconds": 7.0,
+   "pages": 2,
+   "input": 2727,
+   "cached": 0,
+   "output": 149,
+   "cost_usd": 0.0003472,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The homepage does not explain Tetricus Labs\u2019 business, and the only additional page attempted was unavailable. I can\u2019t verify whether the pitch or Health & Biotech industry matches its main business.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Toralgen",
+   "verdict": "accurate",
+   "seconds": 4.4,
+   "pages": 1,
+   "input": 2227,
+   "cached": 0,
+   "output": 172,
+   "cost_usd": 0.0003087,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The pitch accurately reflects the company's stated preclinical therapeutic development focus, and Health & Biotech fits its biopharmaceutical and drug-delivery work.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Transneural Therapeutics",
+   "verdict": "accurate",
+   "seconds": 15.3,
+   "pages": 1,
+   "input": 2681,
+   "cached": 0,
+   "output": 166,
+   "cost_usd": 0.0003511,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The pitch matches the company's stated focus on developing rapid-acting agents for neuropsychiatric and neurodegenerative conditions. Health & Biotech is an appropriate industry tag.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "UfarmX",
+   "verdict": "accurate",
+   "seconds": 56.8,
+   "pages": 1,
+   "input": 2549,
+   "cached": 0,
+   "output": 154,
+   "cost_usd": 0.0003319,
+   "dropped_quotes": 0,
+   "flagged": 1,
+   "stop": "final_output",
+   "summary": "The listing broadly matches the site: UfarmX provides AI-enabled credit infrastructure that connects agricultural businesses and financial institutions with smallholder farmer lending. Fintech and Technology are appropriate industries.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Fintech",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Urologic Design",
+   "verdict": "needs_changes",
+   "seconds": 6.8,
+   "pages": 1,
+   "input": 2502,
+   "cached": 0,
+   "output": 224,
+   "cost_usd": 0.0003622,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The pitch is broadly aligned with the site, though it describes Uroplug as a current device rather than one under development. Health & Biotech fits; Climate & Sustainability is not a primary industry\u2014the waste-reduction benefit is secondary to the continence-care product.",
+   "suggested_industries": [
+    "Health & Biotech"
+   ],
+   "current_industries": [
+    "Climate & Sustainability",
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "VasoRX",
+   "verdict": "accurate",
+   "seconds": 5.1,
+   "pages": 1,
+   "input": 2383,
+   "cached": 0,
+   "output": 135,
+   "cost_usd": 0.0003058,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The pitch and Health & Biotech industry fit the company's stated focus on RNA therapeutics for cardiovascular disease.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Vault Kinetics Inc.",
+   "verdict": "needs_changes",
+   "seconds": 4.8,
+   "pages": 1,
+   "input": 3199,
+   "cached": 0,
+   "output": 193,
+   "cost_usd": 0.0004164,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing's 'intelligent flooring' pitch is misleading: the site describes portable force-plate hardware and performance analysis tools. Technology fits, but Health & Biotech better reflects its human-performance focus.",
+   "suggested_industries": [
+    "Health & Biotech",
+    "Technology"
+   ],
+   "current_industries": [
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Vedanta Biosciences",
+   "verdict": "accurate",
+   "seconds": 4.1,
+   "pages": 1,
+   "input": 2195,
+   "cached": 0,
+   "output": 173,
+   "cost_usd": 0.000306,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The pitch matches the site's description of advancing bacterial-based therapies for gastrointestinal disease, and Health & Biotech is an appropriate industry.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Veil Labs Inc.",
+   "verdict": "accurate",
+   "seconds": 7.1,
+   "pages": 1,
+   "input": 2760,
+   "cached": 0,
+   "output": 194,
+   "cost_usd": 0.000373,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website describes apparish as a location-based mobile ghost-hunting game with generated spirits, conversations, and rivalry between players. The Consumer, Media & Entertainment, and Technology industries fit that business.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Consumer",
+    "Media & Entertainment",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "VeruStruct",
+   "verdict": "needs_changes",
+   "seconds": 4.4,
+   "pages": 1,
+   "input": 2459,
+   "cached": 0,
+   "output": 250,
+   "cost_usd": 0.0003709,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing broadly reflects Verustruct's focus on robotic construction for affordable, sustainable housing, but its specific claims about upcycled materials and chamber-based printing are not supported by the homepage. The site's stated approach is automated formwork, robotics, conventional structural materials, and translational slipform.",
+   "suggested_industries": [
+    "Real Estate",
+    "Technology",
+    "Climate & Sustainability"
+   ],
+   "current_industries": [
+    "Climate & Sustainability",
+    "Real Estate",
+    "Social Impact",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Vyriad",
+   "verdict": "accurate",
+   "seconds": 5.9,
+   "pages": 1,
+   "input": 2400,
+   "cached": 0,
+   "output": 172,
+   "cost_usd": 0.000326,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The listing pitch closely matches Vyriad's description of its work, and Health & Biotech is an appropriate industry for its therapeutic virus platform development.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Win Number",
+   "verdict": "needs_changes",
+   "seconds": 13.8,
+   "pages": 1,
+   "input": 1982,
+   "cached": 0,
+   "output": 229,
+   "cost_usd": 0.0003127,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The Technology industry fits the campaign software and analytics offering. However, the homepage describes planning, tracking, and reporting tools, not an all-in-one AI platform or a Democratic-only focus, so the pitch should be revised.",
+   "suggested_industries": [
+    "Technology",
+    "Social Impact"
+   ],
+   "current_industries": [
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Woofwoof Lux",
+   "verdict": "unclear",
+   "seconds": 4.3,
+   "pages": 1,
+   "input": 1828,
+   "cached": 0,
+   "output": 131,
+   "cost_usd": 0.0002483,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The homepage lists dog grooming, fitness, washing, and daycare, but provides too little detail to confirm whether the listing's automated dog-washing pitch or Robotics and Technology industries accurately describe the main business.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Robotics",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Woola",
+   "verdict": "unclear",
+   "seconds": 28.2,
+   "pages": 1,
+   "input": 1755,
+   "cached": 0,
+   "output": 69,
+   "cost_usd": 0.00021,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The homepage returned no visible text, so I could not verify whether the listing's pitch or industries match what Woola mainly does.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Consumer",
+    "Health & Biotech",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "Xanadu Bio",
+   "verdict": "accurate",
+   "seconds": 5.0,
+   "pages": 1,
+   "input": 2935,
+   "cached": 0,
+   "output": 154,
+   "cost_usd": 0.0003705,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The pitch matches the website's description of Xanadu Bio's polymer nanoparticle delivery platform, and Health & Biotech fits its therapeutic development focus.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  },
+  {
+   "startup": "Yideshare",
+   "verdict": "accurate",
+   "seconds": 4.3,
+   "pages": 1,
+   "input": 1820,
+   "cached": 0,
+   "output": 133,
+   "cost_usd": 0.0002485,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The site describes Yideshare as a Yale-community ride-sharing platform for splitting rides and carpooling. The Technology and Climate & Sustainability industries fit that offering.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Climate & Sustainability",
+    "Technology"
+   ]
+  },
+  {
+   "startup": "YUE",
+   "verdict": "unclear",
+   "seconds": 16.8,
+   "pages": 1,
+   "input": 1701,
+   "cached": 0,
+   "output": 77,
+   "cost_usd": 0.0002086,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "The website homepage could not be read because it redirects to getyue.com, which was blocked. I can\u2019t verify whether the listing matches the company\u2019s main business.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Consumer",
+    "Media & Entertainment"
+   ]
+  },
+  {
+   "startup": "ZK Genomics",
+   "verdict": "unclear",
+   "seconds": 2.8,
+   "pages": 1,
+   "input": 1693,
+   "cached": 0,
+   "output": 67,
+   "cost_usd": 0.0002028,
+   "dropped_quotes": 0,
+   "flagged": 0,
+   "stop": "final_output",
+   "summary": "I couldn't access the company's website, so I can't verify whether the listing's pitch or industry accurately reflects its main business.",
+   "suggested_industries": [],
+   "current_industries": [
+    "Health & Biotech"
+   ]
+  }
+ ]
+}

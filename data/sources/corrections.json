@@ -1,0 +1,13 @@
+{
+ "about": "Fixes applied on top of the source snapshots at import (python db.py --reset). Keyed by Yale Pitchbook id. Admin edits to imported listings are saved here automatically.",
+ "pitchbook": {
+  "111": {
+   "name": "Home Catalyst Partners",
+   "tagline": "Real estate investment firm delivering risk-adjusted returns through triple-bottom-line housing opportunities.",
+   "industries": ["Real Estate"],
+   "reason": "Pitchbook listed it as healthcare housing for adults with autism/IDD. It is a real estate investment firm; housing for adults with autism/IDD (64 units) is one of its deals, not its focus.",
+   "source": "https://homecatalystpartners.com/",
+   "corrected_at": "2026-10-25"
+  }
+ }
+}
