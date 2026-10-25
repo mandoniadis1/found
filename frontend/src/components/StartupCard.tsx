@@ -29,7 +29,7 @@ export function StartupCard({ s, compact = false }: { s: Startup; compact?: bool
           <h3><Link to={`/startups/${s.id}`} className="stretched">{s.name}</Link></h3>
           <p className="muted small ellipsis">{s.affiliations.join(' · ')}</p>
         </div>
-        {!compact && (s.hiring ? <span className="pill pill-hiring">Hiring</span> : s.looking_for ? <span className="pill pill-ask">Has an ask</span> : null)}
+        {!compact && s.source === 'demo' ? <span className="pill pill-demo">Demo</span> : !compact && (s.hiring ? <span className="pill pill-hiring">Hiring</span> : s.looking_for ? <span className="pill pill-ask">Has an ask</span> : null)}
       </div>
       <p className="tagline clamp">{s.tagline}</p>
       <div className="card-meta">

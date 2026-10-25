@@ -241,6 +241,33 @@ def migrate(conn: sqlite3.Connection) -> None:
     if conn.execute("SELECT COUNT(*) FROM users").fetchone()[0] and not conn.execute(
             "SELECT 1 FROM users WHERE email = ?", (config.DEMO_ADMIN_EMAIL,)).fetchone():
         add_demo_admin(conn)
+    if conn.execute("SELECT COUNT(*) FROM users").fetchone()[0]:
+        ensure_demo_founder(conn)
+
+
+def ensure_demo_founder(conn: sqlite3.Connection) -> None:
+    """LOCAL MODE ONLY: a fake founder who owns a clearly labeled demo listing, so graders can try the founder card,
+    "Message founder" and replies without claiming a real company. Never created when FOUND_DEV_MODE=0."""
+    if not config.DEV_MODE or conn.execute("SELECT 1 FROM users WHERE email = ?", (DEMO_FOUNDER_EMAIL,)).fetchone():
+        return
+    created = now()
+    uid = conn.execute(
+        "INSERT INTO users (first_name, last_name, email, password_hash, school, headline, linkedin_url, email_verified,"
+        " is_test_account, created_at) VALUES (?,?,?,?,?,?,?,1,1,?)",
+        ("Test", "Founder", DEMO_FOUNDER_EMAIL, hash_password(DEMO_PASSWORD), "Yale SOM",
+         "Fake test account for trying messages and founder cards",
+         "https://www.linkedin.com/in/found-demo-test-founder", created),
+    ).lastrowid
+    sid = conn.execute(
+        "INSERT INTO startups (name, tagline, description, stage, looking_for, hiring, founder_id, founder_verified_via,"
+        " status, source, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+        (DEMO_STARTUP, "Demo listing for testing found. Not a real company.",
+         "This listing exists only in local mode so you can see a founder card, open the founder's LinkedIn link, and "
+         "message the founder (log in as test.founder@yale.edu / found2026 to reply).",
+         "Idea", "Testers: send me a message to try found.'s messaging.", 0, uid, "admin_review", "listed", "demo", created),
+    ).lastrowid
+    conn.executemany("INSERT INTO startup_industries VALUES (?,?)", [(sid, "Technology")])
+    conn.executemany("INSERT INTO startup_affiliations VALUES (?,?)", [(sid, "Yale SOM")])
 
 
 def add_demo_admin(conn: sqlite3.Connection) -> None:
@@ -363,6 +390,9 @@ def load_source(name: str) -> list[dict]:
 
 # ---------------------------------------------------------------- seed
 
+# Test accounts for local mode (graders). All use the password found2026. None are real people or companies.
+DEMO_FOUNDER_EMAIL = "test.founder@yale.edu"
+DEMO_STARTUP = "Bulldog Test Co."
 DEMO_EMAIL = "demo@yale.edu"
 DEMO_PASSWORD = "found2026"
 TEST_EMAIL = "dan@yale.edu"  # an obviously-test second account so chat can be tried end to end
@@ -520,6 +550,7 @@ def seed(conn: sqlite3.Connection) -> None:
         ("Handsome", "Dan", TEST_EMAIL, hash_password(DEMO_PASSWORD), "Yale College", "Test account for trying messages", 1, created),
     ).lastrowid
     add_demo_admin(conn)
+    ensure_demo_founder(conn)
     a, b = sorted((demo_id, dan_id))
     conv = conn.execute("INSERT INTO conversations (user_a, user_b, created_at) VALUES (?,?,?)", (a, b, created)).lastrowid
     conn.execute("INSERT INTO messages (conversation_id, sender_id, body, created_at) VALUES (?,?,?,?)",

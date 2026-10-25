@@ -97,7 +97,9 @@ export function StartupPage() {
             </>
           )}
           <p className="source-note">
-            {s.source === 'yale_pitchbook' ? 'Listing from the Yale Startup Directory (Yale Pitchbook).' : 'Added on found. by its founder.'}
+            {s.source === 'yale_pitchbook' ? 'Listing from the Yale Startup Directory (Yale Pitchbook).'
+              : s.source === 'demo' ? 'Demo listing (local mode only) for testing the founder card and messaging. Not a real company.'
+              : 'Added on found. by its founder and approved by the found. team.'}
           </p>
           {s.correction_note && <p className="correction-note"><strong>Corrected by found.</strong> {s.correction_note}</p>}
           {user?.is_admin && !mine && (

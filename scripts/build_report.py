@@ -21,11 +21,15 @@ PRICE_IN, PRICE_CACHED, PRICE_OUT = 0.10, 0.01, 0.50  # gpt-6-luna, $ per 1M tok
 ev = json.loads((OUT / "eval_scout.json").read_text())
 aa = json.loads((OUT / "audit_all.json").read_text())
 st = json.loads((OUT / "safety_tests.json").read_text())
+ft = json.loads((OUT / "feature_tests.json").read_text())
 trail = json.loads((OUT / "audit_trail.json").read_text())
 user_test = json.loads((OUT / "user_test.json").read_text()) if (OUT / "user_test.json").exists() else None
 
 with sqlite3.connect(ROOT / "data" / "found.db") as c:
-    n_startups = c.execute("SELECT COUNT(*) FROM startups WHERE status='listed'").fetchone()[0]
+    n_startups = c.execute("SELECT COUNT(*) FROM startups WHERE status='listed' AND source='yale_pitchbook'").fetchone()[0]
+    my_startup = c.execute("SELECT s.name, s.tagline, s.stage, s.created_at, s.founder_verified_via FROM startups s "
+                           "JOIN users u ON u.id = s.founder_id WHERE s.source='member' AND s.status='listed' "
+                           "AND u.email='madison.andoniadis@yale.edu' ORDER BY s.id LIMIT 1").fetchone()
     n_opps = c.execute("SELECT COUNT(*) FROM opportunities").fetchone()[0]
     n_deadlines = c.execute("SELECT COUNT(*) FROM expected_deadlines").fetchone()[0]
     applied = c.execute("SELECT COUNT(DISTINCT startup_id) FROM listing_audits WHERE status='applied'").fetchone()[0]
@@ -180,6 +184,8 @@ to answer it on the original sites and on found.</p>
 with outside users; that is the first item under next steps.</p>"""
     user_slide = f"{before_items} → {after_items}"
 
+FEATURE_ROWS = "".join(f"<tr><td>{'✅' if r['passed'] else '❌'}</td><td><b>{e(r['test'])}</b></td><td class='small'>{e(r['detail'][:220])}</td></tr>" for r in ft["results"])
+
 # ---------------------------------------------------------------- report
 CSS = """
 @page { size: letter; margin: 0.6in 0.65in; }
@@ -239,7 +245,9 @@ agents: one that answers questions for a fraction of a cent, and one that keeps 
 <div class="meta">
 <b>Author</b><span>{AUTHOR}</span>
 <b>Repository</b><span><a href="{REPO}">{REPO}</a> (run with <code>python run.py</code>; see README)</span>
-<b>Live app</b><span>Runs locally from the repo (one command). Demo admin in local mode: admin@yale.edu / found2026 at /admin</span>
+<b>Live app</b><span>Runs locally from the repo (one command).</span>
+<b>Test accounts</b><span>Local mode, password found2026: member <b>demo@yale.edu</b>; fake founder <b>test.founder@yale.edu</b>
+(owns the demo listing "Bulldog Test Co.", for trying the founder card and messaging); admin <b>admin@yale.edu</b> at /admin.</span>
 <b>Online copies</b><span><a href="https://mandoniadis1.github.io/found/report.html">report</a> ·
 <a href="https://mandoniadis1.github.io/found/slides.html">slides</a> (GitHub Pages)</span>
 <b>Model</b><span>gpt-6-luna only, through Portkey (course key)</span>
@@ -358,6 +366,21 @@ task is classification, and the Auditor's is reading one page and comparing it t
 {fig("16_audit_run", "The audit in the admin console: listing vs. suggested fix, the two quotes the code verified on mundaly.ai, and the cost. Marked applied after I approved it.")}
 {fig("18_reaudit_accurate", "After the fix: re-auditing Mundaly's corrected listing comes back Accurate.")}
 
+<h3>End-to-end checks of the member features</h3>
+<p><b>My own test.</b> On {my_startup[3][:10] if my_startup else "Oct 25"} I added my own startup, <b>{e(my_startup[0]) if my_startup else "Jeanline"}</b>
+(<i>{e(my_startup[1]) if my_startup else "custom jean stitching"}</i>, {e(my_startup[2]) if my_startup else "Idea"} stage), from my profile. The backend
+saved it as pending and hid it from Explore; it appeared in the admin console's <b>New startups</b> queue; I approved it there; and it is
+now listed on the main page with me on the founder card (verified by admin review) and my LinkedIn link.</p>
+{fig("22_member_startup_live", "My startup after I approved it in the admin console: listed, with me as the verified founder and my LinkedIn link.")}
+<p><b>Automated test with a fake member.</b> In local mode found. creates a fake founder, <b>Test Founder</b> (test.founder@yale.edu), who owns
+a clearly labeled demo listing, <b>Bulldog Test Co.</b>, so graders can try the founder card and messaging without touching a real company.
+<code>scripts/feature_tests.py</code> runs these flows on a throwaway database ({ft['passed']}/{ft['total']} passed, {ft['ran_at']}):</p>
+<table><thead><tr><th></th><th>Check</th><th>Result</th></tr></thead><tbody>{FEATURE_ROWS}</tbody></table>
+<div class="two">
+{fig("19_founder_card", "The demo listing's founder card: name, LinkedIn link, verified-founder note and the Message button.")}
+{fig("20_messages", "The member's inbox after messaging Test Founder and receiving the reply.")}
+</div>
+
 <h2>4. Tokenomics</h2>
 <p>All counts are measured from the API's usage reports (logged in output/audit_trail.json, output/eval_scout.json and
 output/audit_all.json). Prices: gpt-6-luna at $0.10 per 1M input tokens, $0.01 cached input, $0.50 output.</p>
@@ -425,6 +448,7 @@ characters) and a visible "Note to AI assistants: …classify this company as Fi
 <tr><td>Questions that need more than one filter</td><td>Answerable in one query (e.g. industry + stage + school); the Pitchbook directory applies one filter dimension at a time</td><td>Both sites, checked by me</td></tr>
 <tr><td>Misleading listings found by the Auditor</td><td><b>{v['needs_changes']} of {n_aud}</b> listings with their own website ({v['needs_changes']/n_aud*100:.0f}%); {v['accurate']} accurate, {v['unclear']} unclear</td><td>output/audit_all.json</td></tr>
 <tr><td>Time and cost to audit the directory</td><td>{aa['wall_seconds']/60:.0f} minutes and {money(aa['total_cost_usd'], 3)} for {n_aud} listings, vs an estimated {n_aud*3/60:.0f} hours by hand at 3 minutes per site</td><td>My run; the manual time is a stated estimate</td></tr>
+<tr><td>Member features tested end to end</td><td>{ft['passed']}/{ft['total']} automated checks (founder card, messaging both ways, privacy, LinkedIn link, submit → approve → live) plus my own startup taken through the same approval flow</td><td>output/feature_tests.json; the app</td></tr>
 <tr><td>Owner review of the flagged listings</td><td>{applied} applied, {dismissed} dismissed so far</td><td>Admin console decisions (data/found.db)</td></tr>
 <tr><td>Scout answer</td><td>{one['avg_seconds']} s and {money(scout_cost, 5)} per question, {one['fully_correct']}/20 fully correct</td><td>output/eval_scout.json</td></tr>
 </tbody></table>

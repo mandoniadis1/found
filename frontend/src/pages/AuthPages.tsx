@@ -31,7 +31,7 @@ export function Login() {
         {error && <p className="error">{error}</p>}
         <button className="btn btn-dark full">Log in</button>
         <p className="muted small">New here? <Link to="/signup">Create an account</Link></p>
-        <p className="demo-hint">Demo member: demo@yale.edu / found2026 · Demo admin (local mode): admin@yale.edu / found2026 at /admin</p>
+        <p className="demo-hint">Local-mode test accounts (password found2026): member demo@yale.edu · fake founder test.founder@yale.edu (owns "Bulldog Test Co.") · admin admin@yale.edu at /admin</p>
       </form>
     </div>
   )

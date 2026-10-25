@@ -39,7 +39,7 @@ export type Startup = {
   location: string | null
   founded_year: number | null
   hiring: boolean
-  source: 'yale_pitchbook' | 'member'
+  source: 'yale_pitchbook' | 'member' | 'demo'
   correction_note: string | null
   status: 'listed' | 'pending' | 'rejected'
   claimed: boolean

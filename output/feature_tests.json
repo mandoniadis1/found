@@ -1,0 +1,47 @@
+{
+ "ran_at": "2026-10-25 16:52",
+ "passed": 8,
+ "total": 8,
+ "results": [
+  {
+   "test": "Demo listing shows its founder card",
+   "passed": true,
+   "detail": "Bulldog Test Co. \u2192 founder Test Founder, LinkedIn https://www.linkedin.com/in/found-demo-test-founder"
+  },
+  {
+   "test": "Member can message a founder from the founder card",
+   "passed": true,
+   "detail": "conversation 2 with Test Founder; message \u2192 HTTP 201"
+  },
+  {
+   "test": "Founder receives the message",
+   "passed": true,
+   "detail": "founder inbox shows 'Hi! Is Bulldog Test Co. hiring?' from Madison"
+  },
+  {
+   "test": "Founder replies and the member sees it",
+   "passed": true,
+   "detail": "thread has 2 messages; last: 'Not yet, but happy to chat!'"
+  },
+  {
+   "test": "Other members can't read the conversation",
+   "passed": true,
+   "detail": "third member reading the thread \u2192 HTTP 404"
+  },
+  {
+   "test": "LinkedIn link: only LinkedIn profile links are saved",
+   "passed": true,
+   "detail": "other site \u2192 HTTP 422; 'linkedin.com/in/demo-member-test' saved as https://www.linkedin.com/in/demo-member-test"
+  },
+  {
+   "test": "Member-submitted startup waits for review, hidden",
+   "passed": true,
+   "detail": "created as 'pending'; public search returns 0"
+  },
+  {
+   "test": "Admin approves it and it goes live with the member as founder",
+   "passed": true,
+   "detail": "in admin queue: yes; after approve: 'listed'; public card founder Madison Demo with LinkedIn https://www.linkedin.com/in/demo-member-test"
+  }
+ ]
+}

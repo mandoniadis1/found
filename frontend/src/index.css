@@ -535,3 +535,4 @@ input[type='range'] { width: 100%; accent-color: var(--ink); }
 
 .li-link { font-size: 12px; font-weight: 600; color: #0a66c2; text-decoration: none; margin-left: 8px; }
 .li-link:hover { text-decoration: underline; }
+.pill-demo { background: #e8e4f2; color: #4f3f7a; }

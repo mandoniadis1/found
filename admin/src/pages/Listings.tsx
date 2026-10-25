@@ -47,7 +47,7 @@ export function Listings() {
               <td><strong>{s.name}</strong>{s.correction_note && <span className="tag" title={s.correction_note}>corrected</span>}</td>
               <td>{s.industries.join(', ')}</td>
               <td>{s.stage}</td>
-              <td>{s.source === 'yale_pitchbook' ? 'Pitchbook' : 'Member'}</td>
+              <td>{s.source === 'yale_pitchbook' ? 'Pitchbook' : s.source === 'demo' ? <span className="tag">Demo</span> : 'Member'}</td>
               <td><span className={`tag ${s.status === 'listed' ? 'ok' : 'warn'}`}>{s.status}</span></td>
               <td>{s.founder ? <>{s.founder.first_name} {s.founder.last_name}<span className="muted"> · {VERIFIED[s.founder_verified_via ?? ''] ?? '—'}</span></> : <span className="muted">Unclaimed</span>}</td>
               <td className="row-actions">
