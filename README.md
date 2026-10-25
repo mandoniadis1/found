@@ -90,7 +90,7 @@ Model: **gpt-6-luna only**, through Portkey (`PORTKEY_API_KEY`).
 | Script | Output |
 |---|---|
 | `.venv/bin/python scripts/eval_scout.py` | `output/eval_scout.json`: 20-question accuracy and tokens, one-call vs two-call Scout |
-| `.venv/bin/python scripts/safety_tests.py` | `output/safety_tests.json`: 15 attacks on the defenses (uses a throwaway database) |
+| `.venv/bin/python scripts/safety_tests.py` | `output/safety_tests.json`: 16 attacks on the defenses (uses a throwaway database) |
 | `.venv/bin/python scripts/audit_all.py` | `output/audit_all.json`: Listing Auditor run on every listing with its own website |
 | `.venv/bin/python scripts/build_report.py` | `report.html`, `slides.html` (every number read from the files above) |
 
