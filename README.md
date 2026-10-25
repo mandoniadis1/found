@@ -4,7 +4,7 @@
 
 found. combines the [Yale Startup Directory](https://www.yalepitchbook.com/directory) (122 startups) and the
 [Tsai CITY Yale Startup Opportunities board](https://tsaicity.useplop.com/) (130 programs, grants, competitions,
-perks and asks) into one site, verifies members with their Yale email and LinkedIn, lets founders prove and claim
+perks and asks) into one site, verifies members with their Yale email, lets founders prove and claim
 their listing, and uses two small AI agents (gpt-6-luna):
 
 - **Scout** (Explore page): turns a question into search filters in one cheap call; the database supplies every answer.
@@ -47,15 +47,15 @@ The database is created from the included data on first start. Stop with Ctrl+C.
 | Admin console `/admin` | `admin@yale.edu` | `found2026` |
 
 Or create your own account with any `@yale.edu` address. In local mode nothing is emailed: after signing up, click
-**"Open your email"** in the yellow banner to see the verification email and click its link. "Sign in with LinkedIn"
-goes to a clearly labeled local stand-in until real LinkedIn keys are configured.
+**"Open your email"** in the yellow banner to see the verification email and click its link. Members can paste their
+LinkedIn profile link on their profile (optional, shown on their founder card; not verified).
 
 ### Things to try
 
 1. **Explore**: filter by industry + stage + Yale affiliation; click a card; the "Closing soon" boxes.
 2. **Ask Scout** (bottom-right of Explore): e.g. *"climate startups making revenue"* or *"grants due in the next month"*.
 3. **Opportunities**: categories, "Due in 30 days", the "On the horizon" calendar.
-4. **Claim a startup**: sign up, verify your email, connect LinkedIn (stand-in), open a startup, click *Claim this startup*.
+4. **Claim a startup**: sign up, verify your email, open a startup, click *Claim this startup*.
 5. **Admin console** (`/admin`): review claims, run **Audit** on a listing (e.g. Mundaly), apply or dismiss the suggestion.
 
 ## Data
@@ -102,5 +102,5 @@ cd backend && ../.venv/bin/uvicorn main:app --reload --port 8030   # API
 cd frontend && npm install && npm run dev                           # public site → http://localhost:5185
 cd admin && npm install && npm run dev                              # admin → http://localhost:5186/admin/
 ```
-Rebuild the prebuilt apps with `npm run build` in `frontend/` and `admin/`. Optional settings (real email, LinkedIn
-keys, budgets) are listed in `.env.example`; none are needed to run the app.
+Rebuild the prebuilt apps with `npm run build` in `frontend/` and `admin/`. Optional settings (real email, budgets,
+refresh interval) are listed in `.env.example`; none are needed to run the app.

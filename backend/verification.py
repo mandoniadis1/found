@@ -1,9 +1,7 @@
-"""Identity checks: Yale email links, Sign in with LinkedIn (OpenID Connect), and company-domain claim emails.
+"""Identity checks: Yale email links and company-domain claim emails. (LinkedIn is just a self-reported profile link.)
 
 What each check proves:
   - Yale email link    → the member controls a @yale.edu inbox.
-  - LinkedIn sign-in   → the member controls a real LinkedIn account (we get its name, email, photo, member id).
-                         LinkedIn's sign-in does NOT share work history, so it can't prove someone founded a startup.
   - Company email link → the member controls an inbox on the startup's own domain (e.g. name@daemo.ai). This is the
                          automatic proof of founder status. Anything else goes to manual admin review.
 """
@@ -11,20 +9,14 @@ What each check proves:
 from __future__ import annotations
 
 import hashlib
-import json
 import secrets
 import sqlite3
-import ssl
 import urllib.parse
-import urllib.request
 from datetime import datetime, timedelta, timezone
-
-import certifi
 
 import config
 from db import now
 
-TLS = ssl.create_default_context(cafile=certifi.where())  # see mailer.py
 
 TOKEN_TTL = timedelta(hours=24)
 
@@ -85,45 +77,3 @@ def email_matches_domain(email: str, domain: str) -> bool:
     """name@daemo.ai or name@team.daemo.ai match daemo.ai. Nothing broader (no @ai, no @co.uk)."""
     d = email_domain(email)
     return d == domain or d.endswith("." + domain)
-
-
-# ---------------------------------------------------------------- Sign in with LinkedIn (OpenID Connect)
-
-LINKEDIN_AUTH_URL = "https://www.linkedin.com/oauth/v2/authorization"
-LINKEDIN_TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
-LINKEDIN_USERINFO_URL = "https://api.linkedin.com/v2/userinfo"
-
-
-def new_oauth_state(conn: sqlite3.Connection, user_id: int) -> str:
-    state = secrets.token_urlsafe(24)
-    conn.execute("INSERT INTO oauth_states VALUES (?,?,?)", (state, user_id, now()))
-    return state
-
-
-def use_oauth_state(conn: sqlite3.Connection, state: str, user_id: int) -> bool:
-    cutoff = (datetime.now(timezone.utc) - timedelta(minutes=15)).isoformat(timespec="seconds")
-    row = conn.execute("SELECT * FROM oauth_states WHERE state = ?", (state,)).fetchone()
-    conn.execute("DELETE FROM oauth_states WHERE state = ? OR created_at < ?", (state, cutoff))
-    return bool(row and row["user_id"] == user_id and row["created_at"] >= cutoff)
-
-
-def linkedin_authorize_url(state: str) -> str:
-    return LINKEDIN_AUTH_URL + "?" + urllib.parse.urlencode({
-        "response_type": "code", "client_id": config.LINKEDIN_CLIENT_ID, "redirect_uri": config.LINKEDIN_REDIRECT_URI,
-        "state": state, "scope": "openid profile email",
-    })
-
-
-def linkedin_userinfo(code: str) -> dict:
-    """Exchange the authorization code for a token, then fetch the member's OpenID userinfo."""
-    body = urllib.parse.urlencode({
-        "grant_type": "authorization_code", "code": code, "redirect_uri": config.LINKEDIN_REDIRECT_URI,
-        "client_id": config.LINKEDIN_CLIENT_ID, "client_secret": config.LINKEDIN_CLIENT_SECRET,
-    }).encode()
-    req = urllib.request.Request(LINKEDIN_TOKEN_URL, data=body,
-                                 headers={"Content-Type": "application/x-www-form-urlencoded"})
-    with urllib.request.urlopen(req, timeout=15, context=TLS) as resp:
-        access_token = json.load(resp)["access_token"]
-    req = urllib.request.Request(LINKEDIN_USERINFO_URL, headers={"Authorization": f"Bearer {access_token}"})
-    with urllib.request.urlopen(req, timeout=15, context=TLS) as resp:
-        return json.load(resp)  # sub, name, given_name, family_name, picture, email, email_verified, locale

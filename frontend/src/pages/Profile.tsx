@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, Navigate, useSearchParams } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { api } from '../api'
 import { useAuth } from '../auth'
 import { Modal } from '../components/Modal'
@@ -7,14 +7,6 @@ import { ResendButton } from '../components/ResendButton'
 import { StartupCard } from '../components/StartupCard'
 import { StartupForm } from '../components/StartupForm'
 import type { ClaimRequest, SiteConfig, Startup } from '../types'
-
-const LINKEDIN_RESULT: Record<string, { text: string; error?: boolean }> = {
-  connected: { text: 'LinkedIn connected.' },
-  cancelled: { text: 'LinkedIn sign-in was cancelled.', error: true },
-  expired: { text: 'That LinkedIn sign-in took too long. Please try again.', error: true },
-  failed: { text: "We couldn't reach LinkedIn. Please try again.", error: true },
-  taken: { text: 'That LinkedIn account is already connected to another found. member.', error: true },
-}
 
 const CLAIM_STATUS: Record<ClaimRequest['status'], string> = {
   email_sent: 'Waiting for you to click the work-email link',
@@ -25,12 +17,12 @@ const CLAIM_STATUS: Record<ClaimRequest['status'], string> = {
 
 export function Profile() {
   const { user, ready, setUser } = useAuth()
-  const [params, setParams] = useSearchParams()
   const [config, setConfig] = useState<SiteConfig | null>(null)
   const [mine, setMine] = useState<Startup[]>([])
   const [claims, setClaims] = useState<ClaimRequest[]>([])
   const [adding, setAdding] = useState(false)
   const [headline, setHeadline] = useState('')
+  const [linkedin, setLinkedin] = useState('')
   const [msg, setMsg] = useState<{ text: string; error?: boolean } | null>(null)
 
   useEffect(() => { api.config().then(setConfig) }, [])
@@ -39,14 +31,8 @@ export function Profile() {
     api.myStartups().then(setMine)
     api.myClaims().then(setClaims)
     setHeadline(user.headline ?? '')
+    setLinkedin(user.linkedin_url ?? '')
   }, [user])
-  useEffect(() => {
-    const result = params.get('linkedin')
-    if (!result) return
-    setMsg(LINKEDIN_RESULT[result] ?? null)
-    api.me().then(setUser)
-    setParams({}, { replace: true })
-  }, [params, setParams, setUser])
 
   if (!ready) return null
   if (!user) return <Navigate to="/login" />
@@ -62,7 +48,6 @@ export function Profile() {
   }
 
   const openClaims = claims.filter((c) => c.status === 'pending' || c.status === 'email_sent')
-  const linkedInReady = config?.linkedin_configured || config?.linkedin_dev_standin
 
   return (
     <div className="page narrow">
@@ -97,32 +82,14 @@ export function Profile() {
 
         <section className="panel">
           <div className="panel-head">
-            <h3><span className="step">2</span>LinkedIn</h3>
-            {user.linkedin_connected ? <span className="verified">✓ Connected</span> : <span className="pill">Not connected</span>}
+            <h3><span className="step">2</span>LinkedIn <span className="muted small">(optional)</span></h3>
+            {user.linkedin_url && <a className="li-link" href={user.linkedin_url} target="_blank" rel="noreferrer">View ↗</a>}
           </div>
-          {user.linkedin_connected ? (
-            <>
-              <div className="li-identity">
-                {user.linkedin_picture ? <img src={user.linkedin_picture} alt="" /> : <span className="li-logo">in</span>}
-                <span className="small"><strong>{user.linkedin_name}</strong></span>
-              </div>
-              {user.linkedin_dev_standin && <p className="muted tiny">Connected with the local dev stand-in, not real LinkedIn.</p>}
-              <button className="link-btn" onClick={() => run(async () => setUser(await api.disconnectLinkedIn()), 'LinkedIn disconnected.')}>Disconnect</button>
-            </>
-          ) : (
-            <>
-              <p className="muted small">Sign in with LinkedIn to prove you're a real person. Needed to claim a startup or host events.</p>
-              {linkedInReady ? (
-                <a className={`btn btn-linkedin${user.email_verified ? '' : ' disabled'}`} href={user.email_verified ? '/api/auth/linkedin/start' : undefined}>
-                  <span className="li-logo">in</span> Sign in with LinkedIn
-                </a>
-              ) : (
-                <p className="muted tiny">LinkedIn sign-in isn't set up on this server yet.</p>
-              )}
-              {!user.email_verified && <p className="muted tiny">Verify your Yale email first.</p>}
-              {config?.linkedin_dev_standin && <p className="muted tiny">Dev mode: uses a local stand-in until LinkedIn keys are added.</p>}
-            </>
-          )}
+          <p className="muted small">Paste your LinkedIn profile link so founders can see who you are. It shows on your founder card and in messages.</p>
+          <form className="inline-form" onSubmit={(e) => { e.preventDefault(); run(async () => setUser(await api.updateProfile({ linkedin_url: linkedin })), linkedin.trim() ? 'LinkedIn link saved.' : 'LinkedIn link removed.') }}>
+            <input value={linkedin} onChange={(e) => setLinkedin(e.target.value)} placeholder="linkedin.com/in/your-name" />
+            <button className="btn btn-ghost">Save</button>
+          </form>
         </section>
 
         <section className="panel">
@@ -135,7 +102,7 @@ export function Profile() {
           ) : (
             <>
               <p className="muted small">Moderators plan events: launches for their startup, or industry meetups.</p>
-              <button className="btn btn-ghost" disabled={!user.email_verified || !user.linkedin_connected}
+              <button className="btn btn-ghost" disabled={!user.email_verified}
                 onClick={() => run(async () => setUser(await api.becomeModerator()), 'You are now a moderator.')}>
                 Sign up as moderator
               </button>
@@ -168,7 +135,7 @@ export function Profile() {
 
       <div className="page-head small-gap">
         <h2 className="section-title">Your startups</h2>
-        <button className="btn btn-dark" disabled={!user.email_verified || !user.linkedin_connected} onClick={() => setAdding(true)}>+ Add startup</button>
+        <button className="btn btn-dark" disabled={!user.email_verified} onClick={() => setAdding(true)}>+ Add startup</button>
       </div>
       {mine.length === 0 ? (
         <p className="muted">

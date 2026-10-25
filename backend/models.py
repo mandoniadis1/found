@@ -39,10 +39,7 @@ class User(BaseModel):
     school: str | None = None
     headline: str | None = None
     email_verified: bool = False
-    linkedin_connected: bool = False
-    linkedin_name: str | None = None
-    linkedin_picture: str | None = None
-    linkedin_dev_standin: bool = False
+    linkedin_url: str | None = None
     is_moderator: bool = False
     is_admin: bool = False
 
@@ -54,7 +51,7 @@ class PublicUser(BaseModel):
     last_name: str
     school: str | None = None
     headline: str | None = None
-    linkedin_verified: bool = False  # signed in with LinkedIn
+    linkedin_url: str | None = None  # pasted by the member, not verified
 
 
 class SignupIn(BaseModel):
@@ -73,6 +70,7 @@ class LoginIn(BaseModel):
 class ProfileIn(BaseModel):
     school: str | None = None
     headline: str | None = Field(default=None, max_length=140)
+    linkedin_url: str | None = Field(default=None, max_length=300)  # "" clears it
 
 
 # ---------------------------------------------------------------- startups
@@ -175,9 +173,7 @@ class ClaimRequest(BaseModel):
     # requester identity, shown to admins only
     requester_name: str | None = None
     requester_email: str | None = None
-    requester_linkedin_name: str | None = None
-    requester_linkedin_email: str | None = None
-    requester_linkedin_dev_standin: bool = False
+    requester_linkedin_url: str | None = None  # the link on their found. profile
 
 
 class AdminDecisionIn(BaseModel):

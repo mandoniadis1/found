@@ -17,12 +17,12 @@ export function ClaimModal({ s, onClose }: { s: Startup; onClose: () => void }) 
   const [busy, setBusy] = useState(false)
   const [form, setForm] = useState<ManualClaimInput>({
     full_name: user ? `${user.first_name} ${user.last_name}` : '', role: '', work_email: '',
-    linkedin_profile_url: '', evidence_url: '', note: '',
+    linkedin_profile_url: user?.linkedin_url ?? '', evidence_url: '', note: '',
   })
 
   useEffect(() => { api.claimOptions(s.id).then(setOpts).catch((e) => setError(e.message)) }, [s.id])
 
-  const ready = user?.email_verified && user?.linkedin_connected
+  const ready = user?.email_verified
 
   async function run(fn: () => Promise<void>) {
     setBusy(true)
@@ -44,10 +44,9 @@ export function ClaimModal({ s, onClose }: { s: Startup; onClose: () => void }) 
     <Modal title={`Claim ${s.name}`} onClose={onClose}>
       {!ready ? (
         <div className="claim-steps">
-          <p className="muted">To claim a startup, first confirm who you are:</p>
+          <p className="muted">To claim a startup, first verify your Yale email:</p>
           <ol className="checklist">
             <li className={user?.email_verified ? 'done' : ''}>Verify your Yale email</li>
-            <li className={user?.linkedin_connected ? 'done' : ''}>Sign in with LinkedIn</li>
           </ol>
           <Link to={user ? '/profile' : '/login'} className="btn btn-dark" onClick={onClose}>{user ? 'Go to your profile' : 'Log in'}</Link>
         </div>
@@ -69,7 +68,7 @@ export function ClaimModal({ s, onClose }: { s: Startup; onClose: () => void }) 
           <div className="claim-option alt">
             <h4>Unable to verify automatically?</h4>
             <p className="muted small">
-              Send a request to the found. team. We'll check your LinkedIn and the details you give us, then approve
+              Send a request to the found. team. We'll check your LinkedIn profile and the details you give us, then approve
               or follow up. This usually takes a few days.
             </p>
             <button className="btn btn-ghost" onClick={() => setStep('manual')}>Request a manual review</button>

@@ -28,7 +28,7 @@ function Nav() {
             <NavLink to="/profile" className="nav-user">
               <span className="avatar xs">{user.first_name[0]}{user.last_name[0]}</span>
               {user.first_name}
-              {user.linkedin_connected && <span className="verified-dot" title="Signed in with LinkedIn">✓</span>}
+              {user.email_verified && <span className="verified-dot" title="Yale email verified">✓</span>}
             </NavLink>
             <button className="link-btn" onClick={async () => { await logout(); navigate('/') }}>Log out</button>
           </>

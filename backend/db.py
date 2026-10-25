@@ -40,12 +40,7 @@ CREATE TABLE IF NOT EXISTS users (
     school TEXT,
     headline TEXT,
     email_verified INTEGER NOT NULL DEFAULT 0,       -- clicked the link sent to their Yale address
-    linkedin_sub TEXT UNIQUE,                        -- LinkedIn member id from "Sign in with LinkedIn"
-    linkedin_name TEXT,
-    linkedin_email TEXT,
-    linkedin_picture TEXT,
-    linkedin_dev_standin INTEGER NOT NULL DEFAULT 0, -- 1 = connected through the local dev stand-in, not LinkedIn
-    linkedin_connected_at TEXT,
+    linkedin_url TEXT,                               -- optional link to their LinkedIn profile (self-reported)
     is_moderator INTEGER NOT NULL DEFAULT 0,
     is_test_account INTEGER NOT NULL DEFAULT 0,
     created_at TEXT NOT NULL
@@ -97,11 +92,6 @@ CREATE TABLE IF NOT EXISTS email_tokens (
     claim_id INTEGER REFERENCES claim_requests(id),
     expires_at TEXT NOT NULL,
     used_at TEXT
-);
-CREATE TABLE IF NOT EXISTS oauth_states (
-    state TEXT PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES users(id),
-    created_at TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS claim_requests (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -243,6 +233,8 @@ def migrate(conn: sqlite3.Connection) -> None:
     cols = {r[1] for r in conn.execute("PRAGMA table_info(sessions)")}
     if "kind" not in cols:
         conn.execute("ALTER TABLE sessions ADD COLUMN kind TEXT NOT NULL DEFAULT 'member'")
+    if "linkedin_url" not in {r[1] for r in conn.execute("PRAGMA table_info(users)")}:
+        conn.execute("ALTER TABLE users ADD COLUMN linkedin_url TEXT")
     cols = {r[1] for r in conn.execute("PRAGMA table_info(startups)")}
     if "correction_note" not in cols:
         conn.execute("ALTER TABLE startups ADD COLUMN correction_note TEXT")

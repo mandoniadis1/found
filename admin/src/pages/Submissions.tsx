@@ -36,7 +36,7 @@ export function Submissions({ onChange }: { onChange: () => void }) {
           <p>{s.tagline}</p>
           <p className="muted">
             Submitted by {s.founder ? `${s.founder.first_name} ${s.founder.last_name}` : '—'}
-            {s.founder?.linkedin_verified && ' · LinkedIn ✓'} · {s.affiliations.join(', ')}
+            {s.founder?.linkedin_url && <> · <a href={s.founder.linkedin_url} target="_blank" rel="noreferrer">LinkedIn ↗</a></>} · {s.affiliations.join(', ')}
             {s.website && <> · <a href={s.website} target="_blank" rel="noreferrer">{s.website} ↗</a></>}
           </p>
           <div className="actions right">

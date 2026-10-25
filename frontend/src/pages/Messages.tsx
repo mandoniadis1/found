@@ -84,7 +84,7 @@ export function Messages() {
                 <div className="avatar sm">{current.other.first_name[0]}{current.other.last_name[0]}</div>
                 <div>
                   <strong>{current.other.first_name} {current.other.last_name}</strong>
-                  {current.other.linkedin_verified && <span className="verified">✓ Verified</span>}
+                  {current.other.linkedin_url && <a className="li-link" href={current.other.linkedin_url} target="_blank" rel="noreferrer">LinkedIn ↗</a>}
                   <p className="muted small">{current.other.headline} · {current.other.school}</p>
                 </div>
               </header>

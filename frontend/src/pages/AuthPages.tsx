@@ -109,7 +109,7 @@ export function Verified() {
   useEffect(() => { api.me().then(setUser).catch(() => {}) }, [setUser])
 
   const copy = {
-    email_ok: { title: 'Your Yale email is verified', body: 'Next, sign in with LinkedIn on your profile to claim a startup or host events.', to: '/profile', cta: 'Go to your profile' },
+    email_ok: { title: 'Your Yale email is verified', body: 'You can now message founders, RSVP, claim your startup and host events. Add your LinkedIn link on your profile so people can find you.', to: '/profile', cta: 'Go to your profile' },
     claim_ok: { title: "You've claimed this startup", body: 'Add your team size, round, funding and location so founders can find you.', to: `/startups/${startup}`, cta: 'Open your startup' },
   }[result ?? ''] ?? { title: 'That link didn’t work', body: 'It may have expired or already been used. You can request a new one from your profile.', to: '/profile', cta: 'Go to your profile' }
 

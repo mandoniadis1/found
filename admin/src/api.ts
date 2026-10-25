@@ -17,7 +17,6 @@ export type Overview = {
   scout_questions_today: number
   scout_daily_budget: number
   mail_mode: string
-  linkedin_configured: boolean
 }
 
 export type Claim = {
@@ -37,9 +36,7 @@ export type Claim = {
   decided_at: string | null
   requester_name: string | null
   requester_email: string | null
-  requester_linkedin_name: string | null
-  requester_linkedin_email: string | null
-  requester_linkedin_dev_standin: boolean
+  requester_linkedin_url: string | null
 }
 
 export type Startup = {
@@ -55,7 +52,7 @@ export type Startup = {
   claimed: boolean
   founder_verified_via: string | null
   correction_note: string | null
-  founder: { first_name: string; last_name: string; linkedin_verified: boolean } | null
+  founder: { first_name: string; last_name: string; linkedin_url: string | null } | null
 }
 
 export type Member = {
@@ -65,9 +62,7 @@ export type Member = {
   email: string
   school: string | null
   email_verified: number
-  linkedin: number
-  linkedin_name: string | null
-  linkedin_dev_standin: number
+  linkedin_url: string | null
   is_moderator: number
   is_test_account: number
   created_at: string

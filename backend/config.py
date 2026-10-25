@@ -19,7 +19,7 @@ def _flag(name: str, default: str = "0") -> bool:
 
 
 # Local mode (default ON so a fresh clone works with only PORTKEY_API_KEY): emails go to output/outbox/ and can be
-# opened from the site, LinkedIn uses a labeled stand-in, and a demo admin account exists. Set 0 anywhere real.
+# opened from the site, and a demo admin account exists. Set 0 anywhere real.
 DEV_MODE = _flag("FOUND_DEV_MODE", "1")
 
 # Where links in emails point. The one-command run (python run.py) serves everything on port 8030.
@@ -36,13 +36,6 @@ ADMIN_EMAILS = {e.strip().lower() for e in os.getenv("ADMIN_EMAILS", "").split("
 # Members must sign up with a Yale address.
 ALLOWED_EMAIL_DOMAIN = "yale.edu"
 
-# Sign in with LinkedIn (OpenID Connect). Create an app at https://www.linkedin.com/developers/apps,
-# add the "Sign In with LinkedIn using OpenID Connect" product, and register the redirect URL below.
-LINKEDIN_CLIENT_ID = os.getenv("LINKEDIN_CLIENT_ID", "").strip()
-LINKEDIN_CLIENT_SECRET = os.getenv("LINKEDIN_CLIENT_SECRET", "").strip()
-LINKEDIN_REDIRECT_URI = os.getenv("LINKEDIN_REDIRECT_URI", f"{FRONTEND_URL}/api/auth/linkedin/callback")
-LINKEDIN_CONFIGURED = bool(LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET)
-LINKEDIN_DEV_STANDIN = DEV_MODE and not LINKEDIN_CONFIGURED
 
 # Email: "outbox" saves each email as a file in output/outbox/ (nothing is sent). "smtp" and "outlook" really send.
 # "outlook" sends from the Outlook/Yale account signed in for mcp_servers/mcp_outlook_server.py (Microsoft Graph,

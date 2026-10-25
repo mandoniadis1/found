@@ -463,9 +463,6 @@ input[type='range'] { width: 100%; accent-color: var(--ink); }
 /* profile */
 .step { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--ink); color: var(--bg); font-size: 11px; margin-right: 8px; }
 .headline-panel { margin-top: 14px; }
-.btn-linkedin { background: #0a66c2; color: #fff; align-self: flex-start; }
-.btn-linkedin:hover { background: #004182; }
-.btn-linkedin.disabled { opacity: .45; pointer-events: none; }
 .li-logo { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 4px; background: #fff; color: #0a66c2; font-weight: 700; font-size: 12px; }
 .li-identity { display: flex; align-items: center; gap: 10px; }
 .li-identity img { width: 32px; height: 32px; border-radius: 50%; }
@@ -535,3 +532,6 @@ input[type='range'] { width: 100%; accent-color: var(--ink); }
 .closing .opp-card { background: #fbe9e6; border-color: #efcdc6; }
 .closing .opp-card:hover { background: #f9e1dc; border-color: #e6b9b0; }
 .closing .opp-card .muted { color: #8a6a63; }
+
+.li-link { font-size: 12px; font-weight: 600; color: #0a66c2; text-decoration: none; margin-left: 8px; }
+.li-link:hover { text-decoration: underline; }

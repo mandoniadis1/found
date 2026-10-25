@@ -62,12 +62,11 @@ export const api = {
   config: () => request<SiteConfig>('/api/config'),
   me: () => request<User | null>('/api/me'),
   resendVerification: () => post<void>('/api/auth/resend-verification'),
-  disconnectLinkedIn: () => post<User>('/api/auth/linkedin/disconnect'),
   login: (email: string, password: string) => post<User>('/api/auth/login', { email, password }),
   signup: (body: { first_name: string; last_name: string; email: string; password: string; school?: string }) =>
     post<User>('/api/auth/signup', body),
   logout: () => post<void>('/api/auth/logout'),
-  updateProfile: (body: { school?: string; headline?: string }) =>
+  updateProfile: (body: { school?: string; headline?: string; linkedin_url?: string }) =>
     request<User>('/api/me', { method: 'PATCH', body: JSON.stringify(body) }),
   becomeModerator: () => post<User>('/api/me/moderator'),
 

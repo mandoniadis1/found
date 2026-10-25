@@ -113,7 +113,7 @@ export function StartupPage() {
                 <div className="avatar">{s.founder.first_name[0]}{s.founder.last_name[0]}</div>
                 <div>
                   <strong>{s.founder.first_name} {s.founder.last_name}</strong>
-                  {s.founder.linkedin_verified && <span className="verified" title="Signed in with LinkedIn">✓ LinkedIn</span>}
+                  {s.founder.linkedin_url && <a className="li-link" href={s.founder.linkedin_url} target="_blank" rel="noreferrer">LinkedIn ↗</a>}
                   <p className="muted small">{s.founder.headline}</p>
                   <p className="muted small">{s.founder.school}</p>
                 </div>

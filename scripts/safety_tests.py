@@ -84,8 +84,6 @@ def api_tests():
     record("Admin API refuses members", "Separate admin login", s == 401 and s2 == 401 and s3 == 401,
            f"no login → {s}; member session → {s2}; member trying admin login → {s3}")
 
-    with sqlite3.connect(DB) as c:  # give the member LinkedIn so they may submit a startup
-        c.execute("UPDATE users SET linkedin_sub='test-1', linkedin_name='Demo Member' WHERE email='demo@yale.edu'")
     s, b = m.call("POST", "/api/startups", {"name": "Zzyzx Labs", "tagline": "Test startup", "industries": ["Technology"],
                                              "affiliations": ["Yale SOM"], "stage": "Idea"})
     s2, found = m.call("GET", "/api/startups?q=Zzyzx")

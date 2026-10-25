@@ -47,9 +47,8 @@ export function Claims({ onChange }: { onChange: () => void }) {
             <tbody>
               <tr><th>Claimed by</th><td>{c.full_name}{c.role && ` · ${c.role}`}</td></tr>
               <tr><th>Verified Yale email</th><td>{c.requester_email}</td></tr>
-              <tr><th>LinkedIn sign-in</th><td>{c.requester_linkedin_name ?? '—'}{c.requester_linkedin_email && ` · ${c.requester_linkedin_email}`}
-                {c.requester_linkedin_dev_standin && <span className="tag warn">dev stand-in</span>}</td></tr>
-              <tr><th>LinkedIn profile</th><td>{c.linkedin_profile_url ? <a href={c.linkedin_profile_url} target="_blank" rel="noreferrer">{c.linkedin_profile_url} ↗</a> : '—'}</td></tr>
+              <tr><th>LinkedIn on their profile</th><td>{c.requester_linkedin_url ? <a href={c.requester_linkedin_url} target="_blank" rel="noreferrer">{c.requester_linkedin_url} ↗</a> : '—'}</td></tr>
+              <tr><th>LinkedIn given in the claim</th><td>{c.linkedin_profile_url ? <a href={c.linkedin_profile_url} target="_blank" rel="noreferrer">{c.linkedin_profile_url} ↗</a> : '—'}</td></tr>
               <tr><th>Work email</th><td>{c.work_email ?? '—'}</td></tr>
               <tr><th>Proof link</th><td>{c.evidence_url ? <a href={c.evidence_url} target="_blank" rel="noreferrer">{c.evidence_url} ↗</a> : '—'}</td></tr>
               <tr><th>Note</th><td className="pre">{c.note ?? '—'}</td></tr>
@@ -58,7 +57,7 @@ export function Claims({ onChange }: { onChange: () => void }) {
           </table>
           {c.status === 'pending' && (
             <>
-              <p className="hint">Does their LinkedIn profile list {c.startup_name}, and does the name match their LinkedIn sign-in?</p>
+              <p className="hint">Does their LinkedIn profile list {c.startup_name}, and does the name match their verified Yale account? (LinkedIn links are self-reported.)</p>
               <div className="actions">
                 <input placeholder="Note (optional, saved with the decision)" value={notes[c.id] ?? ''} onChange={(e) => setNotes({ ...notes, [c.id]: e.target.value })} />
                 <button className="btn" onClick={() => decide(c.id, 'deny')}>Deny</button>

@@ -8,14 +8,14 @@ Interactive docs at http://127.0.0.1:8030/docs
 from __future__ import annotations
 
 import asyncio
-import html
 import json
+import re
 import secrets
 import sqlite3
 from contextlib import asynccontextmanager
 from typing import Annotated
 
-from fastapi import Cookie, Depends, FastAPI, Form, HTTPException, Query, Request, Response
+from fastapi import Cookie, Depends, FastAPI, HTTPException, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 
@@ -73,8 +73,7 @@ def to_user(row: sqlite3.Row) -> User:
     return User(
         id=row["id"], first_name=row["first_name"], last_name=row["last_name"], email=row["email"],
         school=row["school"], headline=row["headline"], email_verified=bool(row["email_verified"]),
-        linkedin_connected=row["linkedin_sub"] is not None, linkedin_name=row["linkedin_name"],
-        linkedin_picture=row["linkedin_picture"], linkedin_dev_standin=bool(row["linkedin_dev_standin"]),
+        linkedin_url=row["linkedin_url"],
         is_moderator=bool(row["is_moderator"]),
         is_admin=bool(row["email_verified"]) and (row["email"].lower() in config.ADMIN_EMAILS or (
             config.DEV_MODE and row["email"].lower() == config.DEMO_ADMIN_EMAIL)),
@@ -172,8 +171,7 @@ def dev_email(user: Member, to: str | None = None) -> HTMLResponse:
 
 @app.get("/api/config")
 def site_config() -> dict:
-    return {"dev_mode": config.DEV_MODE, "mail_mode": config.MAIL_MODE,
-            "linkedin_configured": config.LINKEDIN_CONFIGURED, "linkedin_dev_standin": config.LINKEDIN_DEV_STANDIN}
+    return {"dev_mode": config.DEV_MODE, "mail_mode": config.MAIL_MODE}
 
 
 @app.post("/api/auth/signup", response_model=User)
@@ -244,104 +242,33 @@ def me(user: Viewer) -> User | None:
     return user
 
 
+LINKEDIN_RE = re.compile(r"^(?:https?://)?(?:[a-z]{2,3}\.)?(?:www\.)?linkedin\.com/in/([A-Za-z0-9\-_%]{2,100})/?(?:[?#].*)?$", re.I)
+
+
+def clean_linkedin(url: str) -> str | None:
+    """'' clears the link; otherwise it must be a LinkedIn profile URL. Not verified: members paste their own."""
+    url = url.strip()
+    if not url:
+        return None
+    m = LINKEDIN_RE.match(url)
+    if not m:
+        raise HTTPException(422, "That doesn't look like a LinkedIn profile link (linkedin.com/in/your-name).")
+    return f"https://www.linkedin.com/in/{m.group(1)}"
+
+
 @app.patch("/api/me", response_model=User)
 def update_me(body: ProfileIn, user: Member) -> User:
     with connect() as conn:
         conn.execute("UPDATE users SET school = COALESCE(?, school), headline = COALESCE(?, headline) WHERE id = ?",
                      (body.school, body.headline, user.id))
-        return load_user(conn, user.id)
-
-
-# ---------------------------------------------------------------- Sign in with LinkedIn
-
-def _save_linkedin(conn: sqlite3.Connection, user_id: int, info: dict, dev: bool) -> None:
-    taken = conn.execute("SELECT id FROM users WHERE linkedin_sub = ? AND id != ?", (info["sub"], user_id)).fetchone()
-    if taken:
-        raise HTTPException(409, "That LinkedIn account is already connected to another found. member.")
-    conn.execute(
-        "UPDATE users SET linkedin_sub = ?, linkedin_name = ?, linkedin_email = ?, linkedin_picture = ?,"
-        " linkedin_dev_standin = ?, linkedin_connected_at = ? WHERE id = ?",
-        (info["sub"], info.get("name"), info.get("email"), info.get("picture"), int(dev), now(), user_id),
-    )
-
-
-@app.get("/api/auth/linkedin/start")
-def linkedin_start(user: Verified) -> RedirectResponse:
-    with connect() as conn:
-        state = verify.new_oauth_state(conn, user.id)
-    if config.LINKEDIN_CONFIGURED:
-        return RedirectResponse(verify.linkedin_authorize_url(state), status_code=303)
-    if config.LINKEDIN_DEV_STANDIN:
-        return RedirectResponse(f"/api/auth/linkedin/dev?state={state}", status_code=303)
-    raise HTTPException(503, "LinkedIn sign-in isn't set up yet. Add LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET to .env.")
-
-
-@app.get("/api/auth/linkedin/callback")
-def linkedin_callback(user: Member, code: str | None = None, state: str | None = None,
-                      error: str | None = None) -> RedirectResponse:
-    back = f"{config.FRONTEND_URL}/profile"
-    if error or not code or not state:
-        return RedirectResponse(f"{back}?linkedin=cancelled", status_code=303)
-    with connect() as conn:
-        if not verify.use_oauth_state(conn, state, user.id):
-            return RedirectResponse(f"{back}?linkedin=expired", status_code=303)
-    try:
-        info = verify.linkedin_userinfo(code)
-    except Exception:
-        return RedirectResponse(f"{back}?linkedin=failed", status_code=303)
-    with connect() as conn:
-        try:
-            _save_linkedin(conn, user.id, info, dev=False)
-        except HTTPException:
-            return RedirectResponse(f"{back}?linkedin=taken", status_code=303)
-    return RedirectResponse(f"{back}?linkedin=connected", status_code=303)
-
-
-@app.get("/api/auth/linkedin/dev", response_class=HTMLResponse)
-def linkedin_dev_page(state: str, user: Member) -> HTMLResponse:
-    """LOCAL DEVELOPMENT ONLY: stands in for LinkedIn's sign-in page until a LinkedIn app is configured."""
-    if not config.LINKEDIN_DEV_STANDIN:
-        raise HTTPException(404, "Not found.")
-    name = html.escape(f"{user.first_name} {user.last_name}")
-    return HTMLResponse(f"""<!doctype html><html><head><title>LinkedIn sign-in (dev stand-in)</title></head>
-<body style="font-family:Helvetica,Arial;background:#f4efe6;color:#1a1917;display:grid;place-items:center;height:100vh;margin:0">
-<form method="post" action="/api/auth/linkedin/dev" style="background:#fbf8f2;border:1px solid #e2d9c9;border-radius:16px;padding:32px;max-width:420px">
-  <p style="background:#f6ece2;color:#8a4a2c;padding:10px 12px;border-radius:10px;font-size:13px"><b>Development stand-in.</b>
-  This is not LinkedIn. It lets you test the flow locally until LINKEDIN_CLIENT_ID / SECRET are added to .env.
-  Accounts connected this way are marked "dev stand-in".</p>
-  <h2 style="font-family:Georgia,serif;font-weight:400">Continue as {name}?</h2>
-  <input type="hidden" name="state" value="{html.escape(state)}">
-  <button style="background:#0a66c2;color:white;border:0;border-radius:999px;padding:12px 22px;font-size:15px;cursor:pointer">Sign in (dev)</button>
-  <a href="{config.FRONTEND_URL}/profile?linkedin=cancelled" style="margin-left:12px;color:#7a746a">Cancel</a>
-</form></body></html>""")
-
-
-@app.post("/api/auth/linkedin/dev")
-def linkedin_dev_submit(user: Member, state: Annotated[str, Form()]) -> RedirectResponse:
-    if not config.LINKEDIN_DEV_STANDIN:
-        raise HTTPException(404, "Not found.")
-    with connect() as conn:
-        if not verify.use_oauth_state(conn, state, user.id):
-            return RedirectResponse(f"{config.FRONTEND_URL}/profile?linkedin=expired", status_code=303)
-        info = {"sub": f"dev-{secrets.token_hex(8)}", "name": f"{user.first_name} {user.last_name}", "email": user.email}
-        _save_linkedin(conn, user.id, info, dev=True)
-    return RedirectResponse(f"{config.FRONTEND_URL}/profile?linkedin=connected", status_code=303)
-
-
-@app.post("/api/auth/linkedin/disconnect", response_model=User)
-def linkedin_disconnect(user: Member) -> User:
-    with connect() as conn:
-        conn.execute("UPDATE users SET linkedin_sub = NULL, linkedin_name = NULL, linkedin_email = NULL,"
-                     " linkedin_picture = NULL, linkedin_dev_standin = 0, linkedin_connected_at = NULL,"
-                     " is_moderator = 0 WHERE id = ?", (user.id,))
+        if body.linkedin_url is not None:
+            conn.execute("UPDATE users SET linkedin_url = ? WHERE id = ?", (clean_linkedin(body.linkedin_url), user.id))
         return load_user(conn, user.id)
 
 
 @app.post("/api/me/moderator", response_model=User)
 def become_moderator(user: Verified) -> User:
-    """Moderators host events. They need a verified Yale email and a LinkedIn sign-in, so events come from real people."""
-    if not user.linkedin_connected:
-        raise HTTPException(403, "Sign in with LinkedIn first. Moderators must connect their LinkedIn.")
+    """Moderators host events. They need a verified Yale email, so events come from real Yale people."""
     with connect() as conn:
         conn.execute("UPDATE users SET is_moderator = 1 WHERE id = ?", (user.id,))
         return load_user(conn, user.id)
@@ -419,8 +346,6 @@ def _startup_values(body: StartupIn) -> tuple:
 def create_startup(body: StartupIn, user: Verified) -> Startup:
     """New startups go to the admin review queue and stay hidden until approved."""
     _check_startup(body)
-    if not user.linkedin_connected:
-        raise HTTPException(403, "Sign in with LinkedIn before adding a startup.")
     with connect() as conn:
         sid = conn.execute(
             "INSERT INTO startups (name, tagline, description, stage, website, looking_for, round, raised_usd, team_size,"
@@ -464,8 +389,6 @@ def update_startup(startup_id: int, body: StartupIn, user: Verified) -> Startup:
 # ---------------------------------------------------------------- claiming a listing
 
 def _claimable(conn: sqlite3.Connection, startup_id: int, user: User) -> sqlite3.Row:
-    if not user.linkedin_connected:
-        raise HTTPException(403, "Sign in with LinkedIn on your profile before claiming a startup.")
     row = conn.execute("SELECT * FROM startups WHERE id = ? AND status = 'listed'", (startup_id,)).fetchone()
     if not row:
         raise HTTPException(404, "Startup not found.")
@@ -484,15 +407,12 @@ def _claim_row_to_model(r: sqlite3.Row, admin: bool = False) -> ClaimRequest:
     if admin:
         c.requester_name = f"{r['first_name']} {r['last_name']}"
         c.requester_email = r["email"]
-        c.requester_linkedin_name = r["linkedin_name"]
-        c.requester_linkedin_email = r["linkedin_email"]
-        c.requester_linkedin_dev_standin = bool(r["linkedin_dev_standin"])
+        c.requester_linkedin_url = r["linkedin_url"]
     return c
 
 
 CLAIM_SELECT = """
-SELECT c.*, s.name AS startup_name, u.first_name, u.last_name, u.email, u.linkedin_name, u.linkedin_email,
-       u.linkedin_dev_standin
+SELECT c.*, s.name AS startup_name, u.first_name, u.last_name, u.email, u.linkedin_url
 FROM claim_requests c JOIN startups s ON s.id = c.startup_id JOIN users u ON u.id = c.user_id
 """
 
@@ -615,7 +535,7 @@ def admin_overview(admin: Admin) -> dict:
             "pending_startups": one("SELECT COUNT(*) FROM startups WHERE status = 'pending'"),
             "members": one("SELECT COUNT(*) FROM users WHERE is_test_account = 0"),
             "verified_members": one("SELECT COUNT(*) FROM users WHERE email_verified = 1 AND is_test_account = 0"),
-            "linkedin_members": one("SELECT COUNT(*) FROM users WHERE linkedin_sub IS NOT NULL"),
+            "linkedin_members": one("SELECT COUNT(*) FROM users WHERE linkedin_url IS NOT NULL"),
             "moderators": one("SELECT COUNT(*) FROM users WHERE is_moderator = 1"),
             "listed_startups": one("SELECT COUNT(*) FROM startups WHERE status = 'listed'"),
             "claimed_startups": one("SELECT COUNT(*) FROM startups WHERE founder_id IS NOT NULL AND status = 'listed'"),
@@ -625,7 +545,6 @@ def admin_overview(admin: Admin) -> dict:
             "scout_questions_today": one("SELECT COALESCE(SUM(messages), 0) FROM scout_usage WHERE day = ? AND key = 'site'", today),
             "scout_daily_budget": config.SCOUT_DAILY_TOKENS,
             "mail_mode": config.MAIL_MODE,
-            "linkedin_configured": config.LINKEDIN_CONFIGURED,
         }
 
 
@@ -633,8 +552,8 @@ def admin_overview(admin: Admin) -> dict:
 def admin_members(admin: Admin) -> list[dict]:
     with connect() as conn:
         rows = conn.execute(
-            "SELECT u.id, u.first_name, u.last_name, u.email, u.school, u.email_verified, u.linkedin_name,"
-            " u.linkedin_sub IS NOT NULL AS linkedin, u.linkedin_dev_standin, u.is_moderator, u.is_test_account,"
+            "SELECT u.id, u.first_name, u.last_name, u.email, u.school, u.email_verified, u.linkedin_url,"
+            " u.is_moderator, u.is_test_account,"
             " u.created_at, (SELECT COUNT(*) FROM startups s WHERE s.founder_id = u.id) AS startups"
             " FROM users u ORDER BY u.created_at DESC").fetchall()
     return [dict(r) for r in rows]

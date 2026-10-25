@@ -64,7 +64,7 @@ export function Dashboard() {
       <h2 className="section">Community</h2>
       <div className="stats">
         <Stat label="Members" value={o.members} sub={`${o.verified_members} verified Yale email`} to="/members" />
-        <Stat label="LinkedIn connected" value={o.linkedin_members} />
+        <Stat label="LinkedIn on profile" value={o.linkedin_members} />
         <Stat label="Moderators" value={o.moderators} />
         <Stat label="Upcoming events" value={o.upcoming_events} />
       </div>
@@ -131,7 +131,7 @@ export function Dashboard() {
       <h2 className="section">Setup</h2>
       <div className="panel setup">
         <div><span className="stat-label">Email</span>{o.mail_mode === 'outbox' ? 'Saved to output/outbox (not sent)' : `Sending via ${o.mail_mode}`}</div>
-        <div><span className="stat-label">LinkedIn sign-in</span>{o.linkedin_configured ? 'Connected to LinkedIn' : 'Not configured (dev stand-in)'}</div>
+        <div><span className="stat-label">Data refresh</span>Every {ds?.refresh_days ?? 7} days, plus Refresh now</div>
       </div>
     </>
   )

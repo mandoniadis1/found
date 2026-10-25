@@ -23,7 +23,7 @@ export function Members() {
               <td><strong>{m.first_name} {m.last_name}</strong>{!!m.is_test_account && <span className="tag">test</span>}</td>
               <td>{m.email}</td>
               <td>{yes(m.email_verified, 'verified')}</td>
-              <td>{m.linkedin ? <span className={`tag ${m.linkedin_dev_standin ? 'warn' : 'ok'}`}>{m.linkedin_dev_standin ? 'dev stand-in' : m.linkedin_name}</span> : <span className="muted">—</span>}</td>
+              <td>{m.linkedin_url ? <a href={m.linkedin_url} target="_blank" rel="noreferrer">Profile ↗</a> : <span className="muted">—</span>}</td>
               <td>{yes(m.is_moderator)}</td>
               <td>{m.startups || <span className="muted">—</span>}</td>
               <td className="muted">{new Date(m.created_at).toLocaleDateString()}</td>

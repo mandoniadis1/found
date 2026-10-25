@@ -8,10 +8,7 @@ export type User = {
   school: string | null
   headline: string | null
   email_verified: boolean
-  linkedin_connected: boolean
-  linkedin_name: string | null
-  linkedin_picture: string | null
-  linkedin_dev_standin: boolean
+  linkedin_url: string | null
   is_moderator: boolean
   is_admin: boolean
 }
@@ -22,7 +19,7 @@ export type PublicUser = {
   last_name: string
   school: string | null
   headline: string | null
-  linkedin_verified: boolean
+  linkedin_url: string | null
 }
 
 export type Startup = {
@@ -155,7 +152,7 @@ export type ScoutOut = {
   visitor_available: boolean
 }
 
-export type SiteConfig = { dev_mode: boolean; mail_mode: string; linkedin_configured: boolean; linkedin_dev_standin: boolean }
+export type SiteConfig = { dev_mode: boolean; mail_mode: string }
 
 export type ClaimOptions = { company_domain: string | null; has_pending_request: boolean }
 
@@ -176,9 +173,7 @@ export type ClaimRequest = {
   decided_at: string | null
   requester_name: string | null
   requester_email: string | null
-  requester_linkedin_name: string | null
-  requester_linkedin_email: string | null
-  requester_linkedin_dev_standin: boolean
+  requester_linkedin_url: string | null
 }
 
 export type ManualClaimInput = {

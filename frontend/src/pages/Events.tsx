@@ -178,7 +178,7 @@ export function Events() {
           <div className="empty-events">
             <p className="serif-lg">No events yet. Host the first one.</p>
             <p className="muted">
-              Moderators can host industry meetups or events for their own startup. Verify your LinkedIn and sign up as
+              Moderators can host industry meetups or events for their own startup. Verify your Yale email and sign up as
               a moderator on your profile, then pick a format to start from.
             </p>
             <div className="idea-strip">

@@ -13,7 +13,7 @@ SELECT s.*,
        (SELECT group_concat(industry, '|') FROM startup_industries i WHERE i.startup_id = s.id) AS industries_csv,
        (SELECT group_concat(affiliation, '|') FROM startup_affiliations a WHERE a.startup_id = s.id) AS affiliations_csv,
        u.id AS f_id, u.first_name AS f_first, u.last_name AS f_last, u.school AS f_school,
-       u.headline AS f_headline, (u.linkedin_sub IS NOT NULL) AS f_verified
+       u.headline AS f_headline, u.linkedin_url AS f_linkedin
 FROM startups s LEFT JOIN users u ON u.id = s.founder_id
 """
 
@@ -23,12 +23,12 @@ STAGE_ORDER = "CASE s.stage " + " ".join(f"WHEN '{st}' THEN {i}" for i, st in en
 def public_user(row: sqlite3.Row, prefix: str = "") -> PublicUser:
     g = lambda k: row[prefix + k]  # noqa: E731
     return PublicUser(id=g("id"), first_name=g("first"), last_name=g("last"), school=g("school"),
-                      headline=g("headline"), linkedin_verified=bool(g("verified")))
+                      headline=g("headline"), linkedin_url=g("linkedin"))
 
 
 def user_row_to_public(row: sqlite3.Row) -> PublicUser:
     return PublicUser(id=row["id"], first_name=row["first_name"], last_name=row["last_name"], school=row["school"],
-                      headline=row["headline"], linkedin_verified=row["linkedin_sub"] is not None)
+                      headline=row["headline"], linkedin_url=row["linkedin_url"])
 
 
 def to_startup(row: sqlite3.Row) -> Startup:
@@ -181,7 +181,7 @@ def expected_deadlines(conn: sqlite3.Connection) -> list[ExpectedDeadline]:
 EVENT_SELECT = """
 SELECT e.*, s.name AS host_name,
        u.id AS o_id, u.first_name AS o_first, u.last_name AS o_last, u.school AS o_school,
-       u.headline AS o_headline, (u.linkedin_sub IS NOT NULL) AS o_verified,
+       u.headline AS o_headline, u.linkedin_url AS o_linkedin,
        (SELECT COUNT(*) FROM rsvps r WHERE r.event_id = e.id) AS attending,
        EXISTS (SELECT 1 FROM rsvps r WHERE r.event_id = e.id AND r.user_id = ?) AS mine
 FROM events e
