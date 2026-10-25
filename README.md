@@ -10,7 +10,7 @@ their listing, and uses two small AI agents (gpt-6-luna):
 - **Scout** (Explore page): turns a question into search filters in one cheap call; the database supplies every answer.
 - **Listing Auditor** (admin console): reads a startup's own website and proposes corrections with verified quotes.
 
-Report: [`report.html`](report.html) · Slides: [`slides.html`](slides.html) (download and double-click to open).
+**Report:** [open in browser](https://mandoniadis1.github.io/found/report.html) ([file](report.html)) · **Slides:** [open in browser](https://mandoniadis1.github.io/found/slides.html) ([file](slides.html)). Both files also open by double-clicking after download.
 
 ## Run it (about 3 minutes)
 
