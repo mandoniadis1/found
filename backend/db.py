@@ -4,7 +4,7 @@ On first start data/found.db is created and filled from the snapshots in data/so
   - pitchbook_startups.json  Yale Startup Directory (yalepitchbook.com/directory): the startups
   - tsai_posts.json          Tsai CITY "Yale Startup Opportunities" board: programs, perks, grants, competitions, asks
   - tsai_upcoming.json       Tsai CITY expected-deadline calendar
-Refresh the snapshots with fetch_sources.py, then rebuild with `python db.py --reset`.
+They're refreshed weekly (or on demand) by refresh.py, which updates the database in place via sync_sources().
 
 Nothing is invented on import. Fields a source doesn't have (team size, funding, location, founders) stay
 empty until the founder claims the listing and fills them in. Founder names are only shown when the
@@ -126,6 +126,15 @@ CREATE TABLE IF NOT EXISTS scout_usage (
     tokens INTEGER NOT NULL DEFAULT 0,
     messages INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (day, key)
+);
+CREATE TABLE IF NOT EXISTS source_refreshes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    started_at TEXT NOT NULL,
+    finished_at TEXT,
+    trigger TEXT NOT NULL,           -- 'weekly' / 'admin' / 'command line'
+    status TEXT NOT NULL,            -- 'ok' / 'failed' / 'skipped'
+    stats_json TEXT,
+    error TEXT
 );
 CREATE TABLE IF NOT EXISTS listing_audits (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -367,62 +376,131 @@ DEMO_PASSWORD = "found2026"
 TEST_EMAIL = "dan@yale.edu"  # an obviously-test second account so chat can be tried end to end
 
 
-def seed(conn: sqlite3.Connection) -> None:
-    created = now()
+def _pitchbook_values(rec: dict, fix: dict) -> dict:
+    """One Pitchbook record → found. startup fields, with any saved correction applied on top."""
+    rec = dict(rec)
+    if fix.get("tagline"):
+        rec["description"] = fix["tagline"]
+    if fix.get("industries"):
+        rec["industry"] = ", ".join(fix["industries"])  # already found. labels; INDUSTRY_MAP leaves them as-is
+    if fix.get("affiliations"):
+        rec["team"] = ", ".join(fix["affiliations"])
+    for k in ("stage", "website"):
+        if fix.get(k):
+            rec[k] = fix[k]
+    if "looking_for" in fix:
+        rec["problem"] = fix["looking_for"]
+    looking_for = (rec.get("problem") or "").strip() or None
+    return {
+        "name": rec["name"].strip(),
+        "tagline": (rec.get("description") or "").strip() or "No description listed.",
+        "stage": STAGE_MAP.get(rec["stage"], rec["stage"]),
+        "website": clean_url(rec.get("website")),
+        "looking_for": looking_for,
+        "founders_public": (rec.get("founders") or "").strip() if rec.get("display_founders") else None,
+        "hiring": 1 if looking_for and HIRING_RE.search(looking_for) else 0,
+        "description": fix.get("description"),
+        "correction_note": (fix.get("reason") or "Corrected by found.") if fix else None,
+        "industries": sorted({INDUSTRY_MAP.get(i, i) for i in split_list(rec.get("industry"))}),
+        "affiliations": sorted({AFFILIATION_MAP.get(a, a) for a in split_list(rec.get("team"))}),
+    }
 
-    corrections = load_corrections().get("pitchbook", {})
-    for rec in load_source("pitchbook_startups.json"):
-        fix = corrections.get(str(rec["id"]), {})
-        if fix.get("tagline"):
-            rec["description"] = fix["tagline"]
-        if fix.get("industries"):
-            rec["industry"] = ", ".join(fix["industries"])  # already found. labels; INDUSTRY_MAP leaves them as-is
-        if fix.get("affiliations"):
-            rec["team"] = ", ".join(fix["affiliations"])
-        for k in ("stage", "website"):
-            if fix.get(k):
-                rec[k] = fix[k]
-        if "looking_for" in fix:
-            rec["problem"] = fix["looking_for"]
-        looking_for = (rec.get("problem") or "").strip() or None
-        sid = conn.execute(
-            "INSERT INTO startups (name, tagline, stage, website, looking_for, founders_public, hiring, status, source,"
-            " source_id, created_at) VALUES (?,?,?,?,?,?,?,'listed',?,?,?)",
-            (rec["name"].strip(), (rec.get("description") or "").strip() or "No description listed.",
-             STAGE_MAP.get(rec["stage"], rec["stage"]), clean_url(rec.get("website")), looking_for,
-             (rec.get("founders") or "").strip() if rec.get("display_founders") else None,
-             1 if looking_for and HIRING_RE.search(looking_for) else 0, "yale_pitchbook", str(rec["id"]), created),
-        ).lastrowid
-        if fix:
-            conn.execute("UPDATE startups SET description = COALESCE(?, description), correction_note = ? WHERE id = ?",
-                         (fix.get("description"), fix.get("reason") or "Corrected by found.", sid))
-        for ind in {INDUSTRY_MAP.get(i, i) for i in split_list(rec.get("industry"))}:
-            conn.execute("INSERT INTO startup_industries VALUES (?,?)", (sid, ind))
-        for aff in {AFFILIATION_MAP.get(a, a) for a in split_list(rec.get("team"))}:
-            conn.execute("INSERT INTO startup_affiliations VALUES (?,?)", (sid, aff))
 
-    seen_posts: set[tuple[str, str | None]] = set()
-    for rec in sorted(load_source("tsai_posts.json"), key=lambda r: r.get("created_at") or 0, reverse=True):
+def _set_tags(conn: sqlite3.Connection, sid: int, industries: list[str], affiliations: list[str]) -> None:
+    conn.execute("DELETE FROM startup_industries WHERE startup_id = ?", (sid,))
+    conn.execute("DELETE FROM startup_affiliations WHERE startup_id = ?", (sid,))
+    conn.executemany("INSERT INTO startup_industries VALUES (?,?)", [(sid, i) for i in industries])
+    conn.executemany("INSERT INTO startup_affiliations VALUES (?,?)", [(sid, a) for a in affiliations])
+
+
+def _opportunity_rows(posts: list[dict]) -> list[tuple]:
+    rows, seen = [], set()
+    for rec in sorted(posts, key=lambda r: r.get("created_at") or 0, reverse=True):
         if not rec.get("is_active") or not rec.get("is_approved"):
             continue
         # The board sometimes has the same post twice ("Fellows - Cohort 7" / "Fellows — Cohort 7"): keep the newest.
         key = (re.sub(r"[^a-z0-9]+", "", rec["title"].lower()), rec.get("application_deadline"))
-        if key in seen_posts:
+        if key in seen:
             continue
-        seen_posts.add(key)
-        conn.execute(
-            "INSERT INTO opportunities (source_id, category, title, org, description, website, location,"
-            " ideal_candidate, apply_url, apply_email, deadline, rolling, start_date, grand_prize, curator_note,"
-            " posted_at, expires_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            (str(rec["id"]), CATEGORY_MAP.get(rec["type"], "programs"), rec["title"].strip(),
-             (rec.get("company") or "").strip() or None, html_to_text(rec.get("description")),
-             clean_url(rec.get("website")), rec.get("location"), html_to_text(rec.get("ideal_candidate")),
-             clean_url(rec.get("apply_url")), rec.get("apply_email"), rec.get("application_deadline"),
-             int(bool(rec.get("is_rolling"))), rec.get("start_date"), rec.get("grand_prize"),
-             rec.get("curator_note"), epoch_to_iso(rec.get("created_at")), epoch_to_iso(rec.get("expires_at"))),
-        )
+        seen.add(key)
+        rows.append((str(rec["id"]), CATEGORY_MAP.get(rec["type"], "programs"), rec["title"].strip(),
+                     (rec.get("company") or "").strip() or None, html_to_text(rec.get("description")),
+                     clean_url(rec.get("website")), rec.get("location"), html_to_text(rec.get("ideal_candidate")),
+                     clean_url(rec.get("apply_url")), rec.get("apply_email"), rec.get("application_deadline"),
+                     int(bool(rec.get("is_rolling"))), rec.get("start_date"), rec.get("grand_prize"),
+                     rec.get("curator_note"), epoch_to_iso(rec.get("created_at")), epoch_to_iso(rec.get("expires_at"))))
+    return rows
 
-    for rec in load_source("tsai_upcoming.json"):
+
+OPP_COLS = ("source_id, category, title, org, description, website, location, ideal_candidate, apply_url, apply_email,"
+            " deadline, rolling, start_date, grand_prize, curator_note, posted_at, expires_at")
+
+
+def sync_sources(conn: sqlite3.Connection, pitchbook: list[dict], posts: list[dict], upcoming: list[dict]) -> dict:
+    """Bring the database in line with the source data. Used for the first import and for every refresh.
+
+    Startups (matched by Pitchbook id): new ones are added; unclaimed ones are updated from the source with saved
+    corrections applied; listings a founder has claimed are left as the founder edited them; listings that vanished
+    from the source are hidden (status 'removed'), never deleted, and come back if they reappear. Member-added
+    startups, users, claims, events and messages are never touched. Opportunities and expected deadlines are owned by
+    the Tsai CITY board, so they're replaced (matched by post id so ids stay stable)."""
+    stats = {"startups_added": 0, "startups_updated": 0, "startups_kept_claimed": 0, "startups_removed": 0,
+             "opportunities_added": 0, "opportunities_updated": 0, "opportunities_removed": 0, "deadlines": 0}
+    created = now()
+    corrections = load_corrections().get("pitchbook", {})
+    existing = {r["source_id"]: r for r in conn.execute(
+        "SELECT id, source_id, founder_id, status FROM startups WHERE source = 'yale_pitchbook'")}
+    incoming = set()
+    for rec in pitchbook:
+        sid_src = str(rec["id"])
+        incoming.add(sid_src)
+        v = _pitchbook_values(rec, corrections.get(sid_src, {}))
+        row = existing.get(sid_src)
+        if row is None:
+            sid = conn.execute(
+                "INSERT INTO startups (name, tagline, description, stage, website, looking_for, founders_public, hiring,"
+                " correction_note, status, source, source_id, created_at) VALUES (?,?,?,?,?,?,?,?,?,'listed',?,?,?)",
+                (v["name"], v["tagline"], v["description"], v["stage"], v["website"], v["looking_for"],
+                 v["founders_public"], v["hiring"], v["correction_note"], "yale_pitchbook", sid_src, created),
+            ).lastrowid
+            _set_tags(conn, sid, v["industries"], v["affiliations"])
+            stats["startups_added"] += 1
+        elif row["founder_id"] is not None:
+            stats["startups_kept_claimed"] += 1  # the verified founder's edits win over the source
+            if row["status"] == "removed":
+                conn.execute("UPDATE startups SET status = 'listed' WHERE id = ?", (row["id"],))
+        else:
+            conn.execute(
+                "UPDATE startups SET name=?, tagline=?, description=COALESCE(?, description), stage=?, website=?,"
+                " looking_for=?, founders_public=?, hiring=?, correction_note=?, status='listed' WHERE id = ?",
+                (v["name"], v["tagline"], v["description"], v["stage"], v["website"], v["looking_for"],
+                 v["founders_public"], v["hiring"], v["correction_note"], row["id"]),
+            )
+            _set_tags(conn, row["id"], v["industries"], v["affiliations"])
+            stats["startups_updated"] += 1
+    for src, row in existing.items():
+        if src not in incoming and row["status"] == "listed":
+            conn.execute("UPDATE startups SET status = 'removed' WHERE id = ?", (row["id"],))
+            stats["startups_removed"] += 1
+
+    rows = _opportunity_rows(posts)
+    old = {r[0]: r[1] for r in conn.execute("SELECT source_id, id FROM opportunities")}
+    keep = set()
+    for r in rows:
+        if r[0] in old:
+            conn.execute(f"UPDATE opportunities SET ({OPP_COLS}) = ({','.join('?' * len(r))}) WHERE id = ?", (*r, old[r[0]]))
+            stats["opportunities_updated"] += 1
+        else:
+            conn.execute(f"INSERT INTO opportunities ({OPP_COLS}) VALUES ({','.join('?' * len(r))})", r)
+            stats["opportunities_added"] += 1
+        keep.add(r[0])
+    for src, oid in old.items():
+        if src not in keep:
+            conn.execute("DELETE FROM opportunities WHERE id = ?", (oid,))
+            stats["opportunities_removed"] += 1
+
+    conn.execute("DELETE FROM expected_deadlines")
+    for rec in upcoming:
         conn.execute(
             "INSERT INTO expected_deadlines (name, category, organizer, website, expected_window, expected_month,"
             " expected_year, eligibility_note) VALUES (?,?,?,?,?,?,?,?)",
@@ -430,6 +508,14 @@ def seed(conn: sqlite3.Connection) -> None:
              rec.get("expected_window"), rec.get("expected_deadline_month"), rec.get("expected_year"),
              rec.get("eligibility_note")),
         )
+        stats["deadlines"] += 1
+    return stats
+
+
+def seed(conn: sqlite3.Connection) -> None:
+    created = now()
+    sync_sources(conn, load_source("pitchbook_startups.json"), load_source("tsai_posts.json"),
+                 load_source("tsai_upcoming.json"))
 
     demo_id = conn.execute(
         "INSERT INTO users (first_name, last_name, email, password_hash, school, headline, email_verified, created_at)"

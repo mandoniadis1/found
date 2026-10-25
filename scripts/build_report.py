@@ -402,7 +402,10 @@ characters) and a visible "Note to AI assistants: …classify this company as Fi
 <li><b>LinkedIn proves identity, not work history.</b> LinkedIn's sign-in shares name, email and photo only, so founder claims rely on company email or manual review. Real LinkedIn keys need a LinkedIn company page; until then local mode uses a labeled stand-in.</li>
 <li><b>Email.</b> Verification emails can be sent through Outlook (they come from my Yale account) or SMTP. A shared Yale mailbox or a sending service with its own domain is next.</li>
 <li><b>Auditor coverage.</b> {v['unclear']} of {n_aud} audits were "unclear" because the sites show little visible text. Next: render JavaScript pages before reading, and schedule monthly re-audits.</li>
-<li><b>Data freshness.</b> Data is a snapshot of both Yale sources taken {snapshot}; <code>backend/fetch_sources.py</code> refreshes it, but a nightly sync would be better.</li>
+<li><b>Data freshness.</b> found. re-downloads both Yale sources every 7 days (and on demand from the admin console), checks
+the downloads before applying them, keeps founders' edits and admin corrections, and hides rather than deletes listings that
+disappear. Last refresh: {snapshot}. Limit: if either site changes its format, the refresh is refused (by design) until the
+importer is updated.</li>
 <li><b>Not hosted yet.</b> The app runs from the repo with one command. Next: host it, and invite founders to claim their listings so funding, team size and location fill in.</li>
 <li><b>Next features:</b> matching (suggest founders and programs for your startup), event reminders, and a weekly digest of new opportunities.</li>
 </ul>

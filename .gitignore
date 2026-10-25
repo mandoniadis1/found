@@ -7,3 +7,4 @@ data/found.db
 output/outbox/
 cheat_sheet.*
 output/*.log
+data/sources/previous/

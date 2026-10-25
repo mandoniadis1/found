@@ -198,6 +198,22 @@ async def auditor_tests():
            f"third read_page → {replies[2][:60]!r}; plus UsageLimits(request_limit=4, tool_calls_limit=2, 14k tokens)")
 
 
+def refresh_tests():
+    import refresh
+    try:
+        refresh._check("Yale Startup Directory", [{"id": 1, "name": "x", "description": "", "industry": "", "stage": "", "team": ""}] * 10,
+                       ("id", "name", "description", "industry", "stage", "team"), previous=122)
+        ok, detail = False, "a 10-record download was accepted"
+    except refresh.RefreshError as e:
+        ok, detail = True, f"refused: {e}"
+    try:
+        refresh._check("Tsai CITY posts", [{"id": 1, "title": "x"}], ("id", "type", "title", "description"), previous=0)
+        ok2 = False
+    except refresh.RefreshError as e:
+        ok2, detail = True, detail + f"; changed format refused: {e}"
+    record("A broken or shrunken source download can't wipe the directory", "Weekly refresh checks", ok and ok2, detail)
+
+
 def main():
     proc = start_server()
     try:
@@ -205,6 +221,7 @@ def main():
     finally:
         proc.terminate()
     asyncio.run(auditor_tests())
+    refresh_tests()
     out = {"ran_at": time.strftime("%Y-%m-%d %H:%M"), "passed": sum(r["passed"] for r in RESULTS), "total": len(RESULTS),
            "results": RESULTS}
     (_setup.OUTPUT / "safety_tests.json").write_text(json.dumps(out, indent=1))

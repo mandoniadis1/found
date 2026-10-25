@@ -106,6 +106,24 @@ export type Audit = {
   }
 }
 
+export type RefreshRun = {
+  id: number
+  started_at: string
+  finished_at: string | null
+  trigger: string
+  status: 'ok' | 'failed' | 'skipped' | 'running'
+  stats: Record<string, number> | null
+  error: string | null
+}
+
+export type DataSources = {
+  refresh_days: number
+  last_success: string | null
+  next_due: string | null
+  counts: { startups_listed: number; startups_removed: number; opportunities: number; expected_deadlines: number }
+  history: RefreshRun[]
+}
+
 export type UsageDay = { day: string; tokens: number; messages: number }
 
 export class ApiError extends Error {
@@ -147,6 +165,8 @@ export const api = {
   audits: () => request<Audit[]>('/audits'),
   decideAudit: (id: number, decision: 'apply' | 'dismiss') => post<Audit>(`/audits/${id}/${decision}`),
   usage: () => request<UsageDay[]>('/scout-usage'),
+  dataSources: () => request<DataSources>('/data-sources'),
+  refreshNow: () => post<{ status: string; error?: string } & Record<string, number | string>>('/data-sources/refresh'),
 }
 
 // Links into the public site: same origin when served by the backend, port 5185 when using the Vite dev servers.

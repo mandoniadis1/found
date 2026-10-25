@@ -62,9 +62,13 @@ goes to a clearly labeled local stand-in until real LinkedIn keys are configured
 
 - `data/sources/` holds the data the app imports on first start (small, included):
   `pitchbook_startups.json`, `tsai_posts.json`, `tsai_upcoming.json`, plus `corrections.json` (fixes applied on top).
-- **Switch or refresh the data:** replace those files (same format), or re-download them with
-  `python backend/fetch_sources.py` (needs `pip install playwright && playwright install chromium`), then rebuild the
-  database with `.venv/bin/python backend/db.py --reset`.
+- **Kept up to date automatically:** while the app runs, it re-downloads both sites every 7 days (`REFRESH_DAYS` in
+  `.env`; `0` turns it off). The admin console's dashboard shows the last/next refresh and has a **Refresh now** button.
+  You can also run `cd backend && ../.venv/bin/python refresh.py`. A refresh never removes users, claims, corrections,
+  events or messages; a listing that disappears from the source is hidden, not deleted, and a download that looks broken
+  (missing fields, or less than half the previous size) is refused.
+- **Switch datasets:** replace those files (same format) and rebuild the database with
+  `.venv/bin/python backend/db.py --reset`.
 - To use a different database file, set `FOUND_DB=/path/to/file.db` in `.env`.
 
 ## How it's built

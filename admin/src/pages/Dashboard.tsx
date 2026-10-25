@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { api, type Overview, type UsageDay } from '../api'
+import { api, type DataSources, type Overview, type UsageDay } from '../api'
 
 function Stat({ label, value, sub, to, alert }: { label: string; value: number | string; sub?: string; to?: string; alert?: boolean }) {
   const body = (
@@ -16,11 +16,33 @@ function Stat({ label, value, sub, to, alert }: { label: string; value: number |
 export function Dashboard() {
   const [o, setO] = useState<Overview | null>(null)
   const [usage, setUsage] = useState<UsageDay[]>([])
+  const [ds, setDs] = useState<DataSources | null>(null)
+  const [refreshing, setRefreshing] = useState(false)
+  const [refreshMsg, setRefreshMsg] = useState('')
 
   useEffect(() => {
     api.overview().then(setO)
     api.usage().then(setUsage)
+    api.dataSources().then(setDs)
   }, [])
+
+  async function refreshNow() {
+    setRefreshing(true)
+    setRefreshMsg('')
+    try {
+      const r = await api.refreshNow()
+      setRefreshMsg(r.status === 'ok'
+        ? `Updated: ${r.startups_added} new and ${r.startups_updated} updated startups, ${r.opportunities_added} new opportunities, ${r.startups_removed} listings hidden.`
+        : `Not applied: ${r.error}`)
+    } catch (e) {
+      setRefreshMsg((e as Error).message)
+    } finally {
+      setRefreshing(false)
+      api.dataSources().then(setDs)
+      api.overview().then(setO)
+    }
+  }
+  const when = (iso: string | null) => (iso ? new Date(iso).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : '—')
 
   if (!o) return <p className="muted">Loading…</p>
   const pct = Math.min(100, Math.round((o.scout_tokens_today / o.scout_daily_budget) * 100))
@@ -72,6 +94,39 @@ export function Dashboard() {
           </div>
         )}
       </div>
+
+      <h2 className="section">Data sources</h2>
+      {ds && (
+        <div className="panel">
+          <div className="budget-row">
+            <span>
+              Yale Startup Directory + Tsai CITY board · last updated <b>{when(ds.last_success)}</b>
+              {ds.refresh_days > 0 ? <> · next automatic refresh <b>{when(ds.next_due)}</b> (every {ds.refresh_days} days)</> : ' · automatic refresh off'}
+            </span>
+            <button className="btn sm" disabled={refreshing} onClick={refreshNow}>{refreshing ? 'Refreshing…' : 'Refresh now'}</button>
+          </div>
+          <p className="muted small">
+            {ds.counts.startups_listed} startups listed{ds.counts.startups_removed ? `, ${ds.counts.startups_removed} hidden (gone from the source)` : ''} ·
+            {' '}{ds.counts.opportunities} opportunities · {ds.counts.expected_deadlines} expected deadlines.
+            Claimed listings keep their founder's edits; your corrections are re-applied after every refresh.
+          </p>
+          {refreshMsg && <p className="refresh-msg">{refreshMsg}</p>}
+          {ds.history.length > 0 && (
+            <table className="mini">
+              <tbody>
+                {ds.history.slice(0, 5).map((h) => (
+                  <tr key={h.id}>
+                    <td>{when(h.started_at)}</td>
+                    <td>{h.trigger}</td>
+                    <td><span className={`tag ${h.status === 'ok' ? 'ok' : 'warn'}`}>{h.status}</span></td>
+                    <td className="muted">{h.stats ? `+${h.stats.startups_added} startups, +${h.stats.opportunities_added} opportunities, ${h.stats.startups_removed} hidden` : h.error}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      )}
 
       <h2 className="section">Setup</h2>
       <div className="panel setup">

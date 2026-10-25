@@ -7,10 +7,12 @@ Interactive docs at http://127.0.0.1:8030/docs
 
 from __future__ import annotations
 
+import asyncio
 import html
 import json
 import secrets
 import sqlite3
+from contextlib import asynccontextmanager
 from typing import Annotated
 
 from fastapi import Cookie, Depends, FastAPI, Form, HTTPException, Query, Request, Response
@@ -20,6 +22,7 @@ from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 import config
 import mailer
 import queries
+import refresh
 import verification as verify
 from agent import ScoutUnavailable, run_scout, scout_budget
 from auth import COOKIE_NAME, hash_password, new_token, verify_password
@@ -31,7 +34,25 @@ from models import (
     User,
 )
 
-app = FastAPI(title="found. API", version="0.3.0")
+async def _weekly_refresh_loop() -> None:
+    """Checks once an hour; when the data is REFRESH_DAYS old (default 7), re-downloads both source sites."""
+    while True:
+        try:
+            if refresh.is_due():
+                await asyncio.to_thread(refresh.run_refresh, "weekly")
+        except Exception as exc:  # never let the timer crash the server
+            print(f"[refresh] scheduler error: {exc}", flush=True)
+        await asyncio.sleep(3600)
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    task = asyncio.create_task(_weekly_refresh_loop())
+    yield
+    task.cancel()
+
+
+app = FastAPI(title="found. API", version="0.4.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5185", "http://127.0.0.1:5185", "http://localhost:5186", "http://127.0.0.1:5186",
@@ -626,6 +647,24 @@ def admin_scout_usage(admin: Admin) -> list[dict]:
         return [dict(r) for r in rows]
 
 
+@app.get("/api/admin/data-sources")
+def admin_data_sources(admin: Admin) -> dict:
+    with connect() as conn:
+        counts = {
+            "startups_listed": conn.execute("SELECT COUNT(*) FROM startups WHERE status='listed' AND source='yale_pitchbook'").fetchone()[0],
+            "startups_removed": conn.execute("SELECT COUNT(*) FROM startups WHERE status='removed'").fetchone()[0],
+            "opportunities": conn.execute("SELECT COUNT(*) FROM opportunities").fetchone()[0],
+            "expected_deadlines": conn.execute("SELECT COUNT(*) FROM expected_deadlines").fetchone()[0],
+        }
+    return {"refresh_days": refresh.REFRESH_DAYS, "last_success": refresh.last_success(), "next_due": refresh.next_due(),
+            "counts": counts, "history": refresh.history()}
+
+
+@app.post("/api/admin/data-sources/refresh")
+async def admin_refresh_now(admin: Admin) -> dict:
+    return await asyncio.to_thread(refresh.run_refresh, "admin")
+
+
 @app.get("/api/admin/startups/all", response_model=list[Startup])
 def admin_all_startups(admin: Admin, q: str | None = None) -> list[Startup]:
     with connect() as conn:
@@ -940,6 +979,10 @@ def _spa_file(dist, path: str):
 
 
 @app.get("/admin", include_in_schema=False)
+def admin_root() -> RedirectResponse:
+    return RedirectResponse("/admin/")  # the admin app lives under /admin/ (without the slash it renders blank)
+
+
 @app.get("/admin/{path:path}", include_in_schema=False)
 def admin_app(path: str = ""):
     return _spa_file(ADMIN_DIST, path)
