@@ -149,7 +149,7 @@ eval_rows = "".join(
     f"<td>{r['two_call']['precision']:.2f} / {r['two_call']['recall']:.2f}</td></tr>" for r in ev["rows"])
 safety_rows = "".join(
     f"<tr><td>{'✅' if r['passed'] else '❌'}</td><td><b>{e(r['test'])}</b><br><span class='muted'>{e(r['defense'])}</span></td>"
-    f"<td class='small'>{e(r['detail'][:230])}</td></tr>" for r in st["results"])
+    f"<td class='small'>{e(r['detail'][:120] + ('…' if len(r['detail']) > 120 else ''))}</td></tr>" for r in st["results"])
 flagged_rows = "".join(
     f"<tr><td>{e(r['startup'])}</td><td>{e(', '.join(r['current_industries']))}</td><td>{e(', '.join(r['suggested_industries']))}</td>"
     f"<td class='small'>{e(r['summary'][:170])}</td></tr>"
@@ -209,7 +209,7 @@ else:
     user_slide = f"{before_items} → {after_items}"
     user_slide_label = "items to read for one real task, before → with found."
 
-FEATURE_ROWS = "".join(f"<tr><td>{'✅' if r['passed'] else '❌'}</td><td><b>{e(r['test'])}</b></td><td class='small'>{e(r['detail'][:220])}</td></tr>" for r in ft["results"])
+FEATURE_ROWS = "".join(f"<tr><td>{'✅' if r['passed'] else '❌'}</td><td><b>{e(r['test'])}</b></td><td class='small'>{e(r['detail'][:110] + ('…' if len(r['detail']) > 110 else ''))}</td></tr>" for r in ft["results"])
 # ---------------------------------------------------------------- report
 CSS = """
 @page { size: letter; margin: 0.6in 0.65in; }
@@ -404,7 +404,7 @@ now listed on the main page with me on the founder card (verified by admin revie
 <p><b>Automated test with a fake member.</b> In local mode found. creates a fake founder, <b>Test Founder</b> (test.founder@yale.edu), who owns
 a clearly labeled demo listing, <b>Bulldog Test Co.</b>, so graders can try the founder card and messaging without touching a real company.
 <code>scripts/feature_tests.py</code> runs these flows on a throwaway database ({ft['passed']}/{ft['total']} passed, {ft['ran_at']}):</p>
-<table><thead><tr><th></th><th>Check</th><th>Result</th></tr></thead><tbody>{FEATURE_ROWS}</tbody></table>
+<table><thead><tr><th></th><th>Check</th><th>Result (full details in output/feature_tests.json)</th></tr></thead><tbody>{FEATURE_ROWS}</tbody></table>
 <p><b>People who want to join a startup.</b> Not everyone has a startup or an idea. The <i>Join a startup</i> page collects every
 way in, and members can opt in to being found with the roles, industries and time they can give. Only verified founders (members
 with a listed startup) can browse that list, it never shows emails, and members can switch it off at any time; the feature tests above
