@@ -249,8 +249,9 @@ agents: one that answers questions for a fraction of a cent, and one that keeps 
 {fig("01_explore", "The public site's Explore page: one search over every Yale startup, color-coded by industry, with opportunities that close soon highlighted in red.")}
 
 <h2>1. Motivation</h2>
-<p><b>Who has the problem.</b> Yale students and alumni who are starting companies, or who want to join one. Even though Yale
-has plenty of entrepreneurial resources, the startup ecosystem is opaque. In venture capital that opacity is the edge:
+<p><b>Who has the problem.</b> Yale students and alumni who are starting companies, or who want to join one. I see this
+firsthand as co-lead of the Startup and Entrepreneurship Club: the lack of transparency in the Yale startup ecosystem is a
+known issue in need of a solution. Even though Yale has plenty of entrepreneurial resources, the startup ecosystem is opaque. In venture capital that opacity is the edge:
 investors win on transparency and speed, and tools like Harmonic sell exactly that speed. Founders sit on the other side of
 the gap. They value local support before they raise a seed round, which is why so many hub-like platforms exist; but those hubs
 stay disconnected from each other, and attempts to make them global dilute what made them useful. I built found. to give Yale
@@ -477,7 +478,8 @@ slides = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>f
 <li>Yale's startup scene is spread over <b>separate sites</b>: {n_startups} startups on the Pitchbook directory, {n_opps} opportunities on the Tsai CITY board.</li>
 <li>One filter at a time, 5 pages of listings, founders hidden.</li>
 <li>Listings are self-reported: <b>{v['needs_changes']} of {n_aud}</b> are misleading.</li>
-<li>Founders want <em>local</em> support before seed.</li></ul></div>
+<li>Founders want <em>local</em> support before seed.</li>
+<li>As co-lead of the Startup &amp; Entrepreneurship Club: a <b>known gap</b> that needs a fix.</li></ul></div>
 <div>{img("02_directory", "Directory", "s")}</div></div></section>
 
 <section><h2>What's new</h2><div class="grid3">
