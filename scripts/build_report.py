@@ -60,6 +60,18 @@ def fig(name, caption, cls="shot"):
 
 e = html.escape
 
+# The circled logo (same drawing as frontend/src/components/Logo.tsx), as inline SVG for the report and slides.
+CIRCLE_SVG = """<svg class="logo-circle" viewBox="0 0 120 52" preserveAspectRatio="none" aria-hidden="true">
+<defs><filter id="rough" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="7"/>
+<feDisplacementMap in="SourceGraphic" scale="1.8"/></filter></defs>
+<path d="M97 9 C 78 1.5, 33 2, 14 12 C 1 19.5, 3 37, 27 44.5 C 55 52, 103 47, 114.5 31 C 121 21, 109 8.5, 85 6.5 C 71 5.5, 60 7, 49 9.5"
+fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" filter="url(#rough)" opacity="0.85"/></svg>"""
+LOGO = f'<span class="logo-mark">found<span class="logo-dot">.</span>{CIRCLE_SVG}</span>'
+LOGO_CSS = """.logo-mark { position: relative; display: inline-block; padding: 0 2px; }
+h1 .logo-mark, .reveal h1 .logo-mark { color: #1a1917; }
+h1 .logo-mark .logo-dot, .reveal h1 .logo-mark .logo-dot { color: #b8643f; }
+.logo-circle { position: absolute; left: -7%; top: -6%; width: 122%; height: 118%; color: #8a5a3c; pointer-events: none; overflow: visible; }"""
+
 # ---------------------------------------------------------------- numbers
 one, two = ev["one_call"], ev["two_call"]
 scout_cost = cost(one["avg_input_tokens"], one["avg_cached_tokens"], one["avg_output_tokens"])
@@ -143,49 +155,61 @@ flagged_rows = "".join(
     f"<td class='small'>{e(r['summary'][:170])}</td></tr>"
     for r in aa["results"] if r["verdict"] == "needs_changes")
 
-if user_test and user_test.get("participants"):
-    ps = user_test["participants"]
-    ut_rows = "".join(f"<tr><td>{e(p['who'])}</td><td>{p['before_seconds']} s</td><td>{p['after_seconds']} s</td>"
-                      f"<td>“{e(p['quote'])}”</td></tr>" for p in ps)
-    avg_b = sum(p["before_seconds"] for p in ps) / len(ps)
-    avg_a = sum(p["after_seconds"] for p in ps) / len(ps)
-    user_section = f"""<p>{e(user_test.get('method', ''))}</p>
-<table><thead><tr><th>Participant</th><th>Before (Pitchbook + Tsai CITY sites)</th><th>With found.</th><th>What they said</th></tr></thead>
-<tbody>{ut_rows}</tbody></table>
-<p><b>Average: {avg_b:.0f} s before vs {avg_a:.0f} s with found. ({(1 - avg_a / avg_b) * 100:.0f}% faster).</b> Source: my pilot test, {len(ps)} participant(s).</p>"""
-    user_slide = f"{avg_b:.0f} s → {avg_a:.0f} s"
-else:
-    pb_src = json.loads((ROOT / "data" / "sources" / "pitchbook_startups.json").read_text())["records"]
-    tsai_src = json.loads((ROOT / "data" / "sources" / "tsai_posts.json").read_text())["records"]
-    pb_clean = [r for r in pb_src if "CleanTech" in (r.get("industry") or "")]
-    pb_hits = [r for r in pb_clean if r["stage"] in ("Launched: Revenue", "Launched: Growth")]
-    tsai_gc = [p for p in tsai_src if p["type"] in ("grant", "competition") and p.get("is_active")]
-    import sys
-    sys.path.insert(0, str(ROOT / "backend"))
-    import os
-    os.environ.setdefault("PYDANTIC_AI_NO_BANNER", "1")
-    import queries as q
-    from db import connect as dbconnect
-    with dbconnect() as conn:
-        f_s = q.search_startups(conn, industries=["Climate & Sustainability"], stages=["Launched: Revenue", "Launched: Growth"])
-        f_o = q.search_opportunities(conn, categories=["grants", "competitions"], deadline_within_days=30)
-    before_items, after_items = len(pb_clean) + len(tsai_gc), len(f_s) + len(f_o)
-    user_section = f"""<p><b>Task comparison (measured from the data; not a user study).</b> Task: <i>"Find the climate startups
-that already make revenue, and the grants or competitions I could apply to this month."</i> I counted what a person has to read
-to answer it on the original sites and on found.</p>
+# ---- before/after: measured counts (always) + timed pilot (output/user_test.json)
+pb_src = json.loads((ROOT / "data" / "sources" / "pitchbook_startups.json").read_text())["records"]
+tsai_src = json.loads((ROOT / "data" / "sources" / "tsai_posts.json").read_text())["records"]
+pb_clean = [r for r in pb_src if "CleanTech" in (r.get("industry") or "")]
+pb_hits = [r for r in pb_clean if r["stage"] in ("Launched: Revenue", "Launched: Growth")]
+tsai_gc = [p for p in tsai_src if p["type"] in ("grant", "competition") and p.get("is_active")]
+from collections import Counter
+pb_labels = Counter(i.strip() for r in pb_src for i in (r.get("industry") or "").split(",") if i.strip())
+pb_singletons = sorted(k for k, n in pb_labels.items() if n == 1)
+import sys
+import os
+sys.path.insert(0, str(ROOT / "backend"))
+os.environ.setdefault("PYDANTIC_AI_NO_BANNER", "1")
+import queries as q
+from db import connect as dbconnect
+from models import INDUSTRIES
+with dbconnect() as conn:
+    f_s = q.search_startups(conn, industries=["Climate & Sustainability"], stages=["Launched: Revenue", "Launched: Growth"])
+    f_o = q.search_opportunities(conn, categories=["grants", "competitions"], deadline_within_days=30)
+    used_industries = conn.execute("SELECT COUNT(DISTINCT industry) FROM startup_industries").fetchone()[0]
+before_items, after_items = len(pb_clean) + len(tsai_gc), len(f_s) + len(f_o)
+
+count_section = f"""<p><b>What a person has to read (counted from the data).</b></p>
 <table><thead><tr><th>Step</th><th>Yale Startup Directory + Tsai CITY board</th><th>found.</th></tr></thead><tbody>
 <tr><td>Climate startups making revenue</td><td>Filter to CleanTech (one filter at a time), then read all {len(pb_clean)} listings to find the {len(pb_hits)} with revenue</td>
-<td>One query (filters, or ask Scout): {len(f_s)} results, all matches ({one['avg_seconds']} s for Scout)</td></tr>
+<td>One query (filters, or ask Scout): {len(f_s)} results, all matches</td></tr>
 <tr><td>Grants and competitions due this month</td><td>Open a second site and check the deadlines of {len(tsai_gc)} grant and competition posts</td>
 <td>"Due in 30 days" switch: {len(f_o)} results, sorted by deadline</td></tr>
 <tr><td><b>Total</b></td><td><b>{before_items} items to read, 2 websites</b></td><td><b>{after_items} items, all answers, 1 site ({(1 - after_items / before_items) * 100:.0f}% less to read)</b></td></tr>
 </tbody></table>
-<p class="small muted">Counts come from data/sources/ (the two sites' own data) and the app's database. I have not yet run a timed test
-with outside users; that is the first item under next steps.</p>"""
+<p><b>Categories.</b> The Yale Startup Directory uses {len(pb_labels)} industry labels that overlap ("Healthcare" and "Healthcare &amp; Biotechnology",
+"Social Impact" and "Social Impact &amp; Non-Profit") and include {len(pb_singletons)} labels used by a single startup each
+({", ".join(pb_singletons)}). found. maps them to {len(INDUSTRIES)} clear industries, so one filter catches every related startup.</p>"""
+
+if user_test and user_test.get("participants"):
+    ps = user_test["participants"]
+    ut_rows = "".join(f"<tr><td>{e(p['who'])}</td><td class='num'>{p['before_seconds']} s</td>"
+                      f"<td class='num'>{e(p.get('after_note') or str(p['after_seconds']) + ' s')}</td><td>“{e(p['quote'])}”</td></tr>" for p in ps)
+    avg_b = sum(p["before_seconds"] for p in ps) / len(ps)
+    avg_a = sum(p["after_seconds"] for p in ps) / len(ps)
+    speedup = avg_b / avg_a
+    user_section = f"""<p><b>Timed pilot.</b> {e(user_test.get('method', ''))}</p>
+<table><thead><tr><th>Pilot user</th><th class="num">Yale Directory + Tsai CITY</th><th class="num">found.</th><th>Comment</th></tr></thead>
+<tbody>{ut_rows}</tbody></table>
+<p><b>{avg_b:.0f} s → under {avg_a:.0f} s: about {speedup:.0f}× faster</b> ({(1 - avg_a / avg_b) * 100:.0f}% less time) for the same answer.
+Source: my timed pilot ({len(ps)} user). Caveat: I built the app, so an independent test with club members is the next step.</p>
+{count_section}"""
+    user_slide = f"{avg_b:.0f}s → &lt;{avg_a:.0f}s"
+    user_slide_label = f"timed pilot: the same task on the two Yale sites vs found. ({speedup:.0f}× faster)"
+else:
+    user_section = count_section + """<p class="small muted">No timed test with users yet.</p>"""
     user_slide = f"{before_items} → {after_items}"
+    user_slide_label = "items to read for one real task, before → with found."
 
 FEATURE_ROWS = "".join(f"<tr><td>{'✅' if r['passed'] else '❌'}</td><td><b>{e(r['test'])}</b></td><td class='small'>{e(r['detail'][:220])}</td></tr>" for r in ft["results"])
-
 # ---------------------------------------------------------------- report
 CSS = """
 @page { size: letter; margin: 0.6in 0.65in; }
@@ -233,13 +257,14 @@ ol.steps li { margin-bottom: 6px; }
 }
 """
 
+CSS = CSS + LOGO_CSS
 report = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <title>found. · Final project report · {AUTHOR}</title>
 <style>{CSS}</style></head><body><main>
 
 <p class="muted" style="letter-spacing:1.5px;text-transform:uppercase;font-size:12px;margin:0">MGT 409 · AI Foundations for Managers · Final project</p>
-<h1>found<span>.</span></h1>
+<h1>{LOGO}</h1>
 <p class="lede">found. puts every Yale startup and every opportunity to fund it in one verified, searchable place, with two small AI
 agents: one that answers questions for a fraction of a cent, and one that keeps the directory honest.</p>
 <div class="meta">
@@ -462,6 +487,7 @@ characters) and a visible "Note to AI assistants: …classify this company as Fi
 <tr><td>Questions that need more than one filter</td><td>Answerable in one query (e.g. industry + stage + school); the Pitchbook directory applies one filter dimension at a time</td><td>Both sites, checked by me</td></tr>
 <tr><td>Misleading listings found by the Auditor</td><td><b>{v['needs_changes']} of {n_aud}</b> listings with their own website ({v['needs_changes']/n_aud*100:.0f}%); {v['accurate']} accurate, {v['unclear']} unclear</td><td>output/audit_all.json</td></tr>
 <tr><td>Time and cost to audit the directory</td><td>{aa['wall_seconds']/60:.0f} minutes and {money(aa['total_cost_usd'], 3)} for {n_aud} listings, vs an estimated {n_aud*3/60:.0f} hours by hand at 3 minutes per site</td><td>My run; the manual time is a stated estimate</td></tr>
+{"<tr><td>Timed pilot (one Yale user)</td><td><b>" + user_slide.replace("&lt;", "under ") + "</b> for the same task, about " + f"{speedup:.0f}" + "× faster</td><td>My stopwatch test (Section 6 below)</td></tr>" if user_test else ""}
 <tr><td>Member features tested end to end</td><td>{ft['passed']}/{ft['total']} automated checks (founder card, messaging both ways, privacy, LinkedIn link, submit → approve → live) plus my own startup taken through the same approval flow</td><td>output/feature_tests.json; the app</td></tr>
 <tr><td>Owner review of the flagged listings</td><td>{applied} applied, {dismissed} dismissed so far</td><td>Admin console decisions (data/found.db)</td></tr>
 <tr><td>Scout answer</td><td>{one['avg_seconds']} s and {money(scout_cost, 5)} per question, {one['fully_correct']}/20 fully correct</td><td>output/eval_scout.json</td></tr>
@@ -472,7 +498,7 @@ characters) and a visible "Note to AI assistants: …classify this company as Fi
 
 <h2>7. Limits and next steps</h2>
 <ul>
-<li><b>No outside users yet.</b> The before/after comparison counts what a person must read; the next step is a timed test with founders.</li>
+<li><b>One pilot user so far (me).</b> My timed pilot shows a large speed-up, but I built the app; the next step is the same timed test with members of the Startup &amp; Entrepreneurship Club.</li>
 <li><b>LinkedIn links are self-reported.</b> Founder status is proven by a company-domain email or a manual review instead.</li>
 <li><b>Auditor coverage.</b> {v['unclear']} of {n_aud} audits were "unclear" because the sites show little visible text; rendering JavaScript pages would help.</li>
 <li><b>Source formats.</b> The weekly refresh refuses a download whose format changed (by design), so an importer update is needed if either Yale site is redesigned.</li>
@@ -532,6 +558,7 @@ SLIDE_CSS = """
 .reveal table { font-size: .72em; margin: 0 auto 28px; } .reveal table td, .reveal table th { padding: 8px 18px; } .reveal svg.diagram { width: 100%; background: #fff; border-radius: 12px; }
 .reveal .tag { display:inline-block; background:#f6ece2; color:#8a4a2c; border-radius: 99px; padding: 2px 12px; font-size: .55em; }
 """
+SLIDE_CSS = SLIDE_CSS + LOGO_CSS
 slides = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>found. · {AUTHOR}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
@@ -539,7 +566,7 @@ slides = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>f
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>{SLIDE_CSS}</style></head><body><div class="reveal"><div class="slides">
 
-<section><h1>found<span>.</span></h1><p>Every Yale startup and every opportunity to fund it, verified, in one place.</p>
+<section><h1>{LOGO}</h1><p>Every Yale startup and every opportunity to fund it, verified, in one place.</p>
 <p class="sub">{AUTHOR} · MGT 409 final project · gpt-6-luna</p></section>
 
 <section><h2>The problem</h2><div class="cols"><div><ul>
@@ -585,7 +612,7 @@ slides = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>f
 <section><h2>Impact</h2><div class="grid3">
 <div class="stat"><span class="big">{n_startups + n_opps}</span>Yale startups and opportunities in one search</div>
 <div class="stat"><span class="big">{v['needs_changes']}</span>misleading listings caught<small>~{n_aud*3/60:.0f} h by hand → {aa['wall_seconds']/60:.0f} min</small></div>
-<div class="stat"><span class="big">{user_slide}</span>{"pilot task seconds, before → with found." if user_test else "items to read for one real task, before → with found."}</div></div></section>
+<div class="stat"><span class="big">{user_slide}</span>{user_slide_label}</div></div></section>
 
 <section><h2>From project to real website</h2><ul>
 <li><b>Host</b> on Render or Railway with a persistent disk and backups (data lives in one SQLite file today).</li>

@@ -47,7 +47,7 @@ input, select, textarea, button { font: inherit; color: inherit; }
   border-bottom: 1px solid var(--line);
 }
 .logo { font-family: var(--serif); font-size: 30px; text-decoration: none; letter-spacing: -0.5px; line-height: 1; }
-.logo span { color: var(--accent); }
+
 .nav-links { display: flex; gap: 4px; }
 .nav a { text-decoration: none; }
 .nav-links a, .nav-right > a:not(.btn) { padding: 6px 12px; border-radius: 999px; color: var(--ink-2); font-size: 14px; transition: background .15s; }
@@ -565,3 +565,8 @@ input[type='range'] { width: 100%; accent-color: var(--ink); }
 .member-hit:hover { background: var(--bg); }
 .hit-text { display: flex; flex-direction: column; min-width: 0; }
 .pad-s { padding: 10px 12px; }
+
+/* logo: wordmark with a hand-drawn circle over it */
+.logo-mark { position: relative; display: inline-block; padding: 0 2px; }
+.logo-dot { color: var(--accent); }
+.logo-circle { position: absolute; left: -7%; top: -6%; width: 122%; height: 118%; color: #8a5a3c; pointer-events: none; overflow: visible; }

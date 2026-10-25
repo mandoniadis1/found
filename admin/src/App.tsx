@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
 import { api, PUBLIC_SITE, type Admin, type Overview } from './api'
 import { Audits } from './pages/Audits'
+import { Logo } from './Logo'
 import { Claims } from './pages/Claims'
 import { Dashboard } from './pages/Dashboard'
 import { Listings } from './pages/Listings'
@@ -30,7 +31,7 @@ function Login({ onLogin }: { onLogin: (a: Admin) => void }) {
   return (
     <div className="login-wrap">
       <form className="login" onSubmit={submit}>
-        <div className="brand">found<span>.</span> <em>admin</em></div>
+        <div className="brand"><Logo /> <em>admin</em></div>
         <p className="muted">Sign in with an admin account. This console is separate from the public site.</p>
         <label>Email<input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} autoFocus /></label>
         <label>Password<input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} /></label>
@@ -61,7 +62,7 @@ export default function App() {
   return (
     <div className="shell">
       <aside className="sidebar">
-        <div className="brand">found<span>.</span> <em>admin</em></div>
+        <div className="brand"><Logo /> <em>admin</em></div>
         <nav>
           <NavLink to="/" end>Dashboard</NavLink>
           <NavLink to="/claims">Founder claims {!!counts?.pending_claims && <b className="badge">{counts.pending_claims}</b>}</NavLink>

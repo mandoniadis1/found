@@ -1,5 +1,6 @@
 import { Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom'
 import { useAuth } from './auth'
+import { Logo } from './components/Logo'
 import { Doodles } from './components/Doodles'
 import { VerifyBanner } from './components/VerifyBanner'
 import { Login, Signup, Verified } from './pages/AuthPages'
@@ -17,7 +18,7 @@ function Nav() {
   const navigate = useNavigate()
   return (
     <nav className="nav">
-      <Link to="/" className="logo">found<span>.</span></Link>
+      <Link to="/" className="logo" aria-label="found. home"><Logo /></Link>
       <div className="nav-links">
         <NavLink to="/" end>Explore</NavLink>
         <NavLink to="/opportunities">Opportunities</NavLink>

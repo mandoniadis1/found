@@ -16,7 +16,7 @@ h1, h2, h3, p { margin: 0; }
 .pre { white-space: pre-wrap; }
 
 .brand { font-family: var(--serif); font-size: 28px; color: #f4efe6; }
-.brand span { color: var(--accent); }
+.brand .logo-dot { color: var(--accent); }
 .brand em { font-family: var(--sans); font-style: normal; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--side-text); background: var(--side-2); padding: 3px 7px; border-radius: 6px; vertical-align: 6px; margin-left: 4px; }
 
 /* layout */
@@ -120,3 +120,9 @@ a.stat:hover { border-color: #c9c5bd; }
 .demo-login b { color: #fff; font-weight: 600; }
 .demo-login span { color: #8d8996; }
 .demo-login:hover { border-color: var(--accent); }
+
+/* logo: wordmark with a hand-drawn circle over it */
+.logo-mark { position: relative; display: inline-block; padding: 0 2px; }
+.logo-dot { color: var(--accent); }
+.logo-circle { position: absolute; left: -7%; top: -6%; width: 122%; height: 118%; color: #8a5a3c; pointer-events: none; overflow: visible; }
+.brand .logo-circle { color: #c08a64; }
