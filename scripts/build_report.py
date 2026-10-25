@@ -210,6 +210,8 @@ agents: one that answers questions for a fraction of a cent, and one that keeps 
 <b>Author</b><span>{AUTHOR}</span>
 <b>Repository</b><span><a href="{REPO}">{REPO}</a> (run with <code>python run.py</code>; see README)</span>
 <b>Live app</b><span>Runs locally from the repo (one command). Demo admin in local mode: admin@yale.edu / found2026 at /admin</span>
+<b>Online copies</b><span><a href="https://mandoniadis1.github.io/found/report.html">report</a> ·
+<a href="https://mandoniadis1.github.io/found/slides.html">slides</a> (GitHub Pages)</span>
 <b>Model</b><span>gpt-6-luna only, through Portkey (course key)</span>
 </div>
 <div class="kpis">
