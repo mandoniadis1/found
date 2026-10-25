@@ -44,7 +44,7 @@ export function StartupCard({ s, compact = false }: { s: Startup; compact?: bool
               {extras.length > 0 && <span className="dot">·</span>}{prettyUrl(s.website)} ↗
             </a>
           ) : extras.length === 0 && <span>No website listed</span>}
-          {s.claimed && <span className="claimed" title="Claimed by its founder on found.">✓ Claimed</span>}
+          {s.claimed && <span className="claimed" title="The founder is on found. — open the startup to message them">✓ Founder on found.</span>}
         </div>
       )}
     </article>

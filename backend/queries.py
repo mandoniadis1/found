@@ -58,6 +58,7 @@ def search_startups(
     raised_min: int | None = None,
     hiring: bool | None = None,
     has_ask: bool | None = None,
+    has_founder: bool | None = None,
     sort: str = "name",
     limit: int = 500,
 ) -> list[Startup]:
@@ -84,6 +85,8 @@ def search_startups(
         where.append("s.hiring = 1")
     if has_ask:
         where.append("s.looking_for IS NOT NULL")
+    if has_founder:
+        where.append("s.founder_id IS NOT NULL")  # the founder is on found. and can be messaged
     order = {"name": "s.name COLLATE NOCASE", "newest": "s.id DESC", "stage": f"{STAGE_ORDER} DESC, s.name COLLATE NOCASE",
              "raised": "s.raised_usd IS NULL, s.raised_usd DESC"}.get(sort, "s.name COLLATE NOCASE")
     sql = STARTUP_SELECT + (" WHERE " + " AND ".join(where) if where else "") + f" ORDER BY {order} LIMIT ?"
@@ -120,6 +123,7 @@ def filter_options(conn: sqlite3.Connection) -> Filters:
                          " GROUP BY location ORDER BY COUNT(*) DESC"),
         with_team_size=conn.execute("SELECT COUNT(*) FROM startups WHERE status = 'listed' AND team_size IS NOT NULL").fetchone()[0],
         with_funding=conn.execute("SELECT COUNT(*) FROM startups WHERE status = 'listed' AND raised_usd IS NOT NULL").fetchone()[0],
+        with_founder=conn.execute("SELECT COUNT(*) FROM startups WHERE status = 'listed' AND founder_id IS NOT NULL").fetchone()[0],
         total=conn.execute("SELECT COUNT(*) FROM startups WHERE status = 'listed'").fetchone()[0],
     )
 

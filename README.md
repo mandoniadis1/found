@@ -57,8 +57,9 @@ LinkedIn profile link on their profile (optional, shown on their founder card; n
 1. **Explore**: filter by industry + stage + Yale affiliation; click a card; the "Closing soon" boxes.
 2. **Ask Scout** (bottom-right of Explore): e.g. *"climate startups making revenue"* or *"grants due in the next month"*.
 3. **Opportunities**: categories, "Due in 30 days", the "On the horizon" calendar.
-4. **Founder card + messaging**: log in as `demo@yale.edu`, search *Bulldog Test*, open **Bulldog Test Co.** (a demo
-   listing, not a real company), click *Message Test*, send a message. Then log in as `test.founder@yale.edu` in another
+4. **Founder card + messaging**: log in as `demo@yale.edu`, turn on Explore's **Founder on found.** filter (startups whose
+   founder you can message) and open **Bulldog Test Co.** (a demo listing, not a real company), then click *Message Test*.
+   Or go to **Messages** and type *test* in **New message**. Send a message. Then log in as `test.founder@yale.edu` in another
    browser (or after logging out) to read it and reply.
 5. **Join a startup** (for people with no startup or idea): open *Join a startup* in the nav; on your profile turn on
    *Open to joining*. Founders see you at `/people`: log in as `test.founder@yale.edu` and click *Browse people open to

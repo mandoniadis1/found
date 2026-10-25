@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { api } from '../api'
 import { useAuth } from '../auth'
 import { timeAgo } from '../format'
-import type { Conversation, Message } from '../types'
+import type { Conversation, MemberHit, Message } from '../types'
 
 const POLL_MS = 4000
 
@@ -16,6 +16,26 @@ export function Messages() {
   const [msgs, setMsgs] = useState<Message[]>([])
   const [text, setText] = useState('')
   const endRef = useRef<HTMLDivElement>(null)
+  const [findQ, setFindQ] = useState('')
+  const [hits, setHits] = useState<MemberHit[] | null>(null)
+  const [findErr, setFindErr] = useState('')
+
+  useEffect(() => {
+    if (!user) return
+    if (!findQ.trim()) return setHits(null)
+    const t = setTimeout(() => {
+      api.searchMembers(findQ).then((h) => { setHits(h); setFindErr('') }).catch((e) => { setHits(null); setFindErr(e.message) })
+    }, 200)
+    return () => clearTimeout(t)
+  }, [findQ, user])
+
+  async function startWith(h: MemberHit) {
+    const conv = await api.startConversation(h.id)
+    setFindQ('')
+    setHits(null)
+    api.conversations().then(setConvs)
+    navigate(`/messages/${conv.id}`)
+  }
 
   useEffect(() => {
     if (!user) return
@@ -60,6 +80,24 @@ export function Messages() {
       <div className="inbox">
         <aside className="inbox-list">
           <h2 className="inbox-title">Messages</h2>
+          <div className="new-message">
+            <input value={findQ} onChange={(e) => setFindQ(e.target.value)} placeholder="New message: search a name or startup…" />
+            {findErr && <p className="error tiny">{findErr}</p>}
+            {hits && (
+              <div className="member-hits">
+                {hits.length === 0 && <p className="muted tiny pad-s">No one found. You can message founders on found. and people open to joining.</p>}
+                {hits.map((h) => (
+                  <button key={h.id} className="member-hit" onClick={() => startWith(h)}>
+                    <span className="avatar sm">{h.first_name[0]}{h.last_name[0]}</span>
+                    <span className="hit-text">
+                      <strong>{h.first_name} {h.last_name}</strong>
+                      <span className="muted tiny">{h.startup ? `Founder · ${h.startup}` : h.open_to_join ? 'Open to joining a startup' : h.headline ?? h.school ?? ''}</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           {convs.length === 0 && <p className="muted small pad">No conversations yet. Open a startup and message its founder.</p>}
           {convs.map((c) => (
             <Link key={c.id} to={`/messages/${c.id}`} className={`conv${c.id === active ? ' on' : ''}`}>

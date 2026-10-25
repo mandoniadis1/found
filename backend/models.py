@@ -87,6 +87,18 @@ class ProfileIn(BaseModel):
     join_pitch: str | None = Field(default=None, max_length=200)
 
 
+class MemberHit(BaseModel):
+    """A member you can find by name to message: founders of listed startups and people open to joining."""
+    id: int
+    first_name: str
+    last_name: str
+    school: str | None = None
+    headline: str | None = None
+    linkedin_url: str | None = None
+    startup: str | None = None      # their listed startup, if they're a founder
+    open_to_join: bool = False
+
+
 class Joiner(BaseModel):
     """A member who opted in to being found by founders (shown only to verified founders)."""
     id: int
@@ -160,6 +172,7 @@ class Filters(BaseModel):
     locations: list[FilterOption]   # empty until founders add a location
     with_team_size: int             # how many listings have a team size
     with_funding: int               # how many listings have an amount raised
+    with_founder: int               # how many listings have their founder on found. (messageable)
     total: int
 
 

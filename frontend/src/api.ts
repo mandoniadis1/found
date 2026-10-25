@@ -1,5 +1,5 @@
 import type {
-  ChatTurn, ClaimOptions, JoinBoard, Joiner, ClaimRequest, Conversation, EventInput, ManualClaimInput, SiteConfig, ExpectedDeadline, Filters, FoundEvent, Message, Opportunity, Options, PublicUser,
+  ChatTurn, ClaimOptions, JoinBoard, Joiner, MemberHit, ClaimRequest, Conversation, EventInput, ManualClaimInput, SiteConfig, ExpectedDeadline, Filters, FoundEvent, Message, Opportunity, Options, PublicUser,
   ScoutOut, Startup, StartupInput, User,
 } from './types'
 
@@ -43,6 +43,7 @@ export type StartupQuery = {
   raised_min?: number
   hiring?: boolean
   has_ask?: boolean
+  has_founder?: boolean
   sort?: string
 }
 
@@ -100,6 +101,7 @@ export const api = {
   rsvp: (id: number) => post<FoundEvent>(`/api/events/${id}/rsvp`),
 
   member: (id: number) => request<PublicUser>(`/api/members/${id}`),
+  searchMembers: (q: string) => request<MemberHit[]>(`/api/members/search?q=${encodeURIComponent(q)}`),
   conversations: () => request<Conversation[]>('/api/conversations'),
   startConversation: (user_id: number) => post<Conversation>('/api/conversations', { user_id }),
   messages: (cid: number) => request<Message[]>(`/api/conversations/${cid}/messages`),

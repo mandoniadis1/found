@@ -109,6 +109,23 @@ def run():
     record("Member-submitted startup waits for review, hidden", s == 201 and sub["status"] == "pending" and public == [],
            f"created as '{sub.get('status')}'; public search returns {len(public)}")
 
+    s, by_name = member.call("GET", "/api/members/search?q=test")
+    s2, by_startup = member.call("GET", "/api/members/search?q=Bulldog")
+    s3, hidden = member.call("GET", "/api/members/search?q=admin")
+    record("Find someone to message by name or startup", any(m["first_name"] == "Test" for m in by_name)
+           and any(m["startup"] == "Bulldog Test Co." for m in by_startup) and hidden == [],
+           f"'test' → {[m['first_name'] + ' ' + m['last_name'] for m in by_name]}; 'Bulldog' → {[m['startup'] for m in by_startup]}; "
+           f"'admin' (not opted in, not a founder) → {hidden}")
+
+    newbie = Client()
+    newbie.call("POST", "/api/auth/signup", {"first_name": "New", "last_name": "Member", "email": "new.member@yale.edu", "password": "password123"})
+    s, b = newbie.call("GET", "/api/members/search?q=test")
+    record("Unverified accounts can't search members", s == 403, f"before verifying the Yale email → HTTP {s}")
+
+    s, withf = member.call("GET", "/api/startups?has_founder=true")
+    record("'Founder on found.' filter shows only messageable startups", s == 200 and withf and all(x["founder"] for x in withf),
+           f"{len(withf)} startup(s), all with a founder on found.: {[x['name'] for x in withf]}")
+
     joiner = Client("dan@yale.edu")
     s, me = joiner.call("PATCH", "/api/me", {"open_to_join": True, "join_roles": ["Engineering"], "join_industries": ["Robotics"],
                                              "join_commitment": "Internship", "join_pitch": "Builds robots, wants a summer internship"})

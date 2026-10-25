@@ -554,3 +554,14 @@ input[type='range'] { width: 100%; accent-color: var(--ink); }
 .person-pitch { font-size: 14px; color: var(--ink-2); font-style: italic; }
 @media (max-width: 900px) { .join-steps { grid-template-columns: 1fr; } .person-card { grid-template-columns: 40px 1fr; } }
 .join-step .step { flex: none; margin-right: 0; }
+
+/* new message search */
+.new-message { padding: 0 16px 12px; position: relative; }
+.new-message input { width: 100%; border: 1px solid var(--line-strong); border-radius: 999px; padding: 9px 14px; background: var(--bg); font-size: 13px; outline: none; }
+.new-message input:focus { border-color: var(--ink); }
+.member-hits { margin-top: 6px; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+.member-hit { display: flex; gap: 10px; align-items: center; width: 100%; text-align: left; background: none; border: 0; border-top: 1px solid var(--line); padding: 9px 12px; cursor: pointer; }
+.member-hit:first-child { border-top: 0; }
+.member-hit:hover { background: var(--bg); }
+.hit-text { display: flex; flex-direction: column; min-width: 0; }
+.pad-s { padding: 10px 12px; }

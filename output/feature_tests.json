@@ -1,7 +1,7 @@
 {
- "ran_at": "2026-10-25 16:59",
- "passed": 13,
- "total": 13,
+ "ran_at": "2026-10-25 17:09",
+ "passed": 16,
+ "total": 16,
  "results": [
   {
    "test": "Demo listing shows its founder card",
@@ -37,6 +37,21 @@
    "test": "Member-submitted startup waits for review, hidden",
    "passed": true,
    "detail": "created as 'pending'; public search returns 0"
+  },
+  {
+   "test": "Find someone to message by name or startup",
+   "passed": true,
+   "detail": "'test' \u2192 ['Test Founder']; 'Bulldog' \u2192 ['Bulldog Test Co.']; 'admin' (not opted in, not a founder) \u2192 []"
+  },
+  {
+   "test": "Unverified accounts can't search members",
+   "passed": true,
+   "detail": "before verifying the Yale email \u2192 HTTP 403"
+  },
+  {
+   "test": "'Founder on found.' filter shows only messageable startups",
+   "passed": true,
+   "detail": "1 startup(s), all with a founder on found.: ['Bulldog Test Co.']"
   },
   {
    "test": "A member with no startup can opt in to being found",

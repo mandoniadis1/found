@@ -28,7 +28,7 @@ from agent import ScoutUnavailable, run_scout, scout_budget
 from auth import COOKIE_NAME, hash_password, new_token, verify_password
 from db import connect, init_db, now, save_correction
 from models import (
-    AFFILIATIONS, INDUSTRIES, JOIN_COMMITMENTS, JOIN_ROLES, OPPORTUNITY_CATEGORIES, ROUNDS, STAGES, Joiner, AdminDecisionIn, ClaimOptions, ClaimRequest,
+    AFFILIATIONS, INDUSTRIES, JOIN_COMMITMENTS, JOIN_ROLES, OPPORTUNITY_CATEGORIES, ROUNDS, STAGES, Joiner, MemberHit, AdminDecisionIn, ClaimOptions, ClaimRequest,
     CompanyEmailClaimIn, Conversation, Event, EventIn, ExpectedDeadline, Filters, LoginIn, ManualClaimIn, Message,
     MessageIn, Opportunity, ProfileIn, PublicUser, ScoutIn, ScoutOut, SignupIn, StartConversationIn, Startup, StartupIn,
     User,
@@ -367,12 +367,14 @@ def list_startups(
     raised_min: int | None = None,
     hiring: bool | None = None,
     has_ask: bool | None = None,
+    has_founder: bool | None = None,
     sort: str = "name",
 ) -> list[Startup]:
     with connect() as conn:
         return queries.search_startups(conn, q=q, industries=industry, stages=stage, affiliations=affiliation,
                                        rounds=round, locations=location, team_min=team_min, team_max=team_max,
-                                       raised_min=raised_min, hiring=hiring, has_ask=has_ask, sort=sort)
+                                       raised_min=raised_min, hiring=hiring, has_ask=has_ask, has_founder=has_founder,
+                                       sort=sort)
 
 
 @app.get("/api/startups/mine", response_model=list[Startup])
@@ -849,6 +851,30 @@ def toggle_rsvp(event_id: int, user: Verified) -> Event:
 
 
 # ---------------------------------------------------------------- messages (member to member)
+
+@app.get("/api/members/search", response_model=list[MemberHit])
+def member_search(user: Verified, q: str = "") -> list[MemberHit]:
+    """Find someone to message by name. Only people who chose to be visible are searchable: founders of listed startups
+    and members open to joining (plus anyone you already talk to). Needs a verified Yale email."""
+    like = f"%{q.strip()}%"
+    with connect() as conn:
+        rows = conn.execute(
+            """SELECT u.*, (SELECT s.name FROM startups s WHERE s.founder_id = u.id AND s.status = 'listed'
+                            ORDER BY s.id LIMIT 1) AS startup_name
+               FROM users u
+               WHERE u.id != ? AND u.email_verified = 1
+                 AND (u.first_name || ' ' || u.last_name LIKE ? OR EXISTS (
+                      SELECT 1 FROM startups s WHERE s.founder_id = u.id AND s.status = 'listed' AND s.name LIKE ?))
+                 AND (u.open_to_join = 1
+                      OR EXISTS (SELECT 1 FROM startups s WHERE s.founder_id = u.id AND s.status = 'listed')
+                      OR EXISTS (SELECT 1 FROM conversations c WHERE (c.user_a = ? AND c.user_b = u.id)
+                                                                  OR (c.user_b = ? AND c.user_a = u.id)))
+               ORDER BY u.first_name, u.last_name LIMIT 12""",
+            (user.id, like, like, user.id, user.id)).fetchall()
+    return [MemberHit(id=r["id"], first_name=r["first_name"], last_name=r["last_name"], school=r["school"],
+                      headline=r["headline"], linkedin_url=r["linkedin_url"], startup=r["startup_name"],
+                      open_to_join=bool(r["open_to_join"])) for r in rows]
+
 
 @app.get("/api/members/{user_id}", response_model=PublicUser)
 def member(user_id: int) -> PublicUser:

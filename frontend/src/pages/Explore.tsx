@@ -67,6 +67,7 @@ export function Explore() {
   const [team, setTeam] = useState(0)
   const [hiring, setHiring] = useState(false)
   const [hasAsk, setHasAsk] = useState(false)
+  const [hasFounder, setHasFounder] = useState(false)
   const [sort, setSort] = useState('name')
 
   useEffect(() => {
@@ -81,8 +82,8 @@ export function Explore() {
 
   const query: StartupQuery = useMemo(() => ({
     q: debouncedQ, ...multi, team_min: TEAM_BUCKETS[team].min, team_max: TEAM_BUCKETS[team].max,
-    hiring, has_ask: hasAsk, sort,
-  }), [debouncedQ, multi, team, hiring, hasAsk, sort])
+    hiring, has_ask: hasAsk, has_founder: hasFounder, sort,
+  }), [debouncedQ, multi, team, hiring, hasAsk, hasFounder, sort])
 
   useEffect(() => {
     setLoading(true)
@@ -92,8 +93,8 @@ export function Explore() {
   const toggle = (key: Multi, v: string) =>
     setMulti((m) => ({ ...m, [key]: m[key].includes(v) ? m[key].filter((x) => x !== v) : [...m[key], v] }))
 
-  const activeCount = Object.values(multi).flat().length + (team ? 1 : 0) + (hiring ? 1 : 0) + (hasAsk ? 1 : 0)
-  const clear = () => { setMulti(EMPTY_MULTI); setTeam(0); setHiring(false); setHasAsk(false); setQ('') }
+  const activeCount = Object.values(multi).flat().length + (team ? 1 : 0) + (hiring ? 1 : 0) + (hasAsk ? 1 : 0) + (hasFounder ? 1 : 0)
+  const clear = () => { setMulti(EMPTY_MULTI); setTeam(0); setHiring(false); setHasAsk(false); setHasFounder(false); setQ('') }
 
   return (
     <div className="page">
@@ -163,6 +164,10 @@ export function Explore() {
               <label className="toggle tight">
                 <input type="checkbox" checked={hasAsk} onChange={(e) => setHasAsk(e.target.checked)} />
                 <span className="switch" /> Has an ask
+              </label>
+              <label className="toggle tight" title="Startups whose founder has joined found. — you can message them">
+                <input type="checkbox" checked={hasFounder} onChange={(e) => setHasFounder(e.target.checked)} />
+                <span className="switch" /> Founder on found. <span className="muted small">({filters.with_founder})</span>
               </label>
               {(filters.rounds.length === 0 || filters.with_team_size === 0) && (
                 <p className="filter-note">

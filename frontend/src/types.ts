@@ -67,7 +67,19 @@ export type Filters = {
   locations: FilterOption[]
   with_team_size: number
   with_funding: number
+  with_founder: number
   total: number
+}
+
+export type MemberHit = {
+  id: number
+  first_name: string
+  last_name: string
+  school: string | null
+  headline: string | null
+  linkedin_url: string | null
+  startup: string | null
+  open_to_join: boolean
 }
 
 export type Joiner = {

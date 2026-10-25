@@ -383,7 +383,9 @@ a clearly labeled demo listing, <b>Bulldog Test Co.</b>, so graders can try the 
 <p><b>People who want to join a startup.</b> Not everyone has a startup or an idea. The <i>Join a startup</i> page collects every
 way in, and members can opt in to being found with the roles, industries and time they can give. Only verified founders (members
 with a listed startup) can browse that list, it never shows emails, and members can switch it off at any time; the feature tests above
-check each of these.</p>
+check each of these. To find someone to talk to, Explore has a <i>Founder on found.</i> filter (startups whose founder you can
+message) and Messages has a <i>New message</i> search by name or startup; it only finds people who chose to be visible
+(founders of listed startups and people open to joining) and only works for verified members.</p>
 <div class="two">
 {fig("23_join_page", "Join a startup: startups looking for people, co-founder searches and events, plus the founder shortcut.")}
 {fig("24_people_open", "Founders only: people open to joining, filtered by role, industry and time, with a Message button.")}
