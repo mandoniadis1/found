@@ -17,7 +17,7 @@ def find_startups(q: ScoutQuery) -> tuple[list[Startup], int]:
     with connect() as conn:
         results = queries.search_startups(conn, q=q.keywords or None, industries=q.industries or None,
                                           stages=q.stages or None, affiliations=q.affiliations or None,
-                                          hiring=q.hiring_only or None)
+                                          hiring=q.hiring_only or None, has_ask=q.looking_for_people or None)
     return results[:MAX_CARDS], len(results)
 
 
@@ -40,6 +40,8 @@ def describe(q: ScoutQuery, total: int) -> str:
             where.append("from " + " or ".join(q.affiliations))
         if q.hiring_only:
             where.append("that are hiring")
+        if q.looking_for_people:
+            where.append("looking for people to join")
         if q.keywords:
             where.append(f'matching "{q.keywords}"')
         subject = " ".join(b for b in [*bits, noun] if b)

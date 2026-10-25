@@ -20,6 +20,9 @@ AFFILIATIONS = [
     "Yale Professor", "Yale Alumni",
 ]
 ROUNDS = ["Bootstrapped", "Grant-funded", "Pre-seed", "Seed", "Series A", "Series B+"]
+JOIN_ROLES = ["Engineering", "Product", "Design", "Business & sales", "Marketing", "Operations", "Finance",
+              "Research & science", "Any role"]
+JOIN_COMMITMENTS = ["Internship", "Part-time", "Full-time", "Co-founder", "Flexible"]
 OPPORTUNITY_CATEGORIES = {
     "programs": "Accelerators, programs & events",
     "perks": "Perks & credits",
@@ -40,6 +43,12 @@ class User(BaseModel):
     headline: str | None = None
     email_verified: bool = False
     linkedin_url: str | None = None
+    open_to_join: bool = False
+    join_roles: list[str] = []
+    join_industries: list[str] = []
+    join_commitment: str | None = None
+    join_pitch: str | None = None
+    is_founder: bool = False  # has a listed startup on found. (can browse people open to joining)
     is_moderator: bool = False
     is_admin: bool = False
 
@@ -71,6 +80,25 @@ class ProfileIn(BaseModel):
     school: str | None = None
     headline: str | None = Field(default=None, max_length=140)
     linkedin_url: str | None = Field(default=None, max_length=300)  # "" clears it
+    open_to_join: bool | None = None
+    join_roles: list[str] | None = Field(default=None, max_length=4)
+    join_industries: list[str] | None = Field(default=None, max_length=4)
+    join_commitment: str | None = None
+    join_pitch: str | None = Field(default=None, max_length=200)
+
+
+class Joiner(BaseModel):
+    """A member who opted in to being found by founders (shown only to verified founders)."""
+    id: int
+    first_name: str
+    last_name: str
+    school: str | None = None
+    headline: str | None = None
+    linkedin_url: str | None = None
+    roles: list[str] = []
+    industries: list[str] = []
+    commitment: str | None = None
+    pitch: str | None = None
 
 
 # ---------------------------------------------------------------- startups
@@ -296,6 +324,7 @@ class ScoutQuery(BaseModel):
     stages: list[Stage] = []
     affiliations: list[Affiliation] = []
     hiring_only: bool = False
+    looking_for_people: bool = False  # startups that posted an ask (interns, co-founder, team) - for "I want to join"
     categories: list[Category] = []
     within_days: int | None = None
 

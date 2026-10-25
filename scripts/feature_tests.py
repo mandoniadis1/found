@@ -109,6 +109,35 @@ def run():
     record("Member-submitted startup waits for review, hidden", s == 201 and sub["status"] == "pending" and public == [],
            f"created as '{sub.get('status')}'; public search returns {len(public)}")
 
+    joiner = Client("dan@yale.edu")
+    s, me = joiner.call("PATCH", "/api/me", {"open_to_join": True, "join_roles": ["Engineering"], "join_industries": ["Robotics"],
+                                             "join_commitment": "Internship", "join_pitch": "Builds robots, wants a summer internship"})
+    record("A member with no startup can opt in to being found", s == 200 and me["open_to_join"] and me["join_roles"] == ["Engineering"],
+           f"open_to_join={me.get('open_to_join')}, roles={me.get('join_roles')}, commitment={me.get('join_commitment')}")
+
+    s, b = joiner.call("GET", "/api/people/open")
+    s2, people = founder.call("GET", "/api/people/open")
+    names = [f"{p['first_name']} {p['last_name']}" for p in people] if s2 == 200 else []
+    record("Only founders can browse people open to joining", s == 403 and s2 == 200 and "Handsome Dan" in names
+           and all("email" not in p for p in people),
+           f"non-founder → HTTP {s}; founder sees {names} (no emails returned)")
+
+    s, eng = founder.call("GET", "/api/people/open?role=Engineering")
+    s2, des = founder.call("GET", "/api/people/open?role=Design&industry=Robotics")
+    record("Founders can filter by role and industry", any(p["first_name"] == "Handsome" for p in eng)
+           and not any(p["first_name"] == "Handsome" for p in des),
+           f"role=Engineering → {[p['first_name'] for p in eng]}; role=Design → {[p['first_name'] for p in des]}")
+
+    joiner.call("PATCH", "/api/me", {"open_to_join": False})
+    s, people = founder.call("GET", "/api/people/open")
+    record("Opting out hides the member again", not any(p["first_name"] == "Handsome" for p in people),
+           f"after opting out, founder sees {[p['first_name'] for p in people]}")
+
+    s, board = member.call("GET", "/api/join")
+    record("Join page gathers every way in", s == 200 and len(board["startups"]) > 0 and len(board["asks"]) > 0,
+           f"{len(board['startups'])} startups looking for people, {len(board['asks'])} co-founder searches / startup asks, "
+           f"{len(board['events'])} upcoming events")
+
     admin = Client("admin@yale.edu", admin=True)
     s, queue = admin.call("GET", "/api/admin/startups")
     s2, ok = admin.call("POST", f"/api/admin/startups/{sub['id']}/approve", {})

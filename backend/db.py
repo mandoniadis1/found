@@ -41,6 +41,11 @@ CREATE TABLE IF NOT EXISTS users (
     headline TEXT,
     email_verified INTEGER NOT NULL DEFAULT 0,       -- clicked the link sent to their Yale address
     linkedin_url TEXT,                               -- optional link to their LinkedIn profile (self-reported)
+    open_to_join INTEGER NOT NULL DEFAULT 0,         -- opted in to being found by founders who are hiring
+    join_roles TEXT,                                 -- '|'-separated, e.g. Engineering|Design
+    join_industries TEXT,                            -- '|'-separated found. industries
+    join_commitment TEXT,                            -- Internship / Part-time / Full-time / Co-founder / Flexible
+    join_pitch TEXT,                                 -- one line about what they'd bring
     is_moderator INTEGER NOT NULL DEFAULT 0,
     is_test_account INTEGER NOT NULL DEFAULT 0,
     created_at TEXT NOT NULL
@@ -233,8 +238,11 @@ def migrate(conn: sqlite3.Connection) -> None:
     cols = {r[1] for r in conn.execute("PRAGMA table_info(sessions)")}
     if "kind" not in cols:
         conn.execute("ALTER TABLE sessions ADD COLUMN kind TEXT NOT NULL DEFAULT 'member'")
-    if "linkedin_url" not in {r[1] for r in conn.execute("PRAGMA table_info(users)")}:
-        conn.execute("ALTER TABLE users ADD COLUMN linkedin_url TEXT")
+    user_cols = {r[1] for r in conn.execute("PRAGMA table_info(users)")}
+    for col, ddl in (("linkedin_url", "TEXT"), ("open_to_join", "INTEGER NOT NULL DEFAULT 0"), ("join_roles", "TEXT"),
+                     ("join_industries", "TEXT"), ("join_commitment", "TEXT"), ("join_pitch", "TEXT")):
+        if col not in user_cols:
+            conn.execute(f"ALTER TABLE users ADD COLUMN {col} {ddl}")
     cols = {r[1] for r in conn.execute("PRAGMA table_info(startups)")}
     if "correction_note" not in cols:
         conn.execute("ALTER TABLE startups ADD COLUMN correction_note TEXT")
@@ -243,6 +251,19 @@ def migrate(conn: sqlite3.Connection) -> None:
         add_demo_admin(conn)
     if conn.execute("SELECT COUNT(*) FROM users").fetchone()[0]:
         ensure_demo_founder(conn)
+        ensure_demo_joiner(conn)
+
+
+def ensure_demo_joiner(conn: sqlite3.Connection) -> None:
+    """LOCAL MODE ONLY: the demo member is open to joining a startup (once), so the founder side has someone to show."""
+    if not config.DEV_MODE or conn.execute("SELECT 1 FROM users WHERE email = ? AND join_commitment IS NOT NULL",
+                                           (DEMO_EMAIL,)).fetchone():
+        return
+    conn.execute(
+        "UPDATE users SET open_to_join = 1, join_roles = 'Product|Business & sales',"
+        " join_industries = 'Climate & Sustainability|Fintech', join_commitment = 'Part-time',"
+        " join_pitch = 'SOM student who loves early-stage ops; can help with customer interviews and go-to-market.'"
+        " WHERE email = ?", (DEMO_EMAIL,))
 
 
 def ensure_demo_founder(conn: sqlite3.Connection) -> None:
@@ -551,6 +572,7 @@ def seed(conn: sqlite3.Connection) -> None:
     ).lastrowid
     add_demo_admin(conn)
     ensure_demo_founder(conn)
+    ensure_demo_joiner(conn)
     a, b = sorted((demo_id, dan_id))
     conv = conn.execute("INSERT INTO conversations (user_a, user_b, created_at) VALUES (?,?,?)", (a, b, created)).lastrowid
     conn.execute("INSERT INTO messages (conversation_id, sender_id, body, created_at) VALUES (?,?,?,?)",

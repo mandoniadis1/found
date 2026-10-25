@@ -28,7 +28,7 @@ from agent import ScoutUnavailable, run_scout, scout_budget
 from auth import COOKIE_NAME, hash_password, new_token, verify_password
 from db import connect, init_db, now, save_correction
 from models import (
-    AFFILIATIONS, INDUSTRIES, OPPORTUNITY_CATEGORIES, ROUNDS, STAGES, AdminDecisionIn, ClaimOptions, ClaimRequest,
+    AFFILIATIONS, INDUSTRIES, JOIN_COMMITMENTS, JOIN_ROLES, OPPORTUNITY_CATEGORIES, ROUNDS, STAGES, Joiner, AdminDecisionIn, ClaimOptions, ClaimRequest,
     CompanyEmailClaimIn, Conversation, Event, EventIn, ExpectedDeadline, Filters, LoginIn, ManualClaimIn, Message,
     MessageIn, Opportunity, ProfileIn, PublicUser, ScoutIn, ScoutOut, SignupIn, StartConversationIn, Startup, StartupIn,
     User,
@@ -69,8 +69,17 @@ ADMIN_COOKIE = "found_admin"  # separate login for the admin console; only sent 
 
 # ---------------------------------------------------------------- session helpers
 
+def _split(v: str | None) -> list[str]:
+    return [x for x in (v or "").split("|") if x]
+
+
 def to_user(row: sqlite3.Row) -> User:
+    with connect() as conn:
+        founder = conn.execute("SELECT 1 FROM startups WHERE founder_id = ? AND status = 'listed'", (row["id"],)).fetchone()
     return User(
+        open_to_join=bool(row["open_to_join"]), join_roles=_split(row["join_roles"]),
+        join_industries=_split(row["join_industries"]), join_commitment=row["join_commitment"],
+        join_pitch=row["join_pitch"], is_founder=bool(founder),
         id=row["id"], first_name=row["first_name"], last_name=row["last_name"], email=row["email"],
         school=row["school"], headline=row["headline"], email_verified=bool(row["email_verified"]),
         linkedin_url=row["linkedin_url"],
@@ -263,7 +272,63 @@ def update_me(body: ProfileIn, user: Member) -> User:
                      (body.school, body.headline, user.id))
         if body.linkedin_url is not None:
             conn.execute("UPDATE users SET linkedin_url = ? WHERE id = ?", (clean_linkedin(body.linkedin_url), user.id))
+        if body.join_roles is not None and (bad := [r for r in body.join_roles if r not in JOIN_ROLES]):
+            raise HTTPException(422, f"Unknown role: {', '.join(bad)}.")
+        if body.join_industries is not None and (bad := [i for i in body.join_industries if i not in INDUSTRIES]):
+            raise HTTPException(422, f"Unknown industry: {', '.join(bad)}.")
+        if body.join_commitment and body.join_commitment not in JOIN_COMMITMENTS:
+            raise HTTPException(422, f"Commitment must be one of: {', '.join(JOIN_COMMITMENTS)}.")
+        if body.open_to_join and not user.email_verified:
+            raise HTTPException(403, "Verify your Yale email before making yourself visible to founders.")
+        for col, val in (("open_to_join", None if body.open_to_join is None else int(body.open_to_join)),
+                         ("join_roles", None if body.join_roles is None else "|".join(dict.fromkeys(body.join_roles))),
+                         ("join_industries", None if body.join_industries is None else "|".join(dict.fromkeys(body.join_industries))),
+                         ("join_commitment", None if body.join_commitment is None else (body.join_commitment or None)),
+                         ("join_pitch", None if body.join_pitch is None else (body.join_pitch.strip() or None))):
+            if val is not None or (col in ("join_commitment", "join_pitch") and getattr(body, col) == ""):
+                conn.execute(f"UPDATE users SET {col} = ? WHERE id = ?", (val, user.id))
         return load_user(conn, user.id)
+
+
+# ---------------------------------------------------------------- joining a startup
+
+@app.get("/api/join")
+def join_board() -> dict:
+    """Every way into a startup, in one place: listings that are hiring or posted an ask, the Tsai CITY board's startup
+    asks (co-founder searches, startups looking for new owners), and upcoming events."""
+    with connect() as conn:
+        startups = queries.search_startups(conn, has_ask=True, sort="newest")
+        hiring = [s for s in queries.search_startups(conn, hiring=True, sort="newest") if s.id not in {x.id for x in startups}]
+        asks = queries.search_opportunities(conn, categories=["asks"], sort="newest")
+        events = queries.list_events(conn)[:4]
+        open_people = conn.execute("SELECT COUNT(*) FROM users WHERE open_to_join = 1 AND email_verified = 1").fetchone()[0]
+    return {"startups": [s.model_dump() for s in startups + hiring], "asks": [a.model_dump() for a in asks],
+            "events": [e.model_dump() for e in events], "open_people": open_people,
+            "roles": JOIN_ROLES, "commitments": JOIN_COMMITMENTS}
+
+
+@app.get("/api/people/open", response_model=list[Joiner])
+def people_open(user: Verified, role: str | None = None, industry: str | None = None,
+                commitment: str | None = None) -> list[Joiner]:
+    """Members who opted in to being found. Only verified founders (a listed startup on found.) and admins can browse
+    it, so it can't be scraped by anyone who just signs up."""
+    if not (user.is_founder or user.is_admin):
+        raise HTTPException(403, "Only founders with a startup on found. can browse people open to joining. "
+                                 "Add or claim your startup first.")
+    with connect() as conn:
+        rows = conn.execute("SELECT * FROM users WHERE open_to_join = 1 AND email_verified = 1 AND id != ? "
+                            "ORDER BY created_at DESC", (user.id,)).fetchall()
+    people = [Joiner(id=r["id"], first_name=r["first_name"], last_name=r["last_name"], school=r["school"],
+                     headline=r["headline"], linkedin_url=r["linkedin_url"], roles=_split(r["join_roles"]),
+                     industries=_split(r["join_industries"]), commitment=r["join_commitment"], pitch=r["join_pitch"])
+              for r in rows]
+    if role:
+        people = [p for p in people if role in p.roles or "Any role" in p.roles]
+    if industry:
+        people = [p for p in people if industry in p.industries or not p.industries]
+    if commitment:
+        people = [p for p in people if p.commitment in (commitment, "Flexible", None)]
+    return people
 
 
 @app.post("/api/me/moderator", response_model=User)
@@ -285,6 +350,7 @@ def filters() -> Filters:
 @app.get("/api/options")
 def options() -> dict:
     return {"industries": INDUSTRIES, "stages": STAGES, "affiliations": AFFILIATIONS, "rounds": ROUNDS,
+            "join_roles": JOIN_ROLES, "join_commitments": JOIN_COMMITMENTS,
             "opportunity_categories": OPPORTUNITY_CATEGORIES}
 
 
@@ -536,6 +602,7 @@ def admin_overview(admin: Admin) -> dict:
             "members": one("SELECT COUNT(*) FROM users WHERE is_test_account = 0"),
             "verified_members": one("SELECT COUNT(*) FROM users WHERE email_verified = 1 AND is_test_account = 0"),
             "linkedin_members": one("SELECT COUNT(*) FROM users WHERE linkedin_url IS NOT NULL"),
+            "open_to_join": one("SELECT COUNT(*) FROM users WHERE open_to_join = 1"),
             "moderators": one("SELECT COUNT(*) FROM users WHERE is_moderator = 1"),
             "listed_startups": one("SELECT COUNT(*) FROM startups WHERE status = 'listed'"),
             "claimed_startups": one("SELECT COUNT(*) FROM startups WHERE founder_id IS NOT NULL AND status = 'listed'"),
@@ -553,7 +620,7 @@ def admin_members(admin: Admin) -> list[dict]:
     with connect() as conn:
         rows = conn.execute(
             "SELECT u.id, u.first_name, u.last_name, u.email, u.school, u.email_verified, u.linkedin_url,"
-            " u.is_moderator, u.is_test_account,"
+            " u.is_moderator, u.is_test_account, u.open_to_join,"
             " u.created_at, (SELECT COUNT(*) FROM startups s WHERE s.founder_id = u.id) AS startups"
             " FROM users u ORDER BY u.created_at DESC").fetchall()
     return [dict(r) for r in rows]

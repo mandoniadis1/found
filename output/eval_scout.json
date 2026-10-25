@@ -4,13 +4,13 @@
  "questions": 20,
  "one_call": {
   "avg_precision": 1.0,
-  "avg_recall": 0.925,
-  "fully_correct": 18,
-  "avg_input_tokens": 502,
+  "avg_recall": 0.963,
+  "fully_correct": 19,
+  "avg_input_tokens": 557,
   "avg_cached_tokens": 0,
   "avg_output_tokens": 30,
   "avg_model_calls": 1.0,
-  "avg_seconds": 0.87,
+  "avg_seconds": 1.75,
   "blocked_by_content_filter": 1,
   "errors": 0
  },
@@ -18,11 +18,11 @@
   "avg_precision": 0.95,
   "avg_recall": 0.875,
   "fully_correct": 17,
-  "avg_input_tokens": 1357,
+  "avg_input_tokens": 1354,
   "avg_cached_tokens": 0,
-  "avg_output_tokens": 88,
+  "avg_output_tokens": 89,
   "avg_model_calls": 2.0,
-  "avg_seconds": 1.62,
+  "avg_seconds": 1.85,
   "blocked_by_content_filter": 1,
   "errors": 0
  },
@@ -35,9 +35,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 5.66,
+    "seconds": 1.62,
     "requests": 1,
-    "input_tokens": 501,
+    "input_tokens": 556,
     "cached_tokens": 0,
     "output_tokens": 40,
     "filters": {
@@ -55,9 +55,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 3.64,
+    "seconds": 2.49,
     "requests": 2,
-    "input_tokens": 1396,
+    "input_tokens": 1388,
     "cached_tokens": 0,
     "output_tokens": 94
    }
@@ -70,9 +70,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 0.62,
+    "seconds": 1.91,
     "requests": 1,
-    "input_tokens": 502,
+    "input_tokens": 557,
     "cached_tokens": 0,
     "output_tokens": 36,
     "filters": {
@@ -89,7 +89,7 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 2.44,
+    "seconds": 1.3,
     "requests": 2,
     "input_tokens": 1406,
     "cached_tokens": 0,
@@ -104,9 +104,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 0.63,
+    "seconds": 1.11,
     "requests": 1,
-    "input_tokens": 499,
+    "input_tokens": 554,
     "cached_tokens": 0,
     "output_tokens": 25,
     "filters": {
@@ -120,7 +120,7 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 1.12,
+    "seconds": 1.0,
     "requests": 2,
     "input_tokens": 1443,
     "cached_tokens": 0,
@@ -130,14 +130,14 @@
   {
    "question": "edtech startups started by Yale College students",
    "type": "startups",
-   "expected_matches": 5,
+   "expected_matches": 4,
    "one_call": {
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 1.27,
+    "seconds": 1.86,
     "requests": 1,
-    "input_tokens": 505,
+    "input_tokens": 560,
     "cached_tokens": 0,
     "output_tokens": 33,
     "filters": {
@@ -154,11 +154,11 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 1.45,
+    "seconds": 4.02,
     "requests": 2,
-    "input_tokens": 1446,
+    "input_tokens": 1394,
     "cached_tokens": 0,
-    "output_tokens": 116
+    "output_tokens": 115
    }
   },
   {
@@ -169,9 +169,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 0.63,
+    "seconds": 4.73,
     "requests": 1,
-    "input_tokens": 503,
+    "input_tokens": 558,
     "cached_tokens": 0,
     "output_tokens": 36,
     "filters": {
@@ -188,11 +188,11 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 1.33,
+    "seconds": 2.91,
     "requests": 2,
-    "input_tokens": 1446,
+    "input_tokens": 1435,
     "cached_tokens": 0,
-    "output_tokens": 89
+    "output_tokens": 95
    }
   },
   {
@@ -203,9 +203,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 3,
-    "seconds": 0.41,
+    "seconds": 2.51,
     "requests": 1,
-    "input_tokens": 502,
+    "input_tokens": 557,
     "cached_tokens": 0,
     "output_tokens": 24,
     "filters": {
@@ -217,7 +217,7 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 3,
-    "seconds": 1.04,
+    "seconds": 2.54,
     "requests": 2,
     "input_tokens": 1318,
     "cached_tokens": 0,
@@ -227,14 +227,14 @@
   {
    "question": "robotics startups",
    "type": "startups",
-   "expected_matches": 4,
+   "expected_matches": 3,
    "one_call": {
     "precision": 1.0,
     "recall": 1.0,
-    "shown": 4,
-    "seconds": 0.84,
+    "shown": 3,
+    "seconds": 1.11,
     "requests": 1,
-    "input_tokens": 499,
+    "input_tokens": 554,
     "cached_tokens": 0,
     "output_tokens": 25,
     "filters": {
@@ -247,12 +247,12 @@
    "two_call": {
     "precision": 1.0,
     "recall": 1.0,
-    "shown": 4,
-    "seconds": 3.68,
+    "shown": 3,
+    "seconds": 1.93,
     "requests": 2,
-    "input_tokens": 1376,
+    "input_tokens": 1322,
     "cached_tokens": 0,
-    "output_tokens": 98
+    "output_tokens": 87
    }
   },
   {
@@ -263,9 +263,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 1.68,
+    "seconds": 0.89,
     "requests": 1,
-    "input_tokens": 500,
+    "input_tokens": 555,
     "cached_tokens": 0,
     "output_tokens": 25,
     "filters": {
@@ -279,7 +279,7 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 4.62,
+    "seconds": 3.14,
     "requests": 2,
     "input_tokens": 1443,
     "cached_tokens": 0,
@@ -289,14 +289,14 @@
   {
    "question": "social impact startups that are still at the idea or building stage",
    "type": "startups",
-   "expected_matches": 1,
+   "expected_matches": 2,
    "one_call": {
     "precision": 1.0,
     "recall": 1.0,
-    "shown": 1,
-    "seconds": 0.41,
+    "shown": 2,
+    "seconds": 1.2,
     "requests": 1,
-    "input_tokens": 509,
+    "input_tokens": 564,
     "cached_tokens": 0,
     "output_tokens": 33,
     "filters": {
@@ -313,12 +313,12 @@
    "two_call": {
     "precision": 1.0,
     "recall": 1.0,
-    "shown": 1,
-    "seconds": 1.74,
+    "shown": 2,
+    "seconds": 2.67,
     "requests": 2,
-    "input_tokens": 1263,
+    "input_tokens": 1317,
     "cached_tokens": 0,
-    "output_tokens": 73
+    "output_tokens": 92
    }
   },
   {
@@ -329,9 +329,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 0.41,
+    "seconds": 2.19,
     "requests": 1,
-    "input_tokens": 502,
+    "input_tokens": 557,
     "cached_tokens": 0,
     "output_tokens": 35,
     "filters": {
@@ -348,11 +348,11 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 1.16,
+    "seconds": 4.95,
     "requests": 2,
-    "input_tokens": 1451,
+    "input_tokens": 1450,
     "cached_tokens": 0,
-    "output_tokens": 88
+    "output_tokens": 87
    }
   },
   {
@@ -363,9 +363,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 0.53,
+    "seconds": 1.12,
     "requests": 1,
-    "input_tokens": 502,
+    "input_tokens": 557,
     "cached_tokens": 0,
     "output_tokens": 38,
     "filters": {
@@ -383,9 +383,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 1.1,
+    "seconds": 1.6,
     "requests": 2,
-    "input_tokens": 1408,
+    "input_tokens": 1421,
     "cached_tokens": 0,
     "output_tokens": 84
    }
@@ -398,9 +398,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 0.43,
+    "seconds": 1.01,
     "requests": 1,
-    "input_tokens": 503,
+    "input_tokens": 558,
     "cached_tokens": 0,
     "output_tokens": 32,
     "filters": {
@@ -417,7 +417,7 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 0.87,
+    "seconds": 0.78,
     "requests": 2,
     "input_tokens": 1425,
     "cached_tokens": 0,
@@ -432,9 +432,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 0.39,
+    "seconds": 1.6,
     "requests": 1,
-    "input_tokens": 503,
+    "input_tokens": 558,
     "cached_tokens": 0,
     "output_tokens": 29,
     "filters": {
@@ -449,7 +449,7 @@
     "precision": 1.0,
     "recall": 0.25,
     "shown": 1,
-    "seconds": 0.86,
+    "seconds": 0.78,
     "requests": 2,
     "input_tokens": 1246,
     "cached_tokens": 0,
@@ -464,9 +464,9 @@
     "precision": 1.0,
     "recall": 0.25,
     "shown": 1,
-    "seconds": 0.64,
+    "seconds": 1.32,
     "requests": 1,
-    "input_tokens": 504,
+    "input_tokens": 559,
     "cached_tokens": 0,
     "output_tokens": 29,
     "filters": {
@@ -481,7 +481,7 @@
     "precision": 0.0,
     "recall": 0.0,
     "shown": 0,
-    "seconds": 1.27,
+    "seconds": 0.78,
     "requests": 2,
     "input_tokens": 1210,
     "cached_tokens": 0,
@@ -496,9 +496,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 0.36,
+    "seconds": 1.36,
     "requests": 1,
-    "input_tokens": 502,
+    "input_tokens": 557,
     "cached_tokens": 0,
     "output_tokens": 29,
     "filters": {
@@ -513,7 +513,7 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 0.8,
+    "seconds": 0.74,
     "requests": 2,
     "input_tokens": 1355,
     "cached_tokens": 0,
@@ -528,13 +528,14 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 0.34,
+    "seconds": 1.04,
     "requests": 1,
-    "input_tokens": 499,
+    "input_tokens": 554,
     "cached_tokens": 0,
-    "output_tokens": 24,
+    "output_tokens": 29,
     "filters": {
      "kind": "opportunities",
+     "keywords": "accelerator",
      "categories": [
       "programs"
      ]
@@ -544,7 +545,7 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 0.98,
+    "seconds": 1.03,
     "requests": 2,
     "input_tokens": 1361,
     "cached_tokens": 0,
@@ -557,16 +558,15 @@
    "expected_matches": 10,
    "one_call": {
     "precision": 1.0,
-    "recall": 0.25,
-    "shown": 1,
-    "seconds": 0.38,
+    "recall": 1.0,
+    "shown": 4,
+    "seconds": 1.32,
     "requests": 1,
-    "input_tokens": 503,
+    "input_tokens": 558,
     "cached_tokens": 0,
-    "output_tokens": 28,
+    "output_tokens": 23,
     "filters": {
      "kind": "opportunities",
-     "keywords": "co-founder",
      "categories": [
       "asks"
      ]
@@ -576,7 +576,7 @@
     "precision": 1.0,
     "recall": 0.25,
     "shown": 1,
-    "seconds": 0.82,
+    "seconds": 0.63,
     "requests": 2,
     "input_tokens": 1224,
     "cached_tokens": 0,
@@ -591,9 +591,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 0.47,
+    "seconds": 4.19,
     "requests": 1,
-    "input_tokens": 506,
+    "input_tokens": 561,
     "cached_tokens": 0,
     "output_tokens": 29,
     "filters": {
@@ -608,7 +608,7 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 4,
-    "seconds": 0.86,
+    "seconds": 0.87,
     "requests": 2,
     "input_tokens": 1369,
     "cached_tokens": 0,
@@ -623,9 +623,9 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 0,
-    "seconds": 0.36,
+    "seconds": 1.23,
     "requests": 1,
-    "input_tokens": 503,
+    "input_tokens": 558,
     "cached_tokens": 0,
     "output_tokens": 17,
     "filters": {
@@ -636,7 +636,7 @@
     "precision": 1.0,
     "recall": 1.0,
     "shown": 0,
-    "seconds": 0.99,
+    "seconds": 0.92,
     "requests": 2,
     "input_tokens": 1200,
     "cached_tokens": 0,
@@ -652,14 +652,14 @@
     "recall": 1.0,
     "shown": 0,
     "blocked_by_content_filter": true,
-    "seconds": 1.43
+    "seconds": 0.94
    },
    "two_call": {
     "precision": 1.0,
     "recall": 1.0,
     "shown": 0,
     "blocked_by_content_filter": true,
-    "seconds": 1.26
+    "seconds": 1.21
    }
   }
  ]

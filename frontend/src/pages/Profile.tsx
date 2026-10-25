@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { api } from '../api'
 import { useAuth } from '../auth'
+import { JoinProfile } from '../components/JoinProfile'
 import { Modal } from '../components/Modal'
 import { ResendButton } from '../components/ResendButton'
 import { StartupCard } from '../components/StartupCard'
@@ -111,6 +112,8 @@ export function Profile() {
         </section>
       </div>
 
+      <JoinProfile />
+
       <section className="panel headline-panel">
         <div className="panel-head"><h3>Headline</h3></div>
         <form className="inline-form" onSubmit={(e) => { e.preventDefault(); run(async () => setUser(await api.updateProfile({ headline })), 'Saved.') }}>
@@ -135,6 +138,7 @@ export function Profile() {
 
       <div className="page-head small-gap">
         <h2 className="section-title">Your startups</h2>
+        {user.is_founder && <Link to="/people" className="link-arrow">People open to joining →</Link>}
         <button className="btn btn-dark" disabled={!user.email_verified} onClick={() => setAdding(true)}>+ Add startup</button>
       </div>
       {mine.length === 0 ? (

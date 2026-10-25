@@ -60,9 +60,12 @@ LinkedIn profile link on their profile (optional, shown on their founder card; n
 4. **Founder card + messaging**: log in as `demo@yale.edu`, search *Bulldog Test*, open **Bulldog Test Co.** (a demo
    listing, not a real company), click *Message Test*, send a message. Then log in as `test.founder@yale.edu` in another
    browser (or after logging out) to read it and reply.
-5. **Add your startup**: on your profile, *+ Add startup*; it waits hidden until approved in `/admin` → *New startups*.
-6. **Claim a startup**: sign up, verify your email, open a startup, click *Claim this startup*.
-7. **Admin console** (`/admin`): review claims, run **Audit** on a listing (e.g. Mundaly), apply or dismiss the suggestion.
+5. **Join a startup** (for people with no startup or idea): open *Join a startup* in the nav; on your profile turn on
+   *Open to joining*. Founders see you at `/people`: log in as `test.founder@yale.edu` and click *Browse people open to
+   joining* (the demo member is already opted in). Non-founders get an explanation instead.
+6. **Add your startup**: on your profile, *+ Add startup*; it waits hidden until approved in `/admin` → *New startups*.
+7. **Claim a startup**: sign up, verify your email, open a startup, click *Claim this startup*.
+8. **Admin console** (`/admin`): review claims, run **Audit** on a listing (e.g. Mundaly), apply or dismiss the suggestion.
 
 ## Data
 
@@ -97,7 +100,7 @@ Model: **gpt-6-luna only**, through Portkey (`PORTKEY_API_KEY`).
 |---|---|
 | `.venv/bin/python scripts/eval_scout.py` | `output/eval_scout.json`: 20-question accuracy and tokens, one-call vs two-call Scout |
 | `.venv/bin/python scripts/safety_tests.py` | `output/safety_tests.json`: 16 attacks on the defenses (uses a throwaway database) |
-| `.venv/bin/python scripts/feature_tests.py` | `output/feature_tests.json`: founder card, messaging, LinkedIn link, submit → approve (throwaway database) |
+| `.venv/bin/python scripts/feature_tests.py` | `output/feature_tests.json`: founder card, messaging, LinkedIn link, joining a startup, submit → approve (throwaway database) |
 | `.venv/bin/python scripts/audit_all.py` | `output/audit_all.json`: Listing Auditor run on every listing with its own website |
 | `.venv/bin/python scripts/build_report.py` | `report.html`, `slides.html` (every number read from the files above) |
 

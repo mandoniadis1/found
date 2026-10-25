@@ -9,6 +9,12 @@ export type User = {
   headline: string | null
   email_verified: boolean
   linkedin_url: string | null
+  open_to_join: boolean
+  join_roles: string[]
+  join_industries: string[]
+  join_commitment: string | null
+  join_pitch: string | null
+  is_founder: boolean
   is_moderator: boolean
   is_admin: boolean
 }
@@ -64,11 +70,35 @@ export type Filters = {
   total: number
 }
 
+export type Joiner = {
+  id: number
+  first_name: string
+  last_name: string
+  school: string | null
+  headline: string | null
+  linkedin_url: string | null
+  roles: string[]
+  industries: string[]
+  commitment: string | null
+  pitch: string | null
+}
+
+export type JoinBoard = {
+  startups: Startup[]
+  asks: Opportunity[]
+  events: FoundEvent[]
+  open_people: number
+  roles: string[]
+  commitments: string[]
+}
+
 export type Options = {
   industries: string[]
   stages: string[]
   affiliations: string[]
   rounds: string[]
+  join_roles: string[]
+  join_commitments: string[]
   opportunity_categories: Record<string, string>
 }
 

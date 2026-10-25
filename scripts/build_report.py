@@ -300,6 +300,9 @@ claim a listing must prove it (a link sent to an address on the startup's own do
 console).</li>
 <li><b>A directory that corrects itself:</b> the Listing Auditor agent reads each startup's own website and proposes fixes with
 quoted evidence; a person approves them, and fixes survive data refreshes.</li>
+<li><b>Two-sided: for people who want to join, too.</b> A "Join a startup" page gathers every way in (startups looking for
+people, co-founder searches, events). Members with no startup or idea can turn on <i>Open to joining</i> with the roles, industries
+and time they offer, and verified founders can browse and message them.</li>
 <li><b>AI that can't make things up and costs almost nothing:</b> Scout only turns a question into filters; the database supplies
 every name and number ({money(scout_cost)} per question).</li>
 </ol>
@@ -318,7 +321,8 @@ model never writes to the database; changes only happen through the admin approv
 
 <h3>Agent 1 · Scout (Explore page helper)</h3>
 <ul>
-<li><b>Job:</b> answer "find me…" questions about startups and opportunities in one sentence plus cards.</li>
+<li><b>Job:</b> answer "find me…" questions about startups and opportunities in one sentence plus cards, including
+"I want to join a startup" (startups looking for people) and "I'm looking for a co-founder" (co-founder searches).</li>
 <li><b>Design:</b> one gpt-6-luna call returns a typed <code>ScoutQuery</code> (kind, keywords, industries, stages, Yale
 affiliations, hiring, categories, days until deadline), restricted to the exact allowed values. Code then runs the SQL search and
 writes the sentence from the real result count, so the model never states a fact.</li>
@@ -376,6 +380,14 @@ now listed on the main page with me on the founder card (verified by admin revie
 a clearly labeled demo listing, <b>Bulldog Test Co.</b>, so graders can try the founder card and messaging without touching a real company.
 <code>scripts/feature_tests.py</code> runs these flows on a throwaway database ({ft['passed']}/{ft['total']} passed, {ft['ran_at']}):</p>
 <table><thead><tr><th></th><th>Check</th><th>Result</th></tr></thead><tbody>{FEATURE_ROWS}</tbody></table>
+<p><b>People who want to join a startup.</b> Not everyone has a startup or an idea. The <i>Join a startup</i> page collects every
+way in, and members can opt in to being found with the roles, industries and time they can give. Only verified founders (members
+with a listed startup) can browse that list, it never shows emails, and members can switch it off at any time; the feature tests above
+check each of these.</p>
+<div class="two">
+{fig("23_join_page", "Join a startup: startups looking for people, co-founder searches and events, plus the founder shortcut.")}
+{fig("24_people_open", "Founders only: people open to joining, filtered by role, industry and time, with a Message button.")}
+</div>
 <div class="two">
 {fig("19_founder_card", "The demo listing's founder card: name, LinkedIn link, verified-founder note and the Message button.")}
 {fig("20_messages", "The member's inbox after messaging Test Founder and receiving the reply.")}
@@ -411,7 +423,7 @@ Hosting is the bigger cost at that scale (a small server, roughly $5 to $20 a mo
 <tr><td><b>Daily budgets</b> per visitor and per site, per-run token limits</td><td>Hard ceiling on spend ({money(site_cap_month, 2)}/month for Scout).</td><td>A heavy user sees a friendly "come back tomorrow" (Section 5).</td></tr>
 </tbody></table>
 <div class="callout"><b>Why cached tokens are near zero.</b> Prompt caching only applies to prompts over about 1,024 tokens. Scout's
-prompts are about 500 tokens, so nothing is cached ({one['avg_cached_tokens']} cached tokens per question). The Auditor's second call
+prompts are about {round(one['avg_input_tokens'], -1):.0f} tokens, so nothing is cached ({one['avg_cached_tokens']} cached tokens per question). The Auditor's second call
 sometimes reuses the first call's prefix ({aa['tokens']['cached']:,} of {aa['tokens']['input']:,} input tokens, {aa['tokens']['cached']/aa['tokens']['input']*100:.1f}%). Padding
 prompts to reach the caching threshold would cost more than it saves, so the savings come from fewer calls and smaller inputs instead.</div>
 <p class="small muted">Precision = share of the cards shown that are correct matches. Recall@4 = correct cards shown out of min(4, all correct
@@ -474,7 +486,7 @@ Yale founders and their feedback.</li>
 <li><b>Next features:</b> matching (suggest founders and programs for your startup), event reminders, and a weekly digest of new opportunities.</li>
 </ul>
 <p class="small muted">AI assistance: I built found. with an AI coding assistant. I checked the app, the numbers and the claims in this report against the logs and test files in the repository.</p>
-{fig("13_admin_dashboard", "The admin console's dashboard: what needs review, community numbers, and today's Scout spending against its budget.")}
+
 </main></body></html>"""
 (ROOT / "report.html").write_text(report)
 
@@ -516,7 +528,7 @@ slides = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>f
 
 <section><h2>What's new</h2><div class="grid3">
 <div class="stat"><span class="big">1</span>place for both Yale sources, multi-filter search<small>vs Pitchbook + Tsai CITY separately</small></div>
-<div class="stat"><span class="big">✓</span>verified people: Yale email, proven founder claims<small>vs anyone can list anything</small></div>
+<div class="stat"><span class="big">✓</span>verified people: Yale email, proven founder claims, and a way in for people who want to <em>join</em> a startup<small>vs one-way directories</small></div>
 <div class="stat"><span class="big">AI</span>that can't invent, and an Auditor that fixes the data<small>vs ChatGPT guessing</small></div></div>
 <p class="sub">Compared: Yale Pitchbook, Tsai CITY board, Harmonic, Crunchbase, LinkedIn, ChatGPT</p></section>
 

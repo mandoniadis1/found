@@ -11,7 +11,7 @@ const HICCUP = '🐶 Oops, I got distracted by a squirrel. Mind asking that agai
 
 const SUGGESTIONS = [
   'Climate startups making revenue',
-  'Startups that are hiring',
+  'I want to join a startup',
   'Grants due in the next month',
   'Free credits for my startup',
 ]

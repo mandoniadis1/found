@@ -15,7 +15,7 @@ export function Members() {
       </header>
       <table className="table">
         <thead>
-          <tr><th>Name</th><th>Email</th><th>Yale email</th><th>LinkedIn</th><th>Moderator</th><th>Startups</th><th>Joined</th></tr>
+          <tr><th>Name</th><th>Email</th><th>Yale email</th><th>LinkedIn</th><th>Open to join</th><th>Moderator</th><th>Startups</th><th>Joined</th></tr>
         </thead>
         <tbody>
           {items.map((m) => (
@@ -24,6 +24,7 @@ export function Members() {
               <td>{m.email}</td>
               <td>{yes(m.email_verified, 'verified')}</td>
               <td>{m.linkedin_url ? <a href={m.linkedin_url} target="_blank" rel="noreferrer">Profile ↗</a> : <span className="muted">—</span>}</td>
+              <td>{yes(m.open_to_join)}</td>
               <td>{yes(m.is_moderator)}</td>
               <td>{m.startups || <span className="muted">—</span>}</td>
               <td className="muted">{new Date(m.created_at).toLocaleDateString()}</td>

@@ -64,7 +64,7 @@ export function Dashboard() {
       <h2 className="section">Community</h2>
       <div className="stats">
         <Stat label="Members" value={o.members} sub={`${o.verified_members} verified Yale email`} to="/members" />
-        <Stat label="LinkedIn on profile" value={o.linkedin_members} />
+        <Stat label="Open to joining a startup" value={o.open_to_join} sub={`${o.linkedin_members} with a LinkedIn link`} />
         <Stat label="Moderators" value={o.moderators} />
         <Stat label="Upcoming events" value={o.upcoming_events} />
       </div>

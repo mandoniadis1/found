@@ -5,8 +5,10 @@ import { VerifyBanner } from './components/VerifyBanner'
 import { Login, Signup, Verified } from './pages/AuthPages'
 import { Events } from './pages/Events'
 import { Explore } from './pages/Explore'
+import { Join } from './pages/Join'
 import { Messages } from './pages/Messages'
 import { Opportunities } from './pages/Opportunities'
+import { People } from './pages/People'
 import { Profile } from './pages/Profile'
 import { StartupPage } from './pages/StartupPage'
 
@@ -19,6 +21,7 @@ function Nav() {
       <div className="nav-links">
         <NavLink to="/" end>Explore</NavLink>
         <NavLink to="/opportunities">Opportunities</NavLink>
+        <NavLink to="/join">Join a startup</NavLink>
         <NavLink to="/events">Events</NavLink>
         <NavLink to="/messages">Messages</NavLink>
       </div>
@@ -54,6 +57,8 @@ export default function App() {
           <Route path="/" element={<Explore />} />
           <Route path="/startups/:id" element={<StartupPage />} />
           <Route path="/opportunities" element={<Opportunities />} />
+          <Route path="/join" element={<Join />} />
+          <Route path="/people" element={<People />} />
           <Route path="/events" element={<Events />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/messages/:cid" element={<Messages />} />

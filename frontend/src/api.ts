@@ -1,5 +1,5 @@
 import type {
-  ChatTurn, ClaimOptions, ClaimRequest, Conversation, EventInput, ManualClaimInput, SiteConfig, ExpectedDeadline, Filters, FoundEvent, Message, Opportunity, Options, PublicUser,
+  ChatTurn, ClaimOptions, JoinBoard, Joiner, ClaimRequest, Conversation, EventInput, ManualClaimInput, SiteConfig, ExpectedDeadline, Filters, FoundEvent, Message, Opportunity, Options, PublicUser,
   ScoutOut, Startup, StartupInput, User,
 } from './types'
 
@@ -66,7 +66,8 @@ export const api = {
   signup: (body: { first_name: string; last_name: string; email: string; password: string; school?: string }) =>
     post<User>('/api/auth/signup', body),
   logout: () => post<void>('/api/auth/logout'),
-  updateProfile: (body: { school?: string; headline?: string; linkedin_url?: string }) =>
+  updateProfile: (body: { school?: string; headline?: string; linkedin_url?: string; open_to_join?: boolean;
+    join_roles?: string[]; join_industries?: string[]; join_commitment?: string; join_pitch?: string }) =>
     request<User>('/api/me', { method: 'PATCH', body: JSON.stringify(body) }),
   becomeModerator: () => post<User>('/api/me/moderator'),
 
@@ -89,6 +90,10 @@ export const api = {
   opportunityCounts: () => request<Record<string, number>>('/api/opportunities/counts'),
   opportunity: (id: number) => request<Opportunity>(`/api/opportunities/${id}`),
   deadlines: () => request<ExpectedDeadline[]>('/api/deadlines'),
+
+  joinBoard: () => request<JoinBoard>('/api/join'),
+  peopleOpen: (q: { role?: string; industry?: string; commitment?: string }) =>
+    request<Joiner[]>(`/api/people/open?${toParams(q)}`),
 
   events: () => request<FoundEvent[]>('/api/events'),
   createEvent: (body: EventInput) => post<FoundEvent>('/api/events', body),

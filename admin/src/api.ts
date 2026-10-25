@@ -8,6 +8,7 @@ export type Overview = {
   members: number
   verified_members: number
   linkedin_members: number
+  open_to_join: number
   moderators: number
   listed_startups: number
   claimed_startups: number
@@ -63,6 +64,7 @@ export type Member = {
   school: string | null
   email_verified: number
   linkedin_url: string | null
+  open_to_join: number
   is_moderator: number
   is_test_account: number
   created_at: string
